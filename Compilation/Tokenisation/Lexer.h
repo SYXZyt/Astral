@@ -28,7 +28,11 @@ namespace Astral
 
 		void Advance();
 
+		char Peek();
+
 		Token GenerateNumber();
+		Token GenerateString(char strChar);
+		Token GenerateIdentifier();
 
 	public:
 		inline bool Failed() const { return failed; }

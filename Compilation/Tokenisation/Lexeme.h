@@ -7,7 +7,7 @@
 
 namespace Astral
 {
-	ASTRAL struct Lexeme final
+	struct ASTRAL Lexeme final
 	{
 		filepos positionInBuffer;
 		filepos positionInLine;

@@ -4,3 +4,8 @@
 #else
 #define ASTRAL __declspec(dllimport)
 #endif
+
+namespace Astral
+{
+	ASTRAL extern bool UseCLIOutput;
+}
