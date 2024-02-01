@@ -21,7 +21,7 @@ namespace Astral
 		inline void SetLexeme(const Lexeme& l) { lexeme = l; }
 		inline void SetType(TokenType t) { type = t; }
 
-		Token() = default;
+		Token() : lexeme(Lexeme()), type(TokenType::_EOF) {}
 		Token(const Lexeme& lexeme, TokenType type) : lexeme(lexeme), type(type) {}
 		Token(const Lexeme&& lexeme, TokenType type) : lexeme(lexeme), type(type) {}
 	};

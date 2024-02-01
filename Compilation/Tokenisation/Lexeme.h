@@ -15,6 +15,9 @@ namespace Astral
 		
 		std::string lexeme;
 		std::string fname;
+
+		Lexeme() = default;
+		Lexeme(const Lexeme& other) = default;
 	};
 
 	ASTRAL inline std::ostream& operator<<(std::ostream& os, const Lexeme& l)

@@ -88,6 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);ASTRAL_EXPORT;NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -106,6 +107,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);ASTRAL_EXPORT;NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -124,6 +126,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);ASTRAL_EXPORT;NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -142,6 +145,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);ASTRAL_EXPORT;NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -156,6 +160,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Astral.h" />
+    <ClInclude Include="Compilation\Parsing\Expression.h" />
+    <ClInclude Include="Compilation\Parsing\Expressions\BinaryOp.h" />
+    <ClInclude Include="Compilation\Parsing\Expressions\Grouping.h" />
+    <ClInclude Include="Compilation\Parsing\Expressions\Literal.h" />
+    <ClInclude Include="Compilation\Parsing\AllNodeTypes.h" />
+    <ClInclude Include="Compilation\Parsing\Expressions\UnaryOp.h" />
+    <ClInclude Include="Compilation\Parsing\Parser.h" />
+    <ClInclude Include="Compilation\Parsing\ParseTree.h" />
     <ClInclude Include="Compilation\Tokenisation\Lexeme.h" />
     <ClInclude Include="Compilation\Tokenisation\Lexer.h" />
     <ClInclude Include="Compilation\Tokenisation\Token.h" />
@@ -165,6 +177,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Astral.cpp" />
+    <ClCompile Include="Compilation\Parsing\Expressions\BinaryOp.cpp" />
+    <ClCompile Include="Compilation\Parsing\Expressions\Grouping.cpp" />
+    <ClCompile Include="Compilation\Parsing\Expressions\Literal.cpp" />
+    <ClCompile Include="Compilation\Parsing\Expressions\UnaryOp.cpp" />
+    <ClCompile Include="Compilation\Parsing\Parser.cpp" />
     <ClCompile Include="Compilation\Tokenisation\Lexer.cpp" />
   </ItemGroup>
   <ItemGroup>

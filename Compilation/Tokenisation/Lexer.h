@@ -26,6 +26,9 @@ namespace Astral
 
 		std::vector<Token> tokens;
 
+		Token EofToken();
+
+		void Advance(int count);
 		void Advance();
 
 		char Peek();

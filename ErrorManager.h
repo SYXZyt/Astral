@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <sstream>
 #include <iomanip>
 #include <iostream>
 #include <windows.h>

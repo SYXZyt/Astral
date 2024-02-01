@@ -24,10 +24,25 @@ token.SetLexeme(lex)
 
 #define PUSH_TOKEN() tokens.push_back(token)
 
-void Astral::Lexer::Advance()
+Astral::Token Astral::Lexer::EofToken()
 {
-	++bufferpos;
-	++posOnLine;
+	Lexeme lex;
+	lex.fname = fname;
+	lex.lexeme = data[data.size() - 1];
+	lex.line = -1;
+	lex.positionInBuffer = data[data.size() - 1];
+	lex.positionInLine = -1;
+
+	Token tok;
+	tok.SetLexeme(lex);
+	tok.SetType(TokenType::_EOF);
+	return tok;
+}
+
+void Astral::Lexer::Advance(int count)
+{
+	bufferpos += count;
+	posOnLine += count;
 
 	//If we have ran out of characters, we need to use the null characters so we can tell the lexer that we have reached EOF
 	if (bufferpos >= data.size())
@@ -40,6 +55,11 @@ void Astral::Lexer::Advance()
 		posOnLine = 0;
 		++line;
 	}
+}
+
+void Astral::Lexer::Advance()
+{
+	Advance(1);
 }
 
 char Astral::Lexer::Peek()
@@ -236,9 +256,41 @@ void Astral::Lexer::Tokenise()
 		}
 		else if (currentChar == '/')
 		{
-			CHAR_TOKEN("/", TokenType::DIVIDE);
-			PUSH_TOKEN();
-			Advance();
+			if (Peek() == '/')
+			{
+				//If we have a normal comment, we just need to loop until a newline or eof
+				while (currentChar != '\0' && currentChar != '\n')
+					Advance();
+			}
+			else if (Peek() == '*')
+			{
+				//If we have entered a multiline comment, we need to loop until we find another */ tag
+				//If we reach end of file then we have to raise an error
+				Advance(2);
+				while (true)
+				{
+					if (currentChar == '*' && Peek() == '/')
+					{
+						Advance(2);
+						break;
+					}
+
+					if (currentChar == '\0')
+					{
+						Error("Multi-line comment was not terminated", EofToken());
+						failed = true;
+						break;
+					}
+
+					Advance();
+				}
+			}
+			else
+			{
+				CHAR_TOKEN("/", TokenType::DIVIDE);
+				PUSH_TOKEN();
+				Advance();
+			}
 		}
 		else if (currentChar == '*')
 		{
@@ -276,14 +328,28 @@ void Astral::Lexer::Tokenise()
 			PUSH_TOKEN();
 			Advance();
 		}
+		else if (currentChar == '!')
+		{
+			if (Peek() == '=')
+			{
+				CHAR_TOKEN("!=", TokenType::NOT_EQUALS);
+				PUSH_TOKEN();
+				Advance(2);
+			}
+			else
+			{
+				CHAR_TOKEN("!", TokenType::NOT);
+				PUSH_TOKEN();
+				Advance();
+			}
+		}
 		else if (currentChar == '=')
 		{
 			if (Peek() == '=')
 			{
 				CHAR_TOKEN("==", TokenType::EQUALS);
 				PUSH_TOKEN();
-				Advance();
-				Advance();
+				Advance(2);
 			}
 			else
 			{
@@ -298,8 +364,7 @@ void Astral::Lexer::Tokenise()
 			{
 				CHAR_TOKEN("<=", TokenType::LESS_THAN_EQUAL);
 				PUSH_TOKEN();
-				Advance();
-				Advance();
+				Advance(2);
 			}
 			else
 			{
@@ -315,7 +380,7 @@ void Astral::Lexer::Tokenise()
 				CHAR_TOKEN(">=", TokenType::GREATER_THAN_EQUAL);
 				PUSH_TOKEN();
 				Advance();
-				Advance();
+				Advance(2);
 			}
 			else
 			{
@@ -333,12 +398,6 @@ void Astral::Lexer::Tokenise()
 		else if (currentChar == ',')
 		{
 			CHAR_TOKEN(",", TokenType::COMMA);
-			PUSH_TOKEN();
-			Advance();
-		}
-		else if (currentChar == '!')
-		{
-			CHAR_TOKEN("!", TokenType::NOT);
 			PUSH_TOKEN();
 			Advance();
 		}

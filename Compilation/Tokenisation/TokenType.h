@@ -31,6 +31,7 @@ namespace Astral
 
 		ASSIGNMENT,
 		EQUALS,
+		NOT_EQUALS,
 	};
 
 	ASTRAL inline std::ostream& operator<<(std::ostream& os, const TokenType& t)
