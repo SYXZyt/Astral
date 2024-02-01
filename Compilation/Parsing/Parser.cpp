@@ -186,6 +186,7 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 
 	Error("Expected value", tokens[tokens.size() - 1ull]);
 	failed = true;
+	Advance();
 
 	return nullptr;
 }
@@ -196,4 +197,9 @@ void Astral::Parser::Parse()
 	{
 		tree.push_back(ParseExpression());
 	}
+
+	Program* program = new Program(tokens[0]);
+	program->SetStatements(tree);
+	tree.clear();
+	tree.push_back(program);
 }

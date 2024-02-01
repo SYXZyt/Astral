@@ -60,6 +60,12 @@
     <ClInclude Include="Compilation\Parsing\Expressions\Grouping.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Compilation\Parsing\Statement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilation\Parsing\Statements\Program.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Compilation\Tokenisation\Lexer.cpp">
@@ -87,6 +93,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Compilation\Parsing\Expression.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compilation\Parsing\Statement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compilation\Parsing\Statements\Program.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
