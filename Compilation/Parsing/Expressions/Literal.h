@@ -15,6 +15,8 @@ namespace Astral
 		LiteralType type;
 		void* data;
 
+		void Dump(int indent = 0) final override;
+
 		Literal(void* data, LiteralType type, const Token& token) : data(data), type(type), Expression(token) {}
 		~Literal() override;
 	};

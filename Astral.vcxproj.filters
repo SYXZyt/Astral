@@ -83,6 +83,12 @@
     <ClCompile Include="Compilation\Parsing\Expressions\Grouping.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Compilation\Parsing\ParseTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compilation\Parsing\Expression.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />

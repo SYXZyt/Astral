@@ -14,6 +14,8 @@ namespace Astral
 		inline const Expression* Lhs() const { return lhs; }
 		inline const Expression* Rhs() const { return rhs; }
 
+		void Dump(int indent = 0) final override;
+
 		BinaryOp(Expression* lhs, Token op, Expression* rhs) : lhs(lhs), rhs(rhs), Expression(op) {}
 		~BinaryOp() override;
 	};

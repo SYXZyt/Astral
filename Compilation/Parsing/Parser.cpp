@@ -183,6 +183,11 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 		Consume(TokenType::R_BRA, "Expected ')'");
 		return new Grouping(expr, Previous());
 	}
+
+	Error("Expected value", tokens[tokens.size() - 1ull]);
+	failed = true;
+
+	return nullptr;
 }
 
 void Astral::Parser::Parse()

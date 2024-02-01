@@ -177,11 +177,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Astral.cpp" />
+    <ClCompile Include="Compilation\Parsing\Expression.cpp" />
     <ClCompile Include="Compilation\Parsing\Expressions\BinaryOp.cpp" />
     <ClCompile Include="Compilation\Parsing\Expressions\Grouping.cpp" />
     <ClCompile Include="Compilation\Parsing\Expressions\Literal.cpp" />
     <ClCompile Include="Compilation\Parsing\Expressions\UnaryOp.cpp" />
     <ClCompile Include="Compilation\Parsing\Parser.cpp" />
+    <ClCompile Include="Compilation\Parsing\ParseTree.cpp" />
     <ClCompile Include="Compilation\Tokenisation\Lexer.cpp" />
   </ItemGroup>
   <ItemGroup>
