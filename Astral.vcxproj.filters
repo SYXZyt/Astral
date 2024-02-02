@@ -66,6 +66,15 @@
     <ClInclude Include="Compilation\Parsing\Statements\Program.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Compilation\Compiler\Bytecode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilation\Compiler\OpType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilation\Compiler\Compiler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Compilation\Tokenisation\Lexer.cpp">

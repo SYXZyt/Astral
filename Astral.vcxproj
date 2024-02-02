@@ -160,6 +160,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Astral.h" />
+    <ClInclude Include="Compilation\Compiler\Bytecode.h" />
+    <ClInclude Include="Compilation\Compiler\Compiler.h" />
+    <ClInclude Include="Compilation\Compiler\OpType.h" />
     <ClInclude Include="Compilation\Parsing\Expression.h" />
     <ClInclude Include="Compilation\Parsing\Expressions\BinaryOp.h" />
     <ClInclude Include="Compilation\Parsing\Expressions\Grouping.h" />
