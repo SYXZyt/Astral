@@ -135,12 +135,13 @@ Astral::Expression* Astral::Parser::ParseFactor()
 {
 	Expression* expr = ParsePower();
 
-	TokenType types[2]
+	TokenType types[3]
 	{
 		TokenType::DIVIDE,
 		TokenType::ASTERISK,
+		TokenType::MODULO,
 	};
-	while (Match(types, 2))
+	while (Match(types, 3))
 	{
 		Token op = Previous();
 		Expression* right = ParsePower();

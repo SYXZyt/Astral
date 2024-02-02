@@ -23,6 +23,7 @@ namespace Astral
 		COMMA,
 		DOT,
 		HAT,
+		MODULO,
 
 		NOT,
 		LESS_THAN,

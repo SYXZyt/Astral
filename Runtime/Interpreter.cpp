@@ -47,6 +47,13 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			stack.push(Maths::Power(lhs, rhs));
 			break;
 		}
+		case OpType::MOD:
+		{
+			Type::atype_t* rhs = Pop();
+			Type::atype_t* lhs = Pop();
+			stack.push(Maths::Modulo(lhs, rhs));
+			break;
+		}
 		case OpType::UNARY_MINUS:
 		{
 			Type::atype_t* val = Pop();
