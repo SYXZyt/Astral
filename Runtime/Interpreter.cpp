@@ -16,49 +16,115 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		{
 			Type::atype_t* rhs = Pop();
 			Type::atype_t* lhs = Pop();
-			stack.push(Maths::Addition(lhs, rhs));
+			result_t res = Maths::Addition(lhs, rhs);
+
+			if (res.type == result_t::ResultType::R_OK)
+				stack.push(res.result);
+			else
+			{
+				Error("Cannot add types", instruction.lexeme);
+				failed = true;
+			}
+
 			break;
 		}
 		case OpType::SUB:
 		{
 			Type::atype_t* rhs = Pop();
 			Type::atype_t* lhs = Pop();
-			stack.push(Maths::Subtraction(lhs, rhs));
+			result_t res = Maths::Subtraction(lhs, rhs);
+
+			if (res.type == result_t::ResultType::R_OK)
+				stack.push(res.result);
+			else
+			{
+				Error("Cannot subtract types", instruction.lexeme);
+				failed = true;
+			}
 			break;
 		}
 		case OpType::MUL:
 		{
 			Type::atype_t* rhs = Pop();
 			Type::atype_t* lhs = Pop();
-			stack.push(Maths::Multiplication(lhs, rhs));
+			result_t res = Maths::Multiplication(lhs, rhs);
+
+			if (res.type == result_t::ResultType::R_OK)
+				stack.push(res.result);
+			else
+			{
+				Error("Cannot multiply types", instruction.lexeme);
+				failed = true;
+			}
 			break;
 		}
 		case OpType::DIV:
 		{
 			Type::atype_t* rhs = Pop();
 			Type::atype_t* lhs = Pop();
-			stack.push(Maths::Divide(lhs, rhs));
+			result_t res = Maths::Divide(lhs, rhs);
+
+			if (res.type == result_t::ResultType::R_OK)
+				stack.push(res.result);
+			else if (res.type == result_t::ResultType::R_DIV_BY_ZERO)
+			{
+				Error("Division by zero", instruction.lexeme);
+				failed = true;
+			}
+			else
+			{
+				Error("Cannot divide types", instruction.lexeme);
+				failed = true;
+			}
 			break;
 		}
 		case OpType::POW:
 		{
 			Type::atype_t* rhs = Pop();
 			Type::atype_t* lhs = Pop();
-			stack.push(Maths::Power(lhs, rhs));
+			result_t res = Maths::Power(lhs, rhs);
+
+			if (res.type == result_t::ResultType::R_OK)
+				stack.push(res.result);
+			else
+			{
+				Error("Cannot calculate power with types", instruction.lexeme);
+				failed = true;
+			}
 			break;
 		}
 		case OpType::MOD:
 		{
 			Type::atype_t* rhs = Pop();
 			Type::atype_t* lhs = Pop();
-			stack.push(Maths::Modulo(lhs, rhs));
+			result_t res = Maths::Modulo(lhs, rhs);
+
+			if (res.type == result_t::ResultType::R_OK)
+				stack.push(res.result);
+			else if (res.type == result_t::ResultType::R_DIV_BY_ZERO)
+			{
+				Error("Division by zero", instruction.lexeme);
+				failed = true;
+			}
+			else
+			{
+				Error("Cannot calculate modulo with types", instruction.lexeme);
+				failed = true;
+			}
 			break;
 		}
 		case OpType::UNARY_MINUS:
 		{
 			Type::atype_t* val = Pop();
-			stack.push(Maths::Minus(val));
+			result_t res = Maths::Minus(val);
 
+			if (res.type == result_t::ResultType::R_OK)
+				stack.push(res.result);
+			else
+			{
+				Error("Type does not support minus operator", instruction.lexeme);
+				failed = true;
+			}
 			break;
 		}
 		case OpType::EQUALITY:

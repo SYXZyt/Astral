@@ -6,6 +6,7 @@
 #include "../Astral.h"
 #include "MathsHandler.h"
 #include "BooleanHandler.h"
+#include "../ErrorManager.h"
 #include "Types/AstralTypes.h"
 #include "../Compilation/Compiler/OpType.h"
 #include "../Compilation/Compiler/Bytecode.h"
@@ -27,10 +28,14 @@ namespace Astral
 		std::vector<Bytecode> rom;
 		int pc;
 
+		bool failed;
+
 		void ExecuteInstruction(Bytecode& instruction);
 
 	public:
 		void Execute();
+
+		inline bool Failed() const { return failed; }
 
 		Interpreter(const std::vector<Bytecode>& rom) : rom(rom), pc(0) {}
 		~Interpreter();

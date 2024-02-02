@@ -10,23 +10,28 @@
 
 namespace Astral
 {
-	inline void Error(const char* const message, const Astral::Token& token)
+	inline void Error(const char* const message, const Astral::Lexeme& lexeme)
 	{
 		std::string msg = message;
 		msg += '\n';
 		std::stringstream ss;
-		ss << std::setw(4) << token.GetLexeme().line + 1;
-		msg += ss.str() + "| " + token.GetLexeme().lineData + '\n';
+		ss << std::setw(4) << lexeme.line + 1;
+		msg += ss.str() + "| " + lexeme.lineData + '\n';
 
-		msg += std::string(token.GetLexeme().positionInLine + 6, ' ');
-		msg += std::string(token.GetLexeme().lexeme.size(), '^');
+		msg += std::string(lexeme.positionInLine + 6, ' ');
+		msg += std::string(lexeme.lexeme.size(), '^');
 
 		msg += "\n\n";
-		msg += "Occurred in " + token.GetLexeme().fname + " at line " + std::to_string(token.GetLexeme().line + 1) + " position " + std::to_string(token.GetLexeme().positionInLine + 1);
+		msg += "Occurred in " + lexeme.fname + " at line " + std::to_string(lexeme.line + 1) + " position " + std::to_string(lexeme.positionInLine + 1);
 
 		if (UseCLIOutput)
 			std::cerr << msg << "\n\n";
 		else
 			MessageBoxA(nullptr, msg.c_str(), "Astral encountered an error", MB_OK);
+	}
+
+	inline void Error(const char* const message, const Astral::Token& token)
+	{
+		Error(message, token.GetLexeme());
 	}
 }

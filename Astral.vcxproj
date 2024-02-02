@@ -181,6 +181,7 @@
     <ClInclude Include="Runtime\BooleanHandler.h" />
     <ClInclude Include="Runtime\Interpreter.h" />
     <ClInclude Include="Runtime\MathsHandler.h" />
+    <ClInclude Include="Runtime\Result.h" />
     <ClInclude Include="Runtime\Types\AstralTypes.h" />
     <ClInclude Include="Types.h" />
   </ItemGroup>

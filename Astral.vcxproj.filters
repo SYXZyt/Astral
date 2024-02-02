@@ -87,6 +87,9 @@
     <ClInclude Include="Runtime\BooleanHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Runtime\Result.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Compilation\Tokenisation\Lexer.cpp">
