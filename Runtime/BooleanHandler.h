@@ -10,4 +10,5 @@ namespace Astral::Boolean
 	extern Type::atype_t* GreaterEquals(Type::atype_t* lhs, Type::atype_t* rhs);
 	extern Type::atype_t* Less(Type::atype_t* lhs, Type::atype_t* rhs);
 	extern Type::atype_t* LessEquals(Type::atype_t* lhs, Type::atype_t* rhs);
+	extern Type::atype_t* Not(Type::atype_t* val);
 }

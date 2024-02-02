@@ -16,6 +16,7 @@ namespace Astral
 		UNARY_MINUS,
 		POW,
 		MOD,
+		NOT,
 
 		EQUALITY,
 		NEQUALITY,
@@ -53,6 +54,8 @@ namespace Astral
 				return "EQU";
 			case OpType::NEQUALITY:
 				return "NEQ";
+			case OpType::NOT:
+				return "NOT";
 			default:
 				return "UNKNOWN";
 		}

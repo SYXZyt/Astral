@@ -103,6 +103,12 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			stack.push(Boolean::LessEquals(lhs, rhs));
 			break;
 		}
+		case OpType::NOT:
+		{
+			Type::atype_t* val = Pop();
+			stack.push(Boolean::Not(val));
+			break;
+		}
 		default:
 			throw "oop";
 	}

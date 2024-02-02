@@ -36,6 +36,9 @@ void Astral::Compiler::GenerateUnary(const UnaryOp* unaryOp)
 		case TokenType::MINUS:
 			type = OpType::UNARY_MINUS;
 			break;
+		case TokenType::NOT:
+			type = OpType::NOT;
+			break;
 		default:
 			throw "Oop";
 	}
