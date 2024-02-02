@@ -5,6 +5,7 @@
 
 #include "../Astral.h"
 #include "MathsHandler.h"
+#include "BooleanHandler.h"
 #include "Types/AstralTypes.h"
 #include "../Compilation/Compiler/OpType.h"
 #include "../Compilation/Compiler/Bytecode.h"

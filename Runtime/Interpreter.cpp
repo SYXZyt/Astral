@@ -61,6 +61,20 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 
 			break;
 		}
+		case OpType::EQUALITY:
+		{
+			Type::atype_t* rhs = Pop();
+			Type::atype_t* lhs = Pop();
+			stack.push(Boolean::Equality(lhs, rhs));
+			break;
+		}
+		case OpType::NEQUALITY:
+		{
+			Type::atype_t* rhs = Pop();
+			Type::atype_t* lhs = Pop();
+			stack.push(Boolean::Nequality(lhs, rhs));
+			break;
+		}
 		default:
 			throw "oop";
 	}

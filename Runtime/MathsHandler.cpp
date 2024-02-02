@@ -8,7 +8,7 @@
 
 #include <math.h>
 
-void Cleanup(Astral::Type::atype_t* lhs, Astral::Type::atype_t* rhs)
+inline void Cleanup(Astral::Type::atype_t* lhs, Astral::Type::atype_t* rhs)
 {
     if (lhs)
         delete lhs;

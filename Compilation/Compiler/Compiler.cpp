@@ -72,6 +72,12 @@ void Astral::Compiler::GenerateBinary(const BinaryOp* binaryOp)
 		case TokenType::MODULO:
 			type = OpType::MOD;
 			break;
+		case TokenType::EQUALS:
+			type = OpType::EQUALITY;
+			break;
+		case TokenType::NOT_EQUALS:
+			type = OpType::NEQUALITY;
+			break;
 		default:
 			throw "Oop";
 	}

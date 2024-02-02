@@ -179,6 +179,7 @@
     <ClInclude Include="Compilation\Tokenisation\Token.h" />
     <ClInclude Include="Compilation\Tokenisation\TokenType.h" />
     <ClInclude Include="ErrorManager.h" />
+    <ClInclude Include="Runtime\BooleanHandler.h" />
     <ClInclude Include="Runtime\Interpreter.h" />
     <ClInclude Include="Runtime\MathsHandler.h" />
     <ClInclude Include="Runtime\Types\AstralTypes.h" />
@@ -197,6 +198,7 @@
     <ClCompile Include="Compilation\Parsing\Statement.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Program.cpp" />
     <ClCompile Include="Compilation\Tokenisation\Lexer.cpp" />
+    <ClCompile Include="Runtime\BooleanHandler.cpp" />
     <ClCompile Include="Runtime\Interpreter.cpp" />
     <ClCompile Include="Runtime\MathsHandler.cpp" />
   </ItemGroup>
