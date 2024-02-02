@@ -9,7 +9,7 @@ namespace Astral
 		Expression* expression;
 
 	public:
-		inline Expression* GetExpression() { return expression; }
+		inline const Expression* GetExpression() const { return expression; }
 
 		void Dump(int indent = 0) final override;
 

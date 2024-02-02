@@ -1,4 +1,8 @@
 #pragma once
+#include <ostream>
+#include <sstream>
+#include <iomanip>
+
 #include "../../Astral.h"
 #include "../Tokenisation/Lexeme.h"
 
@@ -11,4 +15,14 @@ namespace Astral
 		uint8_t op;
 		Lexeme lexeme;
 	};
+
+	inline ASTRAL std::ostream& operator<<(std::ostream& os, Bytecode& bytecode)
+	{
+		os << OpTypeToString((OpType)bytecode.op) << '\t';
+		std::stringstream ss;
+		ss << std::hex << std::setw(2) << std::setfill('0') << (unsigned)bytecode.op << '\t';
+		os << ss.str();
+		os << bytecode.lexeme.lexeme << '\n';
+		return os;
+	}
 }

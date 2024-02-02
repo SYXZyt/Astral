@@ -1,9 +1,11 @@
 #pragma once
+#include "../../Astral.h"
+
 typedef unsigned char uint8_t;
 
 namespace Astral
 {
-	enum class OpType : uint8_t
+	enum class ASTRAL OpType : uint8_t
 	{
 		NOP,
 		LIT_NUMBER,
@@ -14,7 +16,7 @@ namespace Astral
 		UNARY_MINUS,
 	};
 
-	inline const char* OpTypeToString(OpType type)
+	inline ASTRAL const char* OpTypeToString(OpType type)
 	{
 		switch (type)
 		{

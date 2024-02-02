@@ -182,6 +182,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Astral.cpp" />
+    <ClCompile Include="Compilation\Compiler\Compiler.cpp" />
     <ClCompile Include="Compilation\Parsing\Expression.cpp" />
     <ClCompile Include="Compilation\Parsing\Expressions\BinaryOp.cpp" />
     <ClCompile Include="Compilation\Parsing\Expressions\Grouping.cpp" />

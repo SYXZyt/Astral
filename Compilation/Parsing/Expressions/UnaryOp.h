@@ -12,6 +12,8 @@ namespace Astral
 		Expression* value;
 
 	public:
+		const Expression* GetExpression() const { return value; }
+
 		void Dump(int indent = 0) final override;
 
 		UnaryOp(const Token& op, Expression* value) : op(op), value(value), Expression(op) {}
