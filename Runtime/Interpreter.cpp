@@ -75,6 +75,34 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			stack.push(Boolean::Nequality(lhs, rhs));
 			break;
 		}
+		case OpType::GREATER:
+		{
+			Type::atype_t* rhs = Pop();
+			Type::atype_t* lhs = Pop();
+			stack.push(Boolean::Greater(lhs, rhs));
+			break;
+		}
+		case OpType::GREATER_EQUALS:
+		{
+			Type::atype_t* rhs = Pop();
+			Type::atype_t* lhs = Pop();
+			stack.push(Boolean::GreaterEquals(lhs, rhs));
+			break;
+		}
+		case OpType::LESS:
+		{
+			Type::atype_t* rhs = Pop();
+			Type::atype_t* lhs = Pop();
+			stack.push(Boolean::Less(lhs, rhs));
+			break;
+		}
+		case OpType::LESS_EQUALS:
+		{
+			Type::atype_t* rhs = Pop();
+			Type::atype_t* lhs = Pop();
+			stack.push(Boolean::LessEquals(lhs, rhs));
+			break;
+		}
 		default:
 			throw "oop";
 	}

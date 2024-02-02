@@ -78,6 +78,18 @@ void Astral::Compiler::GenerateBinary(const BinaryOp* binaryOp)
 		case TokenType::NOT_EQUALS:
 			type = OpType::NEQUALITY;
 			break;
+		case TokenType::GREATER_THAN:
+			type = OpType::GREATER;
+			break;
+		case TokenType::GREATER_THAN_EQUAL:
+			type = OpType::GREATER_EQUALS;
+			break;
+		case TokenType::LESS_THAN:
+			type = OpType::LESS;
+			break;
+		case TokenType::LESS_THAN_EQUAL:
+			type = OpType::LESS_EQUALS;
+			break;
 		default:
 			throw "Oop";
 	}

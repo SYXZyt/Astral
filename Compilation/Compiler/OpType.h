@@ -16,8 +16,15 @@ namespace Astral
 		UNARY_MINUS,
 		POW,
 		MOD,
+
 		EQUALITY,
 		NEQUALITY,
+
+		GREATER,
+		GREATER_EQUALS,
+
+		LESS,
+		LESS_EQUALS,
 	};
 
 	inline ASTRAL const char* OpTypeToString(OpType type)
