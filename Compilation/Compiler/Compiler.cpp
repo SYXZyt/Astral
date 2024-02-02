@@ -57,6 +57,9 @@ void Astral::Compiler::GenerateBinary(const BinaryOp* binaryOp)
 		case TokenType::DIVIDE:
 			type = OpType::DIV;
 			break;
+		case TokenType::HAT:
+			type = OpType::POW;
+			break;
 		default:
 			throw "Oop";
 	}

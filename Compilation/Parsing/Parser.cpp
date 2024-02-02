@@ -133,7 +133,7 @@ Astral::Expression* Astral::Parser::ParseTerm()
 
 Astral::Expression* Astral::Parser::ParseFactor()
 {
-	Expression* expr = ParseUnary();
+	Expression* expr = ParsePower();
 
 	TokenType types[2]
 	{
@@ -141,6 +141,22 @@ Astral::Expression* Astral::Parser::ParseFactor()
 		TokenType::ASTERISK,
 	};
 	while (Match(types, 2))
+	{
+		Token op = Previous();
+		Expression* right = ParsePower();
+
+		Expression* temp = expr;
+		expr = new BinaryOp(temp, op, right);
+	}
+
+	return expr;
+}
+
+Astral::Expression* Astral::Parser::ParsePower()
+{
+	Expression* expr = ParseUnary();
+
+	while (Match(TokenType::HAT))
 	{
 		Token op = Previous();
 		Expression* right = ParseUnary();

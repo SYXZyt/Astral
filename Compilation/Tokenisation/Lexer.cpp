@@ -17,6 +17,7 @@ lex.lexeme = tokenLexeme;				\
 lex.line = line;						\
 lex.positionInBuffer = bufferpos;		\
 lex.positionInLine = posOnLine;			\
+lex.lineData = GetLineData(line);		\
 										\
 Token token;							\
 token.SetType(type);					\
@@ -94,6 +95,7 @@ Astral::Token Astral::Lexer::GenerateNumber()
 	lex.line = line;
 	lex.positionInBuffer = startpos;
 	lex.positionInLine = startlinepos;
+	lex.lineData = GetLineData(line);
 
 	Token tok;
 	tok.SetLexeme(lex);
@@ -119,6 +121,7 @@ Astral::Token Astral::Lexer::GenerateString(char strChar)
 	lex.line = line;
 	lex.positionInBuffer = bufferpos;
 	lex.positionInLine = posOnLine;
+	lex.lineData = GetLineData(line);
 
 	std::string data = "";
 
@@ -154,6 +157,7 @@ Astral::Token Astral::Lexer::GenerateString(char strChar)
 					break;
 				case '0':
 					data += '\0';
+					break;
 				case '\0':
 				{
 					lex.lexeme = data;
@@ -222,6 +226,7 @@ Astral::Token Astral::Lexer::GenerateIdentifier()
 	lex.fname = fname;
 	lex.lexeme = iden;
 	lex.line = line;
+	lex.lineData = GetLineData(line);
 	lex.positionInBuffer = beginPos;
 	lex.positionInLine = beginFilePos;
 
@@ -229,6 +234,28 @@ Astral::Token Astral::Lexer::GenerateIdentifier()
 	token.SetLexeme(lex);
 	token.SetType(TokenType::IDEN);
 	return token;
+}
+
+std::string Astral::Lexer::GetLineData(filepos linenum)
+{
+	std::string s = data;
+
+	///@todo Cache this result in the constructor
+	//https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
+	std::string delimiter = "\n";
+	size_t pos_start = 0, pos_end = 0, delim_len = delimiter.length();
+	std::string token;
+	std::vector<std::string> res;
+
+	while ((pos_end = s.find(delimiter, pos_start)) != std::string::npos) {
+		token = s.substr(pos_start, pos_end - pos_start);
+		pos_start = pos_end + delim_len;
+		res.push_back(token);
+	}
+
+	res.push_back(s.substr(pos_start));
+
+	return res[linenum];
 }
 
 void Astral::Lexer::Tokenise()
@@ -398,6 +425,12 @@ void Astral::Lexer::Tokenise()
 		else if (currentChar == ',')
 		{
 			CHAR_TOKEN(",", TokenType::COMMA);
+			PUSH_TOKEN();
+			Advance();
+		}
+		else if (currentChar == '^')
+		{
+			CHAR_TOKEN("^", TokenType::HAT);
 			PUSH_TOKEN();
 			Advance();
 		}

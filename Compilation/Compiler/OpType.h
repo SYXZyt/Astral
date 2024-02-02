@@ -14,6 +14,7 @@ namespace Astral
 		MUL,
 		DIV,
 		UNARY_MINUS,
+		POW,
 	};
 
 	inline ASTRAL const char* OpTypeToString(OpType type)
@@ -34,6 +35,8 @@ namespace Astral
 				return "DIV";
 			case OpType::UNARY_MINUS:
 				return "U_MIN";
+			case OpType::POW:
+				return "POW";
 			default:
 				return "UNKNOWN";
 		}

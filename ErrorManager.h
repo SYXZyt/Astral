@@ -16,8 +16,9 @@ namespace Astral
 		msg += '\n';
 		std::stringstream ss;
 		ss << std::setw(4) << token.GetLexeme().line + 1;
-		msg += ss.str() + "| " + token.GetLexeme().lexeme + '\n';
-		msg += std::string(6, ' ');
+		msg += ss.str() + "| " + token.GetLexeme().lineData + '\n';
+
+		msg += std::string(token.GetLexeme().positionInLine + 6, ' ');
 		msg += std::string(token.GetLexeme().lexeme.size(), '^');
 
 		msg += "\n\n";

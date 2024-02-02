@@ -36,6 +36,7 @@ namespace Astral
 		Expression* ParseComparison();
 		Expression* ParseTerm();
 		Expression* ParseFactor();
+		Expression* ParsePower();
 		Expression* ParseUnary();
 		Expression* ParseLiteral();
 

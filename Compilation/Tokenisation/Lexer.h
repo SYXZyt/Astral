@@ -37,6 +37,8 @@ namespace Astral
 		Token GenerateString(char strChar);
 		Token GenerateIdentifier();
 
+		std::string GetLineData(filepos linenum);
+
 	public:
 		inline bool Failed() const { return failed; }
 		inline const std::vector<Token>& GetTokens() const { return tokens; }

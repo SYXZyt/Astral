@@ -22,6 +22,7 @@ namespace Astral
 		SEMICOLON,
 		COMMA,
 		DOT,
+		HAT,
 
 		NOT,
 		LESS_THAN,

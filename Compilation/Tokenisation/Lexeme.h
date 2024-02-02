@@ -15,8 +15,16 @@ namespace Astral
 		
 		std::string lexeme;
 		std::string fname;
+		std::string lineData;
 
-		Lexeme() = default;
+		Lexeme() :
+			positionInBuffer(0),
+			positionInLine(0),
+			line(0),
+			lexeme(""),
+			fname(""),
+			lineData("")
+		{}
 		Lexeme(const Lexeme& other) = default;
 	};
 
