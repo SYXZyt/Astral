@@ -97,7 +97,10 @@ Astral::result_t Astral::Maths::Addition(Type::atype_t* lhs, Type::atype_t* rhs)
     if (lhs_number && rhs_number)
         return Addition_Number_Number(lhs_number, rhs_number);
     else
+    {
+        Cleanup(lhs, rhs);
         return FailTypes();
+    }
 }
 
 Astral::result_t Astral::Maths::Subtraction(Type::atype_t* lhs, Type::atype_t* rhs)
@@ -115,7 +118,10 @@ Astral::result_t Astral::Maths::Subtraction(Type::atype_t* lhs, Type::atype_t* r
     if (lhs_number && rhs_number)
         return Subtraction_Number_Number(lhs_number, rhs_number);
     else
+    {
+        Cleanup(lhs, rhs);
         return FailTypes();
+    }
 }
 
 Astral::result_t Astral::Maths::Multiplication(Type::atype_t* lhs, Type::atype_t* rhs)
@@ -133,7 +139,10 @@ Astral::result_t Astral::Maths::Multiplication(Type::atype_t* lhs, Type::atype_t
     if (lhs_number && rhs_number)
         return Multiplication_Number_Number(lhs_number, rhs_number);
     else
+    {
+        Cleanup(lhs, rhs);
         return FailTypes();
+    }
 }
 
 Astral::result_t Astral::Maths::Divide(Type::atype_t* lhs, Type::atype_t* rhs)
@@ -151,7 +160,10 @@ Astral::result_t Astral::Maths::Divide(Type::atype_t* lhs, Type::atype_t* rhs)
     if (lhs_number && rhs_number)
         return Division_Number_Number(lhs_number, rhs_number);
     else
+    {
+        Cleanup(lhs, rhs);
         return FailTypes();
+    }
 }
 
 Astral::result_t Astral::Maths::Power(Type::atype_t* lhs, Type::atype_t* rhs)
@@ -169,7 +181,10 @@ Astral::result_t Astral::Maths::Power(Type::atype_t* lhs, Type::atype_t* rhs)
     if (lhs_number && rhs_number)
         return Power_Number_Number(lhs_number, rhs_number);
     else
+    {
+        Cleanup(lhs, rhs);
         return FailTypes();
+    }
 }
 
 Astral::result_t Astral::Maths::Modulo(Type::atype_t* lhs, Type::atype_t* rhs)
@@ -187,7 +202,10 @@ Astral::result_t Astral::Maths::Modulo(Type::atype_t* lhs, Type::atype_t* rhs)
     if (lhs_number && rhs_number)
         return Modulo_Number_Number(lhs_number, rhs_number);
     else
+    {
+        Cleanup(lhs, rhs);
         return FailTypes();
+    }
 }
 
 Astral::result_t Astral::Maths::Minus(Type::atype_t* val)

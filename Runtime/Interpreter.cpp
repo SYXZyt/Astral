@@ -131,48 +131,104 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		{
 			Type::atype_t* rhs = Pop();
 			Type::atype_t* lhs = Pop();
-			stack.push(Boolean::Equality(lhs, rhs));
+			result_t res = Boolean::Equality(lhs, rhs);
+
+			if (res.type == result_t::ResultType::R_OK)
+				stack.push(res.result);
+			else
+			{
+				Error("Invalid boolean operator types", instruction.lexeme);
+				failed = true;
+			}
 			break;
 		}
 		case OpType::NEQUALITY:
 		{
 			Type::atype_t* rhs = Pop();
 			Type::atype_t* lhs = Pop();
-			stack.push(Boolean::Nequality(lhs, rhs));
+			result_t res = Boolean::Nequality(lhs, rhs);
+
+			if (res.type == result_t::ResultType::R_OK)
+				stack.push(res.result);
+			else
+			{
+				Error("Invalid boolean operator types", instruction.lexeme);
+				failed = true;
+			}
 			break;
 		}
 		case OpType::GREATER:
 		{
 			Type::atype_t* rhs = Pop();
 			Type::atype_t* lhs = Pop();
-			stack.push(Boolean::Greater(lhs, rhs));
+			result_t res = Boolean::Greater(lhs, rhs);
+
+			if (res.type == result_t::ResultType::R_OK)
+				stack.push(res.result);
+			else
+			{
+				Error("Invalid boolean operator types", instruction.lexeme);
+				failed = true;
+			}
 			break;
 		}
 		case OpType::GREATER_EQUALS:
 		{
 			Type::atype_t* rhs = Pop();
 			Type::atype_t* lhs = Pop();
-			stack.push(Boolean::GreaterEquals(lhs, rhs));
+			result_t res = Boolean::GreaterEquals(lhs, rhs);
+
+			if (res.type == result_t::ResultType::R_OK)
+				stack.push(res.result);
+			else
+			{
+				Error("Invalid boolean operator types", instruction.lexeme);
+				failed = true;
+			}
 			break;
 		}
 		case OpType::LESS:
 		{
 			Type::atype_t* rhs = Pop();
 			Type::atype_t* lhs = Pop();
-			stack.push(Boolean::Less(lhs, rhs));
+			result_t res = Boolean::Less(lhs, rhs);
+
+			if (res.type == result_t::ResultType::R_OK)
+				stack.push(res.result);
+			else
+			{
+				Error("Invalid boolean operator types", instruction.lexeme);
+				failed = true;
+			}
 			break;
 		}
 		case OpType::LESS_EQUALS:
 		{
 			Type::atype_t* rhs = Pop();
 			Type::atype_t* lhs = Pop();
-			stack.push(Boolean::LessEquals(lhs, rhs));
+			result_t res = Boolean::LessEquals(lhs, rhs);
+
+			if (res.type == result_t::ResultType::R_OK)
+				stack.push(res.result);
+			else
+			{
+				Error("Invalid boolean operator types", instruction.lexeme);
+				failed = true;
+			}
 			break;
 		}
 		case OpType::NOT:
 		{
 			Type::atype_t* val = Pop();
-			stack.push(Boolean::Not(val));
+			result_t res = Boolean::Not(val);
+
+			if (res.type == result_t::ResultType::R_OK)
+				stack.push(res.result);
+			else
+			{
+				Error("Invalid boolean operator type", instruction.lexeme);
+				failed = true;
+			}
 			break;
 		}
 		default:
