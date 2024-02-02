@@ -239,9 +239,15 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 void Astral::Interpreter::Execute()
 {
 	while (pc < rom.size())
+	{
 		ExecuteInstruction(rom[pc++]);
 
-	std::cout << dynamic_cast<Type::number_t*>(Pop())->Value() << '\n';
+		if (failed)
+			break;
+	}
+
+	if (!stack.empty())
+		std::cout << dynamic_cast<Type::number_t*>(Pop())->Value() << '\n';
 }
 
 Astral::Interpreter::~Interpreter()

@@ -37,7 +37,7 @@ namespace Astral
 
 		inline bool Failed() const { return failed; }
 
-		Interpreter(const std::vector<Bytecode>& rom) : rom(rom), pc(0) {}
+		Interpreter(const std::vector<Bytecode>& rom) : rom(rom), pc(0), failed(false) {}
 		~Interpreter();
 	};
 }
