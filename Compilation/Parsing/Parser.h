@@ -7,7 +7,6 @@
 #include "ParseTree.h"
 #include "AllNodeTypes.h"
 
-#include "../Keyword.h"
 #include "../../Astral.h"
 #include "../../ErrorManager.h"
 
@@ -21,6 +20,7 @@ namespace Astral
 
 		bool failed;
 
+		void Sync();
 		Token Peek();
 		Token Previous();
 		Token Advance();

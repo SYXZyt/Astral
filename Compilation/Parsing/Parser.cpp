@@ -1,5 +1,30 @@
 #include "Parser.h"
 
+void Astral::Parser::Sync()
+{
+	Advance();
+
+	while (!IsEof())
+	{
+		if (Previous().GetType() == TokenType::SEMICOLON)
+			return;
+
+		switch (Previous().GetType())
+		{
+			case TokenType::FUNC:
+			case TokenType::LET:
+			case TokenType::FOR:
+			case TokenType::IF:
+			case TokenType::ELSE:
+			case TokenType::WHILE:
+			case TokenType::RETURN:
+				return;
+		}
+
+		Advance();
+	}
+}
+
 Astral::Token Astral::Parser::Peek()
 {
 	if (IsEof())
@@ -79,7 +104,7 @@ Astral::Expression* Astral::Parser::ParseEquality()
 	{
 		Token op = Previous();
 		Expression* right = ParseComparison();
-		
+
 		Expression* temp = expr;
 		expr = new BinaryOp(temp, op, right);
 	}
@@ -102,7 +127,7 @@ Astral::Expression* Astral::Parser::ParseComparison()
 	{
 		Token op = Previous();
 		Expression* right = ParseTerm();
-		
+
 		Expression* temp = expr;
 		expr = new BinaryOp(temp, op, right);
 	}
@@ -201,32 +226,25 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 		return new Grouping(expr, Previous());
 	}
 
-	if (Match(TokenType::KEYWORD))
+	TokenType booleans[2]
 	{
-		if (Previous().GetLexeme().lexeme == "true" ||
-			Previous().GetLexeme().lexeme == "false"
-			)
-		{
-			bool* data;
-			if (Previous().GetLexeme().lexeme == "true")
-				data = new bool(true);
-			else
-				data = new bool(false);
-
-			return new Literal(data, Literal::LiteralType::BOOLEAN, Previous());
-		}
+		TokenType::_TRUE,
+		TokenType::_FALSE,
+	};
+	if (Match(booleans, 2))
+	{
+		bool* data;
+		if (Previous().GetType() == TokenType::_TRUE)
+			data = new bool(true);
 		else
-		{
-			Error("Keyword was unexpected. Expected value", Previous());
-			failed = true;
-			Advance();
-			return nullptr;
-		}
+			data = new bool(false);
+
+		return new Literal(data, Literal::LiteralType::BOOLEAN, Previous());
 	}
 
-	Error("Expected value", tokens[tokens.size() - 1ull]);
+	Error("Expected value", pointer == 0 ? Peek() : Previous());
 	failed = true;
-	Advance();
+	Sync();
 
 	return nullptr;
 }

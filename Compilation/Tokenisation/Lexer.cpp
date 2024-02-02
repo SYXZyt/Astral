@@ -234,9 +234,24 @@ Astral::Token Astral::Lexer::GenerateIdentifier()
 	token.SetLexeme(lex);
 	token.SetType(TokenType::IDEN);
 
-	//Check if the keyword was a keyword instead
-	if (IsKeyword(iden))
-		token.SetType(TokenType::KEYWORD);
+	if (iden == "true")
+		token.SetType(TokenType::_TRUE);
+	else if (iden == "false")
+		token.SetType(TokenType::_FALSE);
+	else if (iden == "func")
+		token.SetType(TokenType::FUNC);
+	else if (iden == "let")
+		token.SetType(TokenType::LET);
+	else if (iden == "for")
+		token.SetType(TokenType::FOR);
+	else if (iden == "if")
+		token.SetType(TokenType::IF);
+	else if (iden == "else")
+		token.SetType(TokenType::ELSE);
+	else if (iden == "while")
+		token.SetType(TokenType::WHILE);
+	else if (iden == "return")
+		token.SetType(TokenType::RETURN);
 
 	return token;
 }

@@ -84,9 +84,6 @@
     <ClInclude Include="Runtime\MathsHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Compilation\Keyword.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Runtime\BooleanHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
