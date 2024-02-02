@@ -133,3 +133,21 @@ Astral::Type::atype_t* Astral::Maths::Divide(Type::atype_t* lhs, Type::atype_t* 
 
     return nullptr;
 }
+
+Astral::Type::atype_t* Astral::Maths::Minus(Type::atype_t* val)
+{
+    if (!val)
+        return nullptr;
+
+    if (Type::number_t* num = dynamic_cast<Type::number_t*>(val))
+    {
+        //We can reuse the pointer and we don't have to create a new object
+        num->SetValue(num->Value() * -1);
+        return num;
+    }
+    else
+    {
+        delete val;
+        return nullptr;
+    }
+}

@@ -30,6 +30,11 @@ void Astral::Compiler::GenerateUnary(const UnaryOp* unaryOp)
 		default:
 			throw "Oop";
 	}
+
+	Bytecode code;
+	code.op = (uint8_t)type;
+	code.lexeme = unaryOp->GetToken().GetLexeme();
+	rom.push_back(code);
 }
 
 void Astral::Compiler::GenerateBinary(const BinaryOp* binaryOp)

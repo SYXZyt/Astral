@@ -40,6 +40,13 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			stack.push(Maths::Divide(lhs, rhs));
 			break;
 		}
+		case OpType::UNARY_MINUS:
+		{
+			Type::atype_t* val = Pop();
+			stack.push(Maths::Minus(val));
+
+			break;
+		}
 		default:
 			throw "oop";
 	}
