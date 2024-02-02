@@ -6,6 +6,7 @@
 
 #include "Token.h"
 
+#include "../Keyword.h"
 #include "../../Astral.h"
 #include "../../ErrorManager.h"
 

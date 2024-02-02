@@ -7,6 +7,7 @@
 #include "ParseTree.h"
 #include "AllNodeTypes.h"
 
+#include "../Keyword.h"
 #include "../../Astral.h"
 #include "../../ErrorManager.h"
 

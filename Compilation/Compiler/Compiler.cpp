@@ -12,6 +12,15 @@ void Astral::Compiler::GenerateLiteral(const Literal* literal)
 			rom.push_back(code);
 			break;
 		}
+		case Literal::LiteralType::BOOLEAN:
+		{
+			Bytecode code;
+			code.lexeme = literal->GetToken().GetLexeme();
+			code.op = (uint8_t)OpType::LIT_NUMBER;
+			code.lexeme.lexeme = *(bool*)literal->data ? "1" : "0";
+			rom.push_back(code);
+			break;
+		}
 		default:
 			throw "oop";
 	}

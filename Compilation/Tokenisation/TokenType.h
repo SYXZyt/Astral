@@ -14,6 +14,7 @@ namespace Astral
 		ASTERISK,
 		DIVIDE,
 		IDEN,
+		KEYWORD,
 		STRING,
 		L_BRA,
 		R_BRA,

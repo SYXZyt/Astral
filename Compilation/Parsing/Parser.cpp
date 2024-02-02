@@ -201,6 +201,29 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 		return new Grouping(expr, Previous());
 	}
 
+	if (Match(TokenType::KEYWORD))
+	{
+		if (Previous().GetLexeme().lexeme == "true" ||
+			Previous().GetLexeme().lexeme == "false"
+			)
+		{
+			bool* data;
+			if (Previous().GetLexeme().lexeme == "true")
+				data = new bool(true);
+			else
+				data = new bool(false);
+
+			return new Literal(data, Literal::LiteralType::BOOLEAN, Previous());
+		}
+		else
+		{
+			Error("Keyword was unexpected. Expected value", Previous());
+			failed = true;
+			Advance();
+			return nullptr;
+		}
+	}
+
 	Error("Expected value", tokens[tokens.size() - 1ull]);
 	failed = true;
 	Advance();

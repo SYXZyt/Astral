@@ -10,6 +10,7 @@ namespace Astral
 		enum class LiteralType
 		{
 			NUMBER,
+			BOOLEAN,
 		};
 
 		LiteralType type;

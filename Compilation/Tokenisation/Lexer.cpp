@@ -233,6 +233,11 @@ Astral::Token Astral::Lexer::GenerateIdentifier()
 	Token token;
 	token.SetLexeme(lex);
 	token.SetType(TokenType::IDEN);
+
+	//Check if the keyword was a keyword instead
+	if (IsKeyword(iden))
+		token.SetType(TokenType::KEYWORD);
+
 	return token;
 }
 
