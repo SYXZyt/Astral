@@ -12,7 +12,7 @@ namespace Astral
 {
 	struct ASTRAL Bytecode
 	{
-		uint8_t op;
+		uint8_t op = 0u;
 		Lexeme lexeme;
 	};
 
@@ -22,7 +22,7 @@ namespace Astral
 		std::stringstream ss;
 		ss << std::hex << std::setw(2) << std::setfill('0') << (unsigned)bytecode.op << '\t';
 		os << ss.str();
-		os << bytecode.lexeme.lexeme << '\n';
+		os << bytecode.lexeme.lexeme;
 		return os;
 	}
 }
