@@ -130,6 +130,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Astral.h" />
+    <ClInclude Include="Compilation\Compiler\Bytecode.h" />
+    <ClInclude Include="Compilation\Compiler\Compiler.h" />
+    <ClInclude Include="Compilation\Compiler\OpType.h" />
     <ClInclude Include="Compilation\Parsing\AllNodeTypes.h" />
     <ClInclude Include="Compilation\Parsing\Expression.h" />
     <ClInclude Include="Compilation\Parsing\Expressions\BinaryOp.h" />
@@ -160,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Astral.cpp" />
+    <ClCompile Include="Compilation\Compiler\Compiler.cpp" />
     <ClCompile Include="Compilation\Parsing\Expression.cpp" />
     <ClCompile Include="Compilation\Parsing\Expressions\BinaryOp.cpp" />
     <ClCompile Include="Compilation\Parsing\Expressions\Grouping.cpp" />

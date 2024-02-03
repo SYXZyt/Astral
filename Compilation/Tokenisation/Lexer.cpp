@@ -426,7 +426,6 @@ void Astral::Lexer::Tokenise()
 			{
 				CHAR_TOKEN(">=", TokenType::GREATER_THAN_EQUAL);
 				PUSH_TOKEN();
-				Advance();
 				Advance(2);
 			}
 			else
