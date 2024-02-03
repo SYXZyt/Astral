@@ -15,19 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Compilation\Tokenisation\TokenType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Compilation\Tokenisation\Lexeme.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Types.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Compilation\Tokenisation\Token.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Compilation\Tokenisation\Lexer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Astral.h">
@@ -36,46 +24,7 @@
     <ClInclude Include="ErrorManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Compilation\Parsing\ParseTree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Compilation\Parsing\Parser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Compilation\Parsing\Expression.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Compilation\Parsing\Expressions\Literal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Compilation\Parsing\Expressions\BinaryOp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Compilation\Parsing\AllNodeTypes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Compilation\Parsing\Expressions\UnaryOp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Compilation\Parsing\Expressions\Grouping.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Compilation\Parsing\Statement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Compilation\Parsing\Statements\Program.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Compilation\Compiler\Bytecode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Compilation\Compiler\OpType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Compilation\Compiler\Compiler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Runtime\Types\AstralTypes.h">
+    <ClInclude Include="Runtime\BooleanHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Runtime\Interpreter.h">
@@ -84,48 +33,65 @@
     <ClInclude Include="Runtime\MathsHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Runtime\BooleanHandler.h">
+    <ClInclude Include="Runtime\Result.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Runtime\Result.h">
+    <ClInclude Include="Runtime\Types\AstralTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilation\Tokenisation\Lexeme.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilation\Tokenisation\Lexer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilation\Tokenisation\Token.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilation\Tokenisation\TokenType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilation\Parsing\AllNodeTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilation\Parsing\Expression.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilation\Parsing\Parser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilation\Parsing\ParseTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilation\Parsing\Statement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilation\Parsing\Statements\Program.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilation\Parsing\Expressions\BinaryOp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilation\Parsing\Expressions\Grouping.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilation\Parsing\Expressions\Literal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilation\Parsing\Expressions\UnaryOp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Compilation\Tokenisation\Lexer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <None Include=".gitattributes" />
+    <None Include=".gitignore" />
+    <None Include="cpp.hint" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="Astral.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Compilation\Parsing\Parser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Compilation\Parsing\Expressions\Literal.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Compilation\Parsing\Expressions\BinaryOp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Compilation\Parsing\Expressions\UnaryOp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Compilation\Parsing\Expressions\Grouping.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Compilation\Parsing\ParseTree.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Compilation\Parsing\Expression.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Compilation\Parsing\Statement.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Compilation\Parsing\Statements\Program.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Compilation\Compiler\Compiler.cpp">
+    <ClCompile Include="Runtime\BooleanHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Runtime\Interpreter.cpp">
@@ -134,13 +100,35 @@
     <ClCompile Include="Runtime\MathsHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Runtime\BooleanHandler.cpp">
+    <ClCompile Include="Compilation\Tokenisation\Lexer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="cpp.hint" />
-    <None Include=".gitignore" />
-    <None Include=".gitattributes" />
+    <ClCompile Include="Compilation\Parsing\Expression.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compilation\Parsing\Parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compilation\Parsing\ParseTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compilation\Parsing\Statement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compilation\Parsing\Statements\Program.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compilation\Parsing\Expressions\BinaryOp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compilation\Parsing\Expressions\Grouping.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compilation\Parsing\Expressions\Literal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compilation\Parsing\Expressions\UnaryOp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
