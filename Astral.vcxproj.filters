@@ -86,6 +86,7 @@
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
     <None Include="cpp.hint" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Astral.cpp">
