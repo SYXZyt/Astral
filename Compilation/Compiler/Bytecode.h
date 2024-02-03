@@ -16,7 +16,7 @@ namespace Astral
 		Lexeme lexeme;
 	};
 
-	inline ASTRAL std::ostream& operator<<(std::ostream& os, Bytecode& bytecode)
+	inline ASTRAL std::ostream& operator<<(std::ostream& os, const Bytecode& bytecode)
 	{
 		os << OpTypeToString((OpType)bytecode.op) << '\t';
 		std::stringstream ss;
