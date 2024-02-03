@@ -90,6 +90,30 @@ func Update(dt)
 }
 ```
 
+## Compilation Stages
+### Lexer
+The lexer, lexical analyser or tokeniser is the first stage in compilation. It will generate tokens which are sequences of related characters. For example, if the lexer reads the characters `f` `u` `n` `c` then it knows that those characters are part of the same keyword and so it can make a `func` token.
+### Parser
+The next stage is parsing which will take in the generated tokens and will use those to create an abstract syntax tree, or AST. This is a tree which will store a representation of the source code. These trees will take into account for operator precedence to easily allow mathematical equations to be executed.
+The expression `1 + 2 * 3` will be turned into this tree.
+```
+ +
+/ \
+1  *
+  / \
+  2  3
+```
+whereas `(1 + 2) * 3` will be turned into this tree.
+```
+  *
+ / \
+ +  3
+/ \
+1 2
+```
+### Compiler
+The final stage of compilation is the compiler or assembler. It will navigate through the AST and generate bytecode. Bytecode is the instructions that the virtual machine or interpreter will execute. These instructions are very simple and will usually consist of, push value onto stack, or add together two values.
+
 ## Building
 Astral was developed using Visual Studio 2022 and provides a `.sln` file for your use. Astral compiles to a `.dll` and Astral Testing (which is the playground I use to test various features) will use that `.dll` to run.
 In the future, I plan to convert over to using CMAKE instead of using a Visual Studio solution.
