@@ -1,6 +1,8 @@
 #pragma once
-#include "../../Astral.h"
+#include <string>
 #include <string.h>
+
+#include "../../Astral.h"
 
 namespace Astral::Type
 {
@@ -55,6 +57,7 @@ namespace Astral::Type
 
 		string_t();
 		string_t(const char* value);
+		string_t(const std::string& string);
 		~string_t() final override;
 	};
 }
