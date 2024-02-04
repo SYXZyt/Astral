@@ -1,5 +1,5 @@
 # Astral Scripting Language
-Astral is a dynamically type scripting language designed to be easy to use and integrate into other software.
+Astral is a dynamic typed scripting language designed to be easy to use and integrate into other software.
 The language features a syntax which has mainly been inspired by JavaScript and C. There are no classes but structs can be used and passed by reference.
 
 # Important Notice
