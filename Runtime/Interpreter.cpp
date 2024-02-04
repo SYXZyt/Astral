@@ -12,6 +12,12 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			stack.push(number);
 			break;
 		}
+		case OpType::LIT_STRING:
+		{
+			Type::string_t* string = new Type::string_t(instruction.lexeme.lexeme.c_str());
+			stack.push(string);
+			break;
+		}
 		case OpType::ADD:
 		{
 			Type::atype_t* rhs = Pop();
@@ -238,6 +244,8 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			//If we do not know the type we are printing, just print the address
 			if (Type::number_t* number_t = dynamic_cast<Type::number_t*>(val))
 				std::cout << number_t->Value() << '\n';
+			else if (Type::string_t* string_t = dynamic_cast<Type::string_t*>(val))
+				std::cout << string_t->Value() << '\n';
 			else
 				std::cout << '$' << val << '\n';
 

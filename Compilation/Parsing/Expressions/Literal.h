@@ -11,6 +11,7 @@ namespace Astral
 		{
 			NUMBER,
 			BOOLEAN,
+			STRING,
 		};
 
 		LiteralType type;

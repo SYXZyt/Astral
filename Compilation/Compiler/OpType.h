@@ -9,6 +9,7 @@ namespace Astral
 	{
 		NOP,
 		LIT_NUMBER,
+		LIT_STRING,
 		ADD,
 		SUB,
 		MUL,
@@ -39,6 +40,8 @@ namespace Astral
 				return "NOP";
 			case OpType::LIT_NUMBER:
 				return "NUMBER";
+			case OpType::LIT_STRING:
+				return "STRING";
 			case OpType::ADD:
 				return "ADD";
 			case OpType::SUB:

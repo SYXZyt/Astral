@@ -149,5 +149,8 @@
     <ClCompile Include="Compilation\Parsing\Statements\PrintStatement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Runtime\Types\AstralTypes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

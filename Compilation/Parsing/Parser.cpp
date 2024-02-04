@@ -219,6 +219,12 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 		return new Literal(data, Literal::LiteralType::NUMBER, Previous());
 	}
 
+	if (Match(TokenType::STRING))
+	{
+		std::string* data = new std::string(Previous().GetLexeme().lexeme);
+		return new Literal(data, Literal::LiteralType::STRING, Previous());
+	}
+
 	if (Match(TokenType::L_BRA))
 	{
 		Expression* expr = ParseExpression();
@@ -242,7 +248,7 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 		return new Literal(data, Literal::LiteralType::BOOLEAN, Previous());
 	}
 
-	Error("Expected value", pointer == 0 ? Peek() : Previous());
+	Error("Expected expression", Peek());
 	failed = true;
 	Sync();
 

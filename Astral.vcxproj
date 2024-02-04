@@ -179,6 +179,7 @@
     <ClCompile Include="Runtime\BooleanHandler.cpp" />
     <ClCompile Include="Runtime\Interpreter.cpp" />
     <ClCompile Include="Runtime\MathsHandler.cpp" />
+    <ClCompile Include="Runtime\Types\AstralTypes.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
