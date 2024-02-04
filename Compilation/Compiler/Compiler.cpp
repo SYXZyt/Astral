@@ -138,6 +138,8 @@ void Astral::Compiler::GenerateStatement(const Statement* statement)
 {
 	if (const Program* program = dynamic_cast<const Program*>(statement))
 		GenerateProgram(program);
+	else if (const PrintStatement* print = dynamic_cast<const PrintStatement*>(statement))
+		GeneratePrint(print);
 	else
 		throw "oop";
 }
@@ -146,6 +148,16 @@ void Astral::Compiler::GenerateProgram(const Program* program)
 {
 	for (ParseTree* node : program->Statements())
 		GenerateNode(node);
+}
+
+void Astral::Compiler::GeneratePrint(const PrintStatement* printStatement)
+{
+	GenerateExpression(printStatement->Expr());
+
+	Bytecode code;
+	code.lexeme = printStatement->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::PRINT;
+	rom.push_back(code);
 }
 
 void Astral::Compiler::GenerateBytecode()

@@ -29,6 +29,7 @@ namespace Astral
 
 		void GenerateStatement(const Statement* statement);
 		void GenerateProgram(const Program* program);
+		void GeneratePrint(const PrintStatement* printStatement);
 
 	public:
 		inline bool Failed() const { return failed; }

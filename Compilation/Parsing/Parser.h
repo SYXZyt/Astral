@@ -41,6 +41,9 @@ namespace Astral
 		Expression* ParseUnary();
 		Expression* ParseLiteral();
 
+		Statement* ParseStatement();
+		Statement* ParsePrintStatement();
+
 	public:
 		inline bool HasFailed() const { return failed; }
 

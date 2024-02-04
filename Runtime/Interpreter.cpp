@@ -231,6 +231,18 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			}
 			break;
 		}
+		case OpType::PRINT:
+		{
+			Type::atype_t* val = Pop();
+
+			//If we do not know the type we are printing, just print the address
+			if (Type::number_t* number_t = dynamic_cast<Type::number_t*>(val))
+				std::cout << number_t->Value() << '\n';
+			else
+				std::cout << '$' << val << '\n';
+
+			break;
+		}
 		default:
 			throw "oop";
 	}
@@ -245,9 +257,6 @@ void Astral::Interpreter::Execute()
 		if (failed)
 			break;
 	}
-
-	if (!stack.empty())
-		std::cout << dynamic_cast<Type::number_t*>(Pop())->Value() << '\n';
 }
 
 Astral::Interpreter::~Interpreter()

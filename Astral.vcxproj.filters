@@ -90,6 +90,9 @@
     <ClInclude Include="Compilation\Compiler\OpType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Compilation\Parsing\Statements\PrintStatement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
@@ -141,6 +144,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Compilation\Compiler\Compiler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compilation\Parsing\Statements\PrintStatement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

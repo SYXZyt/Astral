@@ -28,7 +28,7 @@ void Astral::Parser::Sync()
 Astral::Token Astral::Parser::Peek()
 {
 	if (IsEof())
-		return Token();
+		return tokens[tokens.size() - 1];
 
 	return tokens[pointer];
 }
@@ -36,7 +36,7 @@ Astral::Token Astral::Parser::Peek()
 Astral::Token Astral::Parser::Previous()
 {
 	if (pointer == 0)
-		return Token();
+		return tokens[tokens.size() - 1];
 
 	return tokens[pointer - 1ull];
 }
@@ -249,11 +249,29 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 	return nullptr;
 }
 
+Astral::Statement* Astral::Parser::ParseStatement()
+{
+	if (Match(TokenType::PRINT))
+		return ParsePrintStatement();
+
+	Error("Expected statement", Previous());
+	Sync();
+}
+
+Astral::Statement* Astral::Parser::ParsePrintStatement()
+{
+	Token token = Previous();
+
+	Expression* expr = ParseExpression();
+	Consume(TokenType::SEMICOLON, "Expected ';'");
+	return new PrintStatement(token, expr);
+}
+
 void Astral::Parser::Parse()
 {
 	while (!IsEof())
 	{
-		tree.push_back(ParseExpression());
+		tree.push_back(ParseStatement());
 	}
 
 	Program* program = new Program(tokens[0]);

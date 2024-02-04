@@ -142,6 +142,7 @@
     <ClInclude Include="Compilation\Parsing\Parser.h" />
     <ClInclude Include="Compilation\Parsing\ParseTree.h" />
     <ClInclude Include="Compilation\Parsing\Statement.h" />
+    <ClInclude Include="Compilation\Parsing\Statements\PrintStatement.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Program.h" />
     <ClInclude Include="Compilation\Tokenisation\Lexeme.h" />
     <ClInclude Include="Compilation\Tokenisation\Lexer.h" />
@@ -172,6 +173,7 @@
     <ClCompile Include="Compilation\Parsing\Parser.cpp" />
     <ClCompile Include="Compilation\Parsing\ParseTree.cpp" />
     <ClCompile Include="Compilation\Parsing\Statement.cpp" />
+    <ClCompile Include="Compilation\Parsing\Statements\PrintStatement.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Program.cpp" />
     <ClCompile Include="Compilation\Tokenisation\Lexer.cpp" />
     <ClCompile Include="Runtime\BooleanHandler.cpp" />

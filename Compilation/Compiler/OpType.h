@@ -26,6 +26,9 @@ namespace Astral
 
 		LESS,
 		LESS_EQUALS,
+
+		//Statements
+		PRINT,
 	};
 
 	inline ASTRAL const char* OpTypeToString(OpType type)
@@ -56,6 +59,8 @@ namespace Astral
 				return "NEQ";
 			case OpType::NOT:
 				return "NOT";
+			case OpType::PRINT:
+				return "PRINT";
 			default:
 				return "UNKNOWN";
 		}
