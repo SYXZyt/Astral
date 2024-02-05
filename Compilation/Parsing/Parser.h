@@ -42,6 +42,8 @@ namespace Astral
 		Expression* ParseLiteral();
 
 		Statement* ParseStatement();
+		Statement* ParseDeclarations();
+		Statement* ParseLetStatement();
 		Statement* ParsePrintStatement();
 
 	public:
