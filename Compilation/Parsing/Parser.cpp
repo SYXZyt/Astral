@@ -28,7 +28,7 @@ void Astral::Parser::Sync()
 Astral::Token Astral::Parser::Peek()
 {
 	if (IsEof())
-		return tokens[tokens.size() - 1];
+		return Token();
 
 	return tokens[pointer];
 }
@@ -36,7 +36,7 @@ Astral::Token Astral::Parser::Peek()
 Astral::Token Astral::Parser::Previous()
 {
 	if (pointer == 0)
-		return tokens[tokens.size() - 1];
+		return Token();
 
 	return tokens[pointer - 1ull];
 }
@@ -248,6 +248,7 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 		return new Literal(data, Literal::LiteralType::BOOLEAN, Previous());
 	}
 
+	failed = true;
 	Error("Expected expression", Peek());
 	failed = true;
 	Sync();
@@ -257,16 +258,19 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 
 Astral::Statement* Astral::Parser::ParseStatement()
 {
+	Token token = pointer == 0 ? tokens[0] : Previous();
+
 	if (Match(TokenType::PRINT))
 		return ParsePrintStatement();
 
-	Error("Expected statement", Previous());
+	failed = true;
+	Error("Expected statement", token);
 	Sync();
 }
 
 Astral::Statement* Astral::Parser::ParsePrintStatement()
 {
-	Token token = Previous();
+	Token token = pointer == 0 ? tokens[0] : Previous();
 
 	Expression* expr = ParseExpression();
 	Consume(TokenType::SEMICOLON, "Expected ';'");

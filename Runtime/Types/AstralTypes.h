@@ -60,4 +60,6 @@ namespace Astral::Type
 		string_t(const std::string& string);
 		~string_t() final override;
 	};
+
+	class ASTRAL void_t final : public atype_t {};
 }
