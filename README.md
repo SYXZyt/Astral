@@ -19,6 +19,19 @@ Astral and its runtime are still currently in development. Many of the features 
 | Array | Dynamically sized list of data                                                          |
 | Char  | Single character. Will be used when reading or writing to a string at a specified index |
 
+## Implicit Boolean Conversion
+Astral will implicitly convert some types to booleans when used in an if statement. In Astral, booleans are simply represented as a number, where true is non-zero, like C.
+Void if passed into an if statement will *always* return false, and a struct will always return true. This is implemented to allow C-like null checking for pointers.
+In C, you can do this to check if an object has been defined.
+```c
+void* myobj = NULL;
+if (myobj)
+	printf("My Object Exists\n");
+else
+	printf("My Object Doesn't Exist\n");
+```
+and Astral will allow this as if the object has been defined as a struct, it will return true, otherwise Void which will return false.
+
 ## Syntax
 Astral follows a simple syntax. A program will be made up of global variable definitions, structure definitions and functions.
 Global variables are variables which can be access anywhere within the program, regardless of scope.
