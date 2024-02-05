@@ -258,14 +258,28 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 
 Astral::Statement* Astral::Parser::ParseStatement()
 {
-	Token token = pointer == 0 ? tokens[0] : Previous();
-
 	if (Match(TokenType::PRINT))
 		return ParsePrintStatement();
 
-	failed = true;
-	Error("Expected statement", token);
+	if (Match(TokenType::LET))
+		return ParseLetStatement();
+
+	Error("Expected statement", Previous());
 	Sync();
+	failed = true;
+}
+
+Astral::Statement* Astral::Parser::ParseLetStatement()
+{
+	Token let = Previous();
+	Token name = Consume(TokenType::IDEN, "Expected variable name");
+
+	Expression* expr = nullptr;
+	if (Match(TokenType::EQUALS))
+		expr = ParseExpression();
+
+	Consume(TokenType::SEMICOLON, "Expected ';'");
+	return new Variable(let, name, expr);
 }
 
 Astral::Statement* Astral::Parser::ParsePrintStatement()
