@@ -93,7 +93,13 @@
     <ClInclude Include="Compilation\Parsing\Statements\PrintStatement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Compilation\Parsing\Statements\Variable.h">
+    <ClInclude Include="Compilation\Parsing\Statements\VariableDefinition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtime\Variables\Variable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtime\Variables\Variables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -155,7 +161,13 @@
     <ClCompile Include="Runtime\Types\AstralTypes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Compilation\Parsing\Statements\Variable.cpp">
+    <ClCompile Include="Compilation\Parsing\Statements\VariableDefinition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Runtime\Variables\Variable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Runtime\Variables\Variables.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -249,6 +249,22 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			else
 				std::cout << '$' << val << '\n';
 
+			delete val;
+
+			break;
+		}
+		case OpType::VARIABLE:
+		{
+			std::string name = instruction.lexeme.lexeme;
+			if (!variables.DoesVariableExist(name.c_str()))
+			{
+				Error("Variables does not exist", instruction.lexeme);
+				failed = true;
+				break;
+			}
+
+			stack.push(variables.GetValue(name.c_str()));
+
 			break;
 		}
 		default:

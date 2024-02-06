@@ -1,5 +1,8 @@
 #include "Parser.h"
 
+#define PreviousOrFirst() pointer >= tokens.size() ? tokens[0] : Previous()
+#define PeekOrLast() pointer >= tokens.size() ? tokens[tokens.size() - 1] : Peek()
+
 void Astral::Parser::Sync()
 {
 	Advance();
@@ -36,7 +39,7 @@ Astral::Token Astral::Parser::Peek()
 Astral::Token Astral::Parser::Previous()
 {
 	if (pointer == 0)
-		return Token();
+		return tokens[0];
 
 	return tokens[pointer - 1ull];
 }
@@ -54,7 +57,7 @@ Astral::Token Astral::Parser::Consume(TokenType type, const std::string& message
 	if (Check(type))
 		return Advance();
 
-	Astral::Error(message.c_str(), Peek());
+	Astral::Error(message.c_str(), PeekOrLast());
 	failed = true;
 	return {};
 }
@@ -225,6 +228,12 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 		return new Literal(data, Literal::LiteralType::STRING, Previous());
 	}
 
+	if (Match(TokenType::IDEN))
+	{
+		std::string* data = new std::string(Previous().GetLexeme().lexeme);
+		return new Literal(data, Literal::LiteralType::IDENTIFER, Previous());
+	}
+
 	if (Match(TokenType::L_BRA))
 	{
 		Expression* expr = ParseExpression();
@@ -249,7 +258,7 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 	}
 
 	failed = true;
-	Error("Expected expression", Peek());
+	Error("Expected expression", PeekOrLast());
 	failed = true;
 	Sync();
 
@@ -258,13 +267,18 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 
 Astral::Statement* Astral::Parser::ParseStatement()
 {
+	return ParseDeclarations();
+}
+
+Astral::Statement* Astral::Parser::ParseDeclarations()
+{
 	if (Match(TokenType::PRINT))
 		return ParsePrintStatement();
 
 	if (Match(TokenType::LET))
 		return ParseLetStatement();
 
-	Error("Expected statement", Previous());
+	Error("Expected statement", PreviousOrFirst());
 	Sync();
 	failed = true;
 }
@@ -277,9 +291,9 @@ Astral::Statement* Astral::Parser::ParseLetStatement()
 	Expression* expr = nullptr;
 	if (Match(TokenType::EQUALS))
 		expr = ParseExpression();
-
+	
 	Consume(TokenType::SEMICOLON, "Expected ';'");
-	return new Variable(let, name, expr);
+	return new VariableDefinition(let, name, expr);
 }
 
 Astral::Statement* Astral::Parser::ParsePrintStatement()

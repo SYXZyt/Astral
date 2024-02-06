@@ -144,7 +144,7 @@
     <ClInclude Include="Compilation\Parsing\Statement.h" />
     <ClInclude Include="Compilation\Parsing\Statements\PrintStatement.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Program.h" />
-    <ClInclude Include="Compilation\Parsing\Statements\Variable.h" />
+    <ClInclude Include="Compilation\Parsing\Statements\VariableDefinition.h" />
     <ClInclude Include="Compilation\Tokenisation\Lexeme.h" />
     <ClInclude Include="Compilation\Tokenisation\Lexer.h" />
     <ClInclude Include="Compilation\Tokenisation\Token.h" />
@@ -155,6 +155,8 @@
     <ClInclude Include="Runtime\MathsHandler.h" />
     <ClInclude Include="Runtime\Result.h" />
     <ClInclude Include="Runtime\Types\AstralTypes.h" />
+    <ClInclude Include="Runtime\Variables\Variable.h" />
+    <ClInclude Include="Runtime\Variables\Variables.h" />
     <ClInclude Include="Types.h" />
   </ItemGroup>
   <ItemGroup>
@@ -176,12 +178,14 @@
     <ClCompile Include="Compilation\Parsing\Statement.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\PrintStatement.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Program.cpp" />
-    <ClCompile Include="Compilation\Parsing\Statements\Variable.cpp" />
+    <ClCompile Include="Compilation\Parsing\Statements\VariableDefinition.cpp" />
     <ClCompile Include="Compilation\Tokenisation\Lexer.cpp" />
     <ClCompile Include="Runtime\BooleanHandler.cpp" />
     <ClCompile Include="Runtime\Interpreter.cpp" />
     <ClCompile Include="Runtime\MathsHandler.cpp" />
     <ClCompile Include="Runtime\Types\AstralTypes.cpp" />
+    <ClCompile Include="Runtime\Variables\Variable.cpp" />
+    <ClCompile Include="Runtime\Variables\Variables.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

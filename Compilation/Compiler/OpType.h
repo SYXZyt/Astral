@@ -10,6 +10,7 @@ namespace Astral
 		NOP,
 		LIT_NUMBER,
 		LIT_STRING,
+		VARIABLE,
 		ADD,
 		SUB,
 		MUL,
@@ -30,6 +31,8 @@ namespace Astral
 
 		//Statements
 		PRINT,
+		ASSIGN_VOID,
+		ASSIGN,
 	};
 
 	inline ASTRAL const char* OpTypeToString(OpType type)
@@ -42,6 +45,8 @@ namespace Astral
 				return "NUMBER";
 			case OpType::LIT_STRING:
 				return "STRING";
+			case OpType::VARIABLE:
+				return "VAR";
 			case OpType::ADD:
 				return "ADD";
 			case OpType::SUB:
@@ -64,6 +69,10 @@ namespace Astral
 				return "NOT";
 			case OpType::PRINT:
 				return "PRINT";
+			case OpType::ASSIGN:
+				return "ASSIGN";
+			case OpType::ASSIGN_VOID:
+				return "ASSIGN_VOID";
 			default:
 				return "UNKNOWN";
 		}

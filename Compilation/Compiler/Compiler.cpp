@@ -28,6 +28,14 @@ void Astral::Compiler::GenerateLiteral(const Literal* literal)
 			rom.push_back(code);
 			break;
 		}
+		case Literal::LiteralType::IDENTIFER:
+		{
+			Bytecode code;
+			code.lexeme = literal->GetToken().GetLexeme();
+			code.op = (uint8_t)OpType::VARIABLE;
+			rom.push_back(code);
+			break;
+		}
 		default:
 			throw "oop";
 	}
@@ -147,6 +155,8 @@ void Astral::Compiler::GenerateStatement(const Statement* statement)
 		GenerateProgram(program);
 	else if (const PrintStatement* print = dynamic_cast<const PrintStatement*>(statement))
 		GeneratePrint(print);
+	else if (const VariableDefinition* var = dynamic_cast<const VariableDefinition*>(statement))
+		GenerateLet(var);
 	else
 		throw "oop";
 }
@@ -164,6 +174,22 @@ void Astral::Compiler::GeneratePrint(const PrintStatement* printStatement)
 	Bytecode code;
 	code.lexeme = printStatement->GetToken().GetLexeme();
 	code.op = (uint8_t)OpType::PRINT;
+	rom.push_back(code);
+}
+
+void Astral::Compiler::GenerateLet(const VariableDefinition* variable)
+{
+	//If the expression is non-null, we need to compile that since we have to assign to its result on the stack
+	OpType assignType = OpType::ASSIGN;
+	if (variable->Expr())
+	{
+		GenerateExpression(variable->Expr());
+		assignType = OpType::ASSIGN_VOID;
+	}
+
+	Bytecode code;
+	code.lexeme = variable->Name().GetLexeme();
+	code.op = (uint8_t)assignType;
 	rom.push_back(code);
 }
 

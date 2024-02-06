@@ -8,6 +8,7 @@
 #include "BooleanHandler.h"
 #include "../ErrorManager.h"
 #include "Types/AstralTypes.h"
+#include "Variables/Variables.h"
 #include "../Compilation/Compiler/OpType.h"
 #include "../Compilation/Compiler/Bytecode.h"
 
@@ -22,6 +23,8 @@ namespace Astral
 			stack.pop();
 			return value;
 		}
+
+		Variables variables;
 
 		std::stack<Type::atype_t*> stack;
 

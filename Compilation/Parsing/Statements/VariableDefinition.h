@@ -4,7 +4,7 @@
 
 namespace Astral
 {
-	class Variable final : public Statement
+	class VariableDefinition final : public Statement
 	{
 	private:
 		Expression* expr;
@@ -16,7 +16,7 @@ namespace Astral
 
 		void Dump(int indent = 0) final override;
 
-		Variable(const Token& token, const Token& name, Expression* expr) : name(name), expr(expr), Statement(token) {}
-		~Variable();
+		VariableDefinition(const Token& token, const Token& name, Expression* expr) : name(name), expr(expr), Statement(token) {}
+		~VariableDefinition();
 	};
 }
