@@ -159,6 +159,8 @@ void Astral::Compiler::GenerateStatement(const Statement* statement)
 		GenerateLet(var);
 	else if (const VariableAssignment* assign = dynamic_cast<const VariableAssignment*>(statement))
 		GenerateAssign(assign);
+	else if (const Block* block = dynamic_cast<const Block*>(statement))
+		GenerateBlock(block);
 	else
 		throw "oop";
 }
@@ -203,6 +205,22 @@ void Astral::Compiler::GenerateAssign(const VariableAssignment* variable)
 	code.lexeme = variable->GetToken().GetLexeme();
 	code.op = (uint8_t)OpType::UPDATE_VAR;
 	rom.push_back(code);
+}
+
+void Astral::Compiler::GenerateBlock(const Block* block)
+{
+	Bytecode scopeBegin;
+	scopeBegin.lexeme = block->GetToken().GetLexeme();
+	scopeBegin.op = (uint8_t)OpType::SCOPE_BEG;
+	rom.push_back(scopeBegin);
+
+	for (Statement* stmt : block->Statements())
+		GenerateStatement(stmt);
+
+	Bytecode scopeEnd;
+	scopeEnd.lexeme = block->GetToken().GetLexeme();
+	scopeEnd.op = (uint8_t)OpType::SCOPE_END;
+	rom.push_back(scopeEnd);
 }
 
 void Astral::Compiler::GenerateBytecode()

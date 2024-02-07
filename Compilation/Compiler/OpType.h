@@ -34,6 +34,9 @@ namespace Astral
 		ASSIGN_VOID,
 		ASSIGN,
 		UPDATE_VAR,
+
+		SCOPE_BEG,
+		SCOPE_END,
 	};
 
 	inline ASTRAL const char* OpTypeToString(OpType type)
@@ -74,6 +77,10 @@ namespace Astral
 				return "ASSIGN";
 			case OpType::ASSIGN_VOID:
 				return "ASSIGN_VOID";
+			case OpType::SCOPE_BEG:
+				return "SCOPE_BEG";
+			case OpType::SCOPE_END:
+				return "SCOPE_END";
 			default:
 				return "UNKNOWN";
 		}

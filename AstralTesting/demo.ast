@@ -1,5 +1,11 @@
-let var = "Hello, World!";
-let copy = var;
-var = "New value";
-print copy;
-print var;
+{
+	let x = 1;
+	{
+		let x = 2;
+		print x;
+	}
+
+	print x;
+}
+
+print x;

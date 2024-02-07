@@ -4,6 +4,7 @@
 #include "Expressions/BinaryOp.h"
 #include "Expressions/Grouping.h"
 
+#include "Statements/Block.h"
 #include "Statements/Program.h"
 #include "Statements/PrintStatement.h"
 #include "Statements/VariableDefinition.h"

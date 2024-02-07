@@ -281,10 +281,35 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 	if (Match(TokenType::IDEN))
 		return ParseAssignment();
 
-	Error("Expected statement", PreviousOrFirst());
+	if (Match(TokenType::L_CURLY))
+		return ParseBlock();
+
+	Error("Expected statement", PeekOrLast());
 	Sync();
 	failed = true;
 	return nullptr;
+}
+
+Astral::Statement* Astral::Parser::ParseBlock()
+{
+	std::vector<Statement*> statements;
+
+	Block* block = new Block(Previous());
+
+	while (!Match(TokenType::R_CURLY))
+	{
+		statements.push_back(ParseStatement());
+
+		if (IsEof())
+		{
+			Error("Expected '}'", PeekOrLast());
+			failed = true;
+			break;
+		}
+	}
+
+	block->SetStatements(statements);
+	return block;
 }
 
 Astral::Statement* Astral::Parser::ParseLetStatement()

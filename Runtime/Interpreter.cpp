@@ -313,8 +313,13 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			variables.UpdateValue(name.c_str(), Pop());
 
 			break;
-			break;
 		}
+		case OpType::SCOPE_BEG:
+			variables.AddScope();
+			break;
+		case OpType::SCOPE_END:
+			variables.RemoveScope();
+			break;
 		default:
 			throw "oop";
 	}

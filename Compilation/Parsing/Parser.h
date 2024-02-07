@@ -43,6 +43,7 @@ namespace Astral
 
 		Statement* ParseStatement();
 		Statement* ParseDeclarations();
+		Statement* ParseBlock();
 		Statement* ParseLetStatement();
 		Statement* ParsePrintStatement();
 		Statement* ParseAssignment();
