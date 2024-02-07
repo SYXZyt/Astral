@@ -33,6 +33,7 @@ namespace Astral
 		PRINT,
 		ASSIGN_VOID,
 		ASSIGN,
+		UPDATE_VAR,
 	};
 
 	inline ASTRAL const char* OpTypeToString(OpType type)

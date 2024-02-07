@@ -31,6 +31,7 @@ namespace Astral
 		void GenerateProgram(const Program* program);
 		void GeneratePrint(const PrintStatement* printStatement);
 		void GenerateLet(const VariableDefinition* variable);
+		void GenerateAssign(const VariableAssignment* variable);
 
 	public:
 		inline bool Failed() const { return failed; }

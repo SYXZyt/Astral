@@ -1,10 +1,10 @@
 #pragma once
-#include "../Expression.h"
 #include "../Statement.h"
+#include "../Expression.h"
 
 namespace Astral
 {
-	class PrintStatement final : public Statement
+	class VariableAssignment final : public Statement
 	{
 	private:
 		Expression* expr;
@@ -14,7 +14,7 @@ namespace Astral
 
 		void Dump(int indent = 0) final override;
 
-		PrintStatement(const Token& token, Expression* expr) : expr(expr), Statement(token) {}
-		~PrintStatement() override;
+		VariableAssignment(const Token& token, Expression* expr) : expr(expr), Statement(token) {}
+		~VariableAssignment();
 	};
 }

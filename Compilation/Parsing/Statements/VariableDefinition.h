@@ -11,7 +11,7 @@ namespace Astral
 		Token name;
 
 	public:
-		inline const Expression const* Expr() const { return expr; }
+		inline const Expression* Expr() const { return expr; }
 		inline const Token& Name() const { return name; }
 
 		void Dump(int indent = 0) final override;

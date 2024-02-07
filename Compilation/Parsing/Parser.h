@@ -45,7 +45,8 @@ namespace Astral
 		Statement* ParseDeclarations();
 		Statement* ParseLetStatement();
 		Statement* ParsePrintStatement();
-
+		Statement* ParseAssignment();
+			
 	public:
 		inline bool HasFailed() const { return failed; }
 

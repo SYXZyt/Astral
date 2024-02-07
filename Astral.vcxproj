@@ -144,6 +144,7 @@
     <ClInclude Include="Compilation\Parsing\Statement.h" />
     <ClInclude Include="Compilation\Parsing\Statements\PrintStatement.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Program.h" />
+    <ClInclude Include="Compilation\Parsing\Statements\VariableAssignment.h" />
     <ClInclude Include="Compilation\Parsing\Statements\VariableDefinition.h" />
     <ClInclude Include="Compilation\Tokenisation\Lexeme.h" />
     <ClInclude Include="Compilation\Tokenisation\Lexer.h" />
@@ -178,6 +179,7 @@
     <ClCompile Include="Compilation\Parsing\Statement.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\PrintStatement.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Program.cpp" />
+    <ClCompile Include="Compilation\Parsing\Statements\VariableAssignment.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\VariableDefinition.cpp" />
     <ClCompile Include="Compilation\Tokenisation\Lexer.cpp" />
     <ClCompile Include="Runtime\BooleanHandler.cpp" />

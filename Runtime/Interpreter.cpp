@@ -300,6 +300,21 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 
 			break;
 		}
+		case OpType::UPDATE_VAR:
+		{
+			std::string name = instruction.lexeme.lexeme;
+			if (!variables.DoesVariableExist(name.c_str()))
+			{
+				Error("Variable does not exist", instruction.lexeme);
+				failed = true;
+				break;
+			}
+
+			variables.UpdateValue(name.c_str(), Pop());
+
+			break;
+			break;
+		}
 		default:
 			throw "oop";
 	}

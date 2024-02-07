@@ -157,6 +157,8 @@ void Astral::Compiler::GenerateStatement(const Statement* statement)
 		GeneratePrint(print);
 	else if (const VariableDefinition* var = dynamic_cast<const VariableDefinition*>(statement))
 		GenerateLet(var);
+	else if (const VariableAssignment* assign = dynamic_cast<const VariableAssignment*>(statement))
+		GenerateAssign(assign);
 	else
 		throw "oop";
 }
@@ -190,6 +192,16 @@ void Astral::Compiler::GenerateLet(const VariableDefinition* variable)
 	Bytecode code;
 	code.lexeme = variable->Name().GetLexeme();
 	code.op = (uint8_t)assignType;
+	rom.push_back(code);
+}
+
+void Astral::Compiler::GenerateAssign(const VariableAssignment* variable)
+{
+	GenerateExpression(variable->Expr());
+
+	Bytecode code;
+	code.lexeme = variable->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::UPDATE_VAR;
 	rom.push_back(code);
 }
 

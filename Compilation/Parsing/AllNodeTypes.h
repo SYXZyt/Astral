@@ -7,3 +7,4 @@
 #include "Statements/Program.h"
 #include "Statements/PrintStatement.h"
 #include "Statements/VariableDefinition.h"
+#include "Statements/VariableAssignment.h"

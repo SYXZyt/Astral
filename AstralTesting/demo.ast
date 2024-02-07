@@ -1,2 +1,5 @@
-let var = "Hello\n" + ", World!";
+let var = "Hello, World!";
+let copy = var;
+var = "New value";
+print copy;
 print var;

@@ -278,9 +278,13 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 	if (Match(TokenType::LET))
 		return ParseLetStatement();
 
+	if (Match(TokenType::IDEN))
+		return ParseAssignment();
+
 	Error("Expected statement", PreviousOrFirst());
 	Sync();
 	failed = true;
+	return nullptr;
 }
 
 Astral::Statement* Astral::Parser::ParseLetStatement()
@@ -303,6 +307,18 @@ Astral::Statement* Astral::Parser::ParsePrintStatement()
 	Expression* expr = ParseExpression();
 	Consume(TokenType::SEMICOLON, "Expected ';'");
 	return new PrintStatement(token, expr);
+}
+
+Astral::Statement* Astral::Parser::ParseAssignment()
+{
+	Token name = Previous();
+
+	Consume(TokenType::ASSIGNMENT, "Expected '='");
+
+	Expression* expr = ParseExpression();
+
+	Consume(TokenType::SEMICOLON, "Expected ';'");
+	return new VariableAssignment(name, expr);
 }
 
 void Astral::Parser::Parse()
