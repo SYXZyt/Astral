@@ -289,7 +289,7 @@ Astral::Statement* Astral::Parser::ParseLetStatement()
 	Token name = Consume(TokenType::IDEN, "Expected variable name");
 
 	Expression* expr = nullptr;
-	if (Match(TokenType::EQUALS))
+	if (Match(TokenType::ASSIGNMENT))
 		expr = ParseExpression();
 	
 	Consume(TokenType::SEMICOLON, "Expected ';'");
