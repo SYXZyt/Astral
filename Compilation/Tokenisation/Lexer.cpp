@@ -53,7 +53,7 @@ void Astral::Lexer::Advance(int count)
 
 	if (currentChar == '\n')
 	{
-		posOnLine = 0;
+		posOnLine = -1;
 		++line;
 	}
 }
