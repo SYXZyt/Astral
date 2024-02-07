@@ -1,2 +1,2 @@
-let var = "Hello, World!";
+let var = "Hello\n" + ", World!";
 print var;

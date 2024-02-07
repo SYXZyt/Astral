@@ -181,6 +181,9 @@ Astral::Token Astral::Lexer::GenerateString(char strChar)
 					break;
 				}
 			}
+
+			Advance();
+			continue;
 		}
 
 		//Handle an unterminated string, either EOF or EOL
