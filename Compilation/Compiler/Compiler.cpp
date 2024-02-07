@@ -180,11 +180,11 @@ void Astral::Compiler::GeneratePrint(const PrintStatement* printStatement)
 void Astral::Compiler::GenerateLet(const VariableDefinition* variable)
 {
 	//If the expression is non-null, we need to compile that since we have to assign to its result on the stack
-	OpType assignType = OpType::ASSIGN;
+	OpType assignType = OpType::ASSIGN_VOID;
 	if (variable->Expr())
 	{
 		GenerateExpression(variable->Expr());
-		assignType = OpType::ASSIGN_VOID;
+		assignType = OpType::ASSIGN;
 	}
 
 	Bytecode code;

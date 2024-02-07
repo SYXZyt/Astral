@@ -14,6 +14,6 @@ namespace Astral
 		};
 
 		ResultType type;
-		Type::atype_t* result;
+		std::shared_ptr<Type::atype_t> result;
 	};
 }

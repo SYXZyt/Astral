@@ -8,20 +8,20 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		case OpType::LIT_NUMBER:
 		{
 			float v = std::stof(instruction.lexeme.lexeme);
-			Type::number_t* number = new Type::number_t(v);
+			std::shared_ptr<Type::atype_t> number(new Type::number_t(v));
 			stack.push(number);
 			break;
 		}
 		case OpType::LIT_STRING:
 		{
-			Type::string_t* string = new Type::string_t(instruction.lexeme.lexeme.c_str());
+			std::shared_ptr<Type::atype_t> string(new Type::string_t(instruction.lexeme.lexeme.c_str()));
 			stack.push(string);
 			break;
 		}
 		case OpType::ADD:
 		{
-			Type::atype_t* rhs = Pop();
-			Type::atype_t* lhs = Pop();
+			std::shared_ptr<Type::atype_t> rhs = Pop();
+			std::shared_ptr<Type::atype_t> lhs = Pop();
 			result_t res = Maths::Addition(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
@@ -36,8 +36,8 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::SUB:
 		{
-			Type::atype_t* rhs = Pop();
-			Type::atype_t* lhs = Pop();
+			std::shared_ptr<Type::atype_t> rhs = Pop();
+			std::shared_ptr<Type::atype_t> lhs = Pop();
 			result_t res = Maths::Subtraction(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
@@ -51,8 +51,8 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::MUL:
 		{
-			Type::atype_t* rhs = Pop();
-			Type::atype_t* lhs = Pop();
+			std::shared_ptr<Type::atype_t> lhs = Pop();
+			std::shared_ptr<Type::atype_t> rhs = Pop();
 			result_t res = Maths::Multiplication(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
@@ -66,8 +66,8 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::DIV:
 		{
-			Type::atype_t* rhs = Pop();
-			Type::atype_t* lhs = Pop();
+			std::shared_ptr<Type::atype_t> rhs = Pop();
+			std::shared_ptr<Type::atype_t> lhs = Pop();
 			result_t res = Maths::Divide(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
@@ -86,8 +86,8 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::POW:
 		{
-			Type::atype_t* rhs = Pop();
-			Type::atype_t* lhs = Pop();
+			std::shared_ptr<Type::atype_t> rhs = Pop();
+			std::shared_ptr<Type::atype_t> lhs = Pop();
 			result_t res = Maths::Power(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
@@ -101,8 +101,8 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::MOD:
 		{
-			Type::atype_t* rhs = Pop();
-			Type::atype_t* lhs = Pop();
+			std::shared_ptr<Type::atype_t> rhs = Pop();
+			std::shared_ptr<Type::atype_t> lhs = Pop();
 			result_t res = Maths::Modulo(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
@@ -121,7 +121,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::UNARY_MINUS:
 		{
-			Type::atype_t* val = Pop();
+			std::shared_ptr<Type::atype_t> val = Pop();
 			result_t res = Maths::Minus(val);
 
 			if (res.type == result_t::ResultType::R_OK)
@@ -135,8 +135,8 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::EQUALITY:
 		{
-			Type::atype_t* rhs = Pop();
-			Type::atype_t* lhs = Pop();
+			std::shared_ptr<Type::atype_t> rhs = Pop();
+			std::shared_ptr<Type::atype_t> lhs = Pop();
 			result_t res = Boolean::Equality(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
@@ -150,8 +150,8 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::NEQUALITY:
 		{
-			Type::atype_t* rhs = Pop();
-			Type::atype_t* lhs = Pop();
+			std::shared_ptr<Type::atype_t> rhs = Pop();
+			std::shared_ptr<Type::atype_t> lhs = Pop();
 			result_t res = Boolean::Nequality(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
@@ -165,8 +165,8 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::GREATER:
 		{
-			Type::atype_t* rhs = Pop();
-			Type::atype_t* lhs = Pop();
+			std::shared_ptr<Type::atype_t> rhs = Pop();
+			std::shared_ptr<Type::atype_t> lhs = Pop();
 			result_t res = Boolean::Greater(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
@@ -180,8 +180,8 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::GREATER_EQUALS:
 		{
-			Type::atype_t* rhs = Pop();
-			Type::atype_t* lhs = Pop();
+			std::shared_ptr<Type::atype_t> rhs = Pop();
+			std::shared_ptr<Type::atype_t> lhs = Pop();
 			result_t res = Boolean::GreaterEquals(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
@@ -195,8 +195,8 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::LESS:
 		{
-			Type::atype_t* rhs = Pop();
-			Type::atype_t* lhs = Pop();
+			std::shared_ptr<Type::atype_t> rhs = Pop();
+			std::shared_ptr<Type::atype_t> lhs = Pop();
 			result_t res = Boolean::Less(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
@@ -210,8 +210,8 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::LESS_EQUALS:
 		{
-			Type::atype_t* rhs = Pop();
-			Type::atype_t* lhs = Pop();
+			std::shared_ptr<Type::atype_t> rhs = Pop();
+			std::shared_ptr<Type::atype_t> lhs = Pop();
 			result_t res = Boolean::LessEquals(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
@@ -225,7 +225,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::NOT:
 		{
-			Type::atype_t* val = Pop();
+			std::shared_ptr<Type::atype_t> val = Pop();
 			result_t res = Boolean::Not(val);
 
 			if (res.type == result_t::ResultType::R_OK)
@@ -239,17 +239,15 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::PRINT:
 		{
-			Type::atype_t* val = Pop();
+			std::shared_ptr<Type::atype_t> val = Pop();
 
 			//If we do not know the type we are printing, just print the address
-			if (Type::number_t* number_t = dynamic_cast<Type::number_t*>(val))
+			if (Type::number_t* number_t = dynamic_cast<Type::number_t*>(val.get()))
 				std::cout << number_t->Value() << '\n';
-			else if (Type::string_t* string_t = dynamic_cast<Type::string_t*>(val))
+			else if (Type::string_t* string_t = dynamic_cast<Type::string_t*>(val.get()))
 				std::cout << string_t->Value() << '\n';
 			else
 				std::cout << '$' << val << '\n';
-
-			delete val;
 
 			break;
 		}
@@ -264,6 +262,35 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			}
 
 			stack.push(variables.GetValue(name.c_str()));
+
+			break;
+		}
+		case OpType::ASSIGN_VOID:
+		{
+			std::string name = instruction.lexeme.lexeme;
+			if (variables.DoesVariableExistInHighestScope(name.c_str()))
+			{
+				Error("Variable redefinition", instruction.lexeme);
+				failed = true;
+				break;
+			}
+
+			variables.AddVariable(name.c_str());
+
+			break;
+		}
+		case OpType::ASSIGN:
+		{
+			std::string name = instruction.lexeme.lexeme;
+			if (variables.DoesVariableExistInHighestScope(name.c_str()))
+			{
+				Error("Variable redefinition", instruction.lexeme);
+				failed = true;
+				break;
+			}
+
+			variables.AddVariable(name.c_str());
+			variables.UpdateValue(name.c_str(), Pop());
 
 			break;
 		}
@@ -285,10 +312,10 @@ void Astral::Interpreter::Execute()
 
 Astral::Interpreter::~Interpreter()
 {
-	while (!stack.empty())
-	{
-		Type::atype_t* value = Pop();
+	//while (!stack.empty())
+	//{
+	//	std::shared_ptr<Type::atype_t> value = Pop();
 
-		delete value;
-	}
+	//	delete value;
+	//}
 }

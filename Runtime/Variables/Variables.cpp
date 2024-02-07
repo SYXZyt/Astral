@@ -45,16 +45,16 @@ bool Astral::Variables::DoesVariableExist(const char* name)
 
 void Astral::Variables::AddVariable(const char* vname)
 {
-	Variable* v = new Variable(vname, new Type::void_t());
+	Variable* v = new Variable(vname, std::shared_ptr<Type::atype_t>(new Type::void_t()));
 	variables[variables.size() - 1].push_back(v);
 }
 
-void Astral::Variables::UpdateValue(const char* vname, Type::atype_t* value)
+void Astral::Variables::UpdateValue(const char* vname, std::shared_ptr<Type::atype_t> value)
 {
 	GetVariable(vname)->SetValue(value);
 }
 
-Astral::Type::atype_t* Astral::Variables::GetValue(const char* vname)
+std::shared_ptr<Astral::Type::atype_t> Astral::Variables::GetValue(const char* vname)
 {
 	return GetVariable(vname)->Value();
 }
