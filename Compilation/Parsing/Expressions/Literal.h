@@ -13,6 +13,7 @@ namespace Astral
 			BOOLEAN,
 			STRING,
 			IDENTIFER,
+			REFERENCE,
 		};
 
 		LiteralType type;

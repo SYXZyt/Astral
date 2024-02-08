@@ -19,8 +19,8 @@ namespace Astral
 		bool DoesVariableExistInHighestScope(const char* name);
 		bool DoesVariableExist(const char* name);
 		void AddVariable(const char* vname);
-		void UpdateValue(const char* vname, std::shared_ptr<Type::atype_t> value);
-		std::shared_ptr<Type::atype_t> GetValue(const char* vname);
+		void UpdateValue(const char* vname, RefCount<Type::atype_t>* value);
+		RefCount<Type::atype_t>* GetValue(const char* vname);
 
 		void AddScope();
 		void RemoveScope();

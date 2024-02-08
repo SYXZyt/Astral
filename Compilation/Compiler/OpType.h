@@ -11,6 +11,7 @@ namespace Astral
 		LIT_NUMBER,
 		LIT_STRING,
 		VARIABLE,
+		VARIABLE_REF,
 		ADD,
 		SUB,
 		MUL,
@@ -51,6 +52,8 @@ namespace Astral
 				return "STRING";
 			case OpType::VARIABLE:
 				return "VAR";
+			case OpType::VARIABLE_REF:
+				return "VAR_REF";
 			case OpType::ADD:
 				return "ADD";
 			case OpType::SUB:

@@ -17,16 +17,16 @@ namespace Astral
 	class ASTRAL Interpreter final
 	{
 	private:
-		inline std::shared_ptr<Type::atype_t> Pop()
+		inline RefCount<Type::atype_t>* Pop()
 		{
-			std::shared_ptr<Type::atype_t> value = stack.top();
+			RefCount<Type::atype_t>* value = stack.top();
 			stack.pop();
 			return value;
 		}
 
 		Variables variables;
 
-		std::stack<std::shared_ptr<Type::atype_t>> stack;
+		std::stack<RefCount<Type::atype_t>*> stack;
 
 		std::vector<Bytecode> rom;
 		int pc;

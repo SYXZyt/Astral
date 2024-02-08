@@ -464,6 +464,12 @@ void Astral::Lexer::Tokenise()
 			PUSH_TOKEN();
 			Advance();
 		}
+		else if (currentChar == '&')
+		{
+			CHAR_TOKEN("&", TokenType::REFERENCE);
+			PUSH_TOKEN();
+			Advance();
+		}
 		else if (currentChar == '"')
 			tokens.push_back(GenerateString('"'));
 

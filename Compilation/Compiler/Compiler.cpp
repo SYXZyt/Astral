@@ -36,6 +36,14 @@ void Astral::Compiler::GenerateLiteral(const Literal* literal)
 			rom.push_back(code);
 			break;
 		}
+		case Literal::LiteralType::REFERENCE:
+		{
+			Bytecode code;
+			code.lexeme = literal->GetToken().GetLexeme();
+			code.op = (uint8_t)OpType::VARIABLE_REF;
+			rom.push_back(code);
+			break;
+		}
 		default:
 			throw "oop";
 	}

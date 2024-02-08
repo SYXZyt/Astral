@@ -234,6 +234,15 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 		return new Literal(data, Literal::LiteralType::IDENTIFER, Previous());
 	}
 
+	if (Match(TokenType::REFERENCE))
+	{
+		//Make sure we are getting the reference of a variable
+		Token varName = Consume(TokenType::IDEN, "Expected variable name");
+
+		std::string* data = new std::string(Previous().GetLexeme().lexeme);
+		return new Literal(data, Literal::LiteralType::REFERENCE, varName);
+	}
+
 	if (Match(TokenType::L_BRA))
 	{
 		Expression* expr = ParseExpression();

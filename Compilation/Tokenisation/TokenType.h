@@ -24,6 +24,7 @@ namespace Astral
 		DOT,
 		HAT,
 		MODULO,
+		REFERENCE,
 
 		NOT,
 		LESS_THAN,

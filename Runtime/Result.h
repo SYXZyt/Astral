@@ -1,4 +1,5 @@
 #pragma once
+#include "../RefCount.h"
 #include "Types/AstralTypes.h"
 
 namespace Astral
@@ -14,6 +15,6 @@ namespace Astral
 		};
 
 		ResultType type;
-		std::shared_ptr<Type::atype_t> result;
+		RefCount<Type::atype_t>* result;
 	};
 }

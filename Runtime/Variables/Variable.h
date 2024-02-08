@@ -1,7 +1,6 @@
 #pragma once
-#include <memory>
-
 #include "../../Astral.h"
+#include "../../RefCount.h"
 #include "../Types/AstralTypes.h"
 
 namespace Astral
@@ -10,18 +9,18 @@ namespace Astral
 	{
 	private:
 		char* varname;
-		std::shared_ptr<Type::atype_t> value;
+		RefCount<Type::atype_t>* value;
 
 	public:
 		inline const char* Name() const { return varname; }
-		inline std::shared_ptr<Type::atype_t> Value() { return value; }
+		inline RefCount<Type::atype_t>* Value() { return value; }
 
-		inline void SetValue(std::shared_ptr<Type::atype_t> value)
+		inline void SetValue(Type::atype_t* value)
 		{
-			this->value = value;
+			this->value->Update(value);
 		}
 
-		Variable(const char* name, std::shared_ptr<Type::atype_t> value);
+		Variable(const char* name, RefCount<Type::atype_t>* value);
 		~Variable();
 	};
 }
