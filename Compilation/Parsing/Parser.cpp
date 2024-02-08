@@ -1,6 +1,7 @@
 #include "Parser.h"
 
 #define PreviousOrFirst() pointer >= tokens.size() ? tokens[0] : Previous()
+#define PreviousOrLast() pointer >= tokens.size() ? tokens[tokens.size() - 1] : Previous()
 #define PeekOrLast() pointer >= tokens.size() ? tokens[tokens.size() - 1] : Peek()
 
 void Astral::Parser::Sync()
@@ -57,7 +58,7 @@ Astral::Token Astral::Parser::Consume(TokenType type, const std::string& message
 	if (Check(type))
 		return Advance();
 
-	Astral::Error(message.c_str(), PeekOrLast());
+	Astral::Error(message.c_str(), PreviousOrLast());
 	failed = true;
 	return {};
 }
