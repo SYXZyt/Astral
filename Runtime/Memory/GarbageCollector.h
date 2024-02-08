@@ -13,6 +13,8 @@ namespace Astral
 
 		static GarbageCollector* instance;
 
+		static constexpr unsigned int CullLimit = 1000; //In kb
+
 	public:
 		static void FreeInstance()
 		{

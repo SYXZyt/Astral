@@ -15,6 +15,17 @@ void Astral::GarbageCollector::Cleanup()
 		if (memory[i]->CanDelete())
 			memory.erase(memory.begin() + i);
 	}
+
+	//Estimate how many kbs are in use. Since different types have a differnt size, this is only a minimum, but it will be good enough
+	unsigned int size = (danglingMemory.size() * sizeof(Type::atype_t)) / 1024;
+	if (size >= CullLimit) //If we have too much memory, all of the data we can
+	{
+		for (int i = danglingMemory.size() - 1; i >= 0; i--)
+		{
+			if (!danglingMemory[i]->isOnStack) //If this is not on the stack, then we know it is not in use and ready to be cleaned up
+				danglingMemory.erase(danglingMemory.begin() + i);
+		}
+	}
 }
 
 void Astral::GarbageCollector::RegisterDanglingPointer(Type::atype_t* data)

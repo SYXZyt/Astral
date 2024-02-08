@@ -9,13 +9,15 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		{
 			float v = std::stof(instruction.lexeme.lexeme);
 			Astral::Type::atype_t* number = new Type::number_t(v);
-			stack.push(number);
+			GarbageCollector::Instance().RegisterDanglingPointer(number);
+			Push(number);
 			break;
 		}
 		case OpType::LIT_STRING:
 		{
 			Astral::Type::atype_t* string = new Type::string_t(instruction.lexeme.lexeme.c_str());
-			stack.push(string);
+			GarbageCollector::Instance().RegisterDanglingPointer(string);
+			Push(string);
 			break;
 		}
 		case OpType::ADD:
@@ -25,7 +27,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			result_t res = Maths::Addition(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
-				stack.push(res.result);
+				Push(res.result);
 			else
 			{
 				Error("Cannot add types", instruction.lexeme);
@@ -41,7 +43,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			result_t res = Maths::Subtraction(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
-				stack.push(res.result);
+				Push(res.result);
 			else
 			{
 				Error("Cannot subtract types", instruction.lexeme);
@@ -56,7 +58,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			result_t res = Maths::Multiplication(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
-				stack.push(res.result);
+				Push(res.result);
 			else
 			{
 				Error("Cannot multiply types", instruction.lexeme);
@@ -71,7 +73,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			result_t res = Maths::Divide(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
-				stack.push(res.result);
+				Push(res.result);
 			else if (res.type == result_t::ResultType::R_DIV_BY_ZERO)
 			{
 				Error("Division by zero", instruction.lexeme);
@@ -91,7 +93,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			result_t res = Maths::Power(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
-				stack.push(res.result);
+				Push(res.result);
 			else
 			{
 				Error("Cannot calculate power with types", instruction.lexeme);
@@ -106,7 +108,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			result_t res = Maths::Modulo(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
-				stack.push(res.result);
+				Push(res.result);
 			else if (res.type == result_t::ResultType::R_DIV_BY_ZERO)
 			{
 				Error("Division by zero", instruction.lexeme);
@@ -125,7 +127,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			result_t res = Maths::Minus(val);
 
 			if (res.type == result_t::ResultType::R_OK)
-				stack.push(res.result);
+				Push(res.result);
 			else
 			{
 				Error("Type does not support minus operator", instruction.lexeme);
@@ -140,7 +142,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			result_t res = Boolean::Equality(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
-				stack.push(res.result);
+				Push(res.result);
 			else
 			{
 				Error("Invalid boolean operator types", instruction.lexeme);
@@ -155,7 +157,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			result_t res = Boolean::Nequality(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
-				stack.push(res.result);
+				Push(res.result);
 			else
 			{
 				Error("Invalid boolean operator types", instruction.lexeme);
@@ -170,7 +172,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			result_t res = Boolean::Greater(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
-				stack.push(res.result);
+				Push(res.result);
 			else
 			{
 				Error("Invalid boolean operator types", instruction.lexeme);
@@ -185,7 +187,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			result_t res = Boolean::GreaterEquals(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
-				stack.push(res.result);
+				Push(res.result);
 			else
 			{
 				Error("Invalid boolean operator types", instruction.lexeme);
@@ -200,7 +202,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			result_t res = Boolean::Less(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
-				stack.push(res.result);
+				Push(res.result);
 			else
 			{
 				Error("Invalid boolean operator types", instruction.lexeme);
@@ -215,7 +217,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			result_t res = Boolean::LessEquals(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
-				stack.push(res.result);
+				Push(res.result);
 			else
 			{
 				Error("Invalid boolean operator types", instruction.lexeme);
@@ -229,7 +231,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			result_t res = Boolean::Not(val);
 
 			if (res.type == result_t::ResultType::R_OK)
-				stack.push(res.result);
+				Push(res.result);
 			else
 			{
 				Error("Invalid boolean operator type", instruction.lexeme);

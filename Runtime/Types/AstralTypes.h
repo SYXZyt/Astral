@@ -9,6 +9,8 @@ namespace Astral::Type
 	class ASTRAL atype_t
 	{
 	public:
+		bool isOnStack = false; //Used in GC to determine whether this is OK to delete or not
+
 		virtual ~atype_t() {}
 	};
 

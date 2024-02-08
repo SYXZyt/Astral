@@ -22,7 +22,14 @@ namespace Astral
 		{
 			Type::atype_t* value = stack.top();
 			stack.pop();
+			value->isOnStack = false;
 			return value;
+		}
+
+		inline void Push(Type::atype_t* value)
+		{
+			value->isOnStack = true;
+			stack.push(value);
 		}
 
 		Variables variables;
