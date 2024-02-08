@@ -344,4 +344,6 @@ Astral::Interpreter::~Interpreter()
 
 	//	delete value;
 	//}
+
+	GarbageCollector::FreeInstance();
 }

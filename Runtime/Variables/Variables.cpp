@@ -45,7 +45,7 @@ bool Astral::Variables::DoesVariableExist(const char* name)
 
 void Astral::Variables::AddVariable(const char* vname)
 {
-	Variable* v = new Variable(vname, new MemoryBlock(new Type::void_t()));
+	Variable* v = new Variable(vname);
 	variables[variables.size() - 1].push_back(v);
 }
 

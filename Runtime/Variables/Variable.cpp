@@ -14,14 +14,14 @@ void Astral::Variable::SetValue(MemoryBlock* value)
 	this->value = value;
 }
 
-Astral::Variable::Variable(const char* name, MemoryBlock* value)
+Astral::Variable::Variable(const char* name)
 {
 	size_t len = strlen(name) + 1;
 	varname = new char[len];
 	strcpy_s(varname, len, name);
 	varname[len - 1] = '\0';
 
-	this->value = value;
+	value = GarbageCollector::Instance().New();
 }
 
 Astral::Variable::~Variable()

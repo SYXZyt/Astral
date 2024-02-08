@@ -2,10 +2,11 @@
 #include <vector>
 
 #include "../Types/AstralTypes.h"
-#include "../Variables/Variable.h"
 
 namespace Astral
 {
+	class Variable;
+
 	struct MemoryBlock
 	{
 		std::vector<Variable*> referencing; //All of the variables who are pointing to this

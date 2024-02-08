@@ -2,6 +2,7 @@
 #include "../../Astral.h"
 #include "../../RefCount.h"
 #include "../Types/AstralTypes.h"
+#include "../Memory/GarbageCollector.h"
 
 namespace Astral
 {
@@ -20,7 +21,7 @@ namespace Astral
 
 		void SetValue(MemoryBlock* value);
 
-		Variable(const char* name, MemoryBlock* value);
+		Variable(const char* name);
 		~Variable();
 	};
 }

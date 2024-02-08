@@ -4,7 +4,7 @@ Astral::GarbageCollector* Astral::GarbageCollector::instance = nullptr;
 
 Astral::MemoryBlock* Astral::GarbageCollector::New()
 {
-    return new MemoryBlock(nullptr);
+    return new MemoryBlock(new Type::void_t());
 }
 
 void Astral::GarbageCollector::Cleanup()
