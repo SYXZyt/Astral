@@ -1,6 +1,20 @@
 #include "Variable.h"
 
-Astral::Variable::Variable(const char* name, RefCount<Type::atype_t>* value)
+#include "../Memory/MemoryBlock.h"
+
+void Astral::Variable::SetValue(Type::atype_t* value)
+{
+	delete this->value->data;
+	this->value->data = value;
+}
+
+void Astral::Variable::SetValue(MemoryBlock* value)
+{
+	this->value->RemoveReference(this);
+	this->value = value;
+}
+
+Astral::Variable::Variable(const char* name, MemoryBlock* value)
 {
 	size_t len = strlen(name) + 1;
 	varname = new char[len];
@@ -13,5 +27,5 @@ Astral::Variable::Variable(const char* name, RefCount<Type::atype_t>* value)
 Astral::Variable::~Variable()
 {
 	delete[] varname;
-	RefCount<Type::atype_t>::AutoReleaseOrDelete(value);
+	value->RemoveReference(this);
 }

@@ -1,8 +1,5 @@
 #include "Interpreter.h"
 
-//I am not typing that every time lol
-typedef RefCount<Astral::Type::atype_t> RC;
-
 void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 {
 	OpType op = (OpType)instruction.op;
@@ -11,21 +8,21 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		case OpType::LIT_NUMBER:
 		{
 			float v = std::stof(instruction.lexeme.lexeme);
-			RC* number = new RC(new Type::number_t(v));
+			Astral::Type::atype_t* number = new Type::number_t(v);
 			stack.push(number);
 			break;
 		}
 		case OpType::LIT_STRING:
 		{
-			RC* string = new RC(new Type::string_t(instruction.lexeme.lexeme.c_str()));
+			Astral::Type::atype_t* string = new Type::string_t(instruction.lexeme.lexeme.c_str());
 			stack.push(string);
 			break;
 		}
 		case OpType::ADD:
 		{
-			RC* rhs = Pop();
-			RC* lhs = Pop();
-			result_t res = Maths::Addition(lhs->Get(), rhs->Get());
+			Astral::Type::atype_t* rhs = Pop();
+			Astral::Type::atype_t* lhs = Pop();
+			result_t res = Maths::Addition(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
 				stack.push(res.result);
@@ -35,16 +32,13 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 				failed = true;
 			}
 
-			RC::AutoReleaseOrDelete(lhs);
-			RC::AutoReleaseOrDelete(rhs);
-
 			break;
 		}
 		case OpType::SUB:
 		{
-			RC* rhs = Pop();
-			RC* lhs = Pop();
-			result_t res = Maths::Subtraction(lhs->Get(), rhs->Get());
+			Astral::Type::atype_t* rhs = Pop();
+			Astral::Type::atype_t* lhs = Pop();
+			result_t res = Maths::Subtraction(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
 				stack.push(res.result);
@@ -57,9 +51,9 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::MUL:
 		{
-			RC* rhs = Pop();
-			RC* lhs = Pop();
-			result_t res = Maths::Multiplication(lhs->Get(), rhs->Get());
+			Astral::Type::atype_t* rhs = Pop();
+			Astral::Type::atype_t* lhs = Pop();
+			result_t res = Maths::Multiplication(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
 				stack.push(res.result);
@@ -72,9 +66,9 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::DIV:
 		{
-			RC* rhs = Pop();
-			RC* lhs = Pop();
-			result_t res = Maths::Divide(lhs->Get(), rhs->Get());
+			Astral::Type::atype_t* rhs = Pop();
+			Astral::Type::atype_t* lhs = Pop();
+			result_t res = Maths::Divide(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
 				stack.push(res.result);
@@ -92,9 +86,9 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::POW:
 		{
-			RC* rhs = Pop();
-			RC* lhs = Pop();
-			result_t res = Maths::Power(lhs->Get(), rhs->Get());
+			Astral::Type::atype_t* rhs = Pop();
+			Astral::Type::atype_t* lhs = Pop();
+			result_t res = Maths::Power(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
 				stack.push(res.result);
@@ -107,9 +101,9 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::MOD:
 		{
-			RC* rhs = Pop();
-			RC* lhs = Pop();
-			result_t res = Maths::Modulo(lhs->Get(), rhs->Get());
+			Astral::Type::atype_t* rhs = Pop();
+			Astral::Type::atype_t* lhs = Pop();
+			result_t res = Maths::Modulo(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
 				stack.push(res.result);
@@ -127,8 +121,8 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::UNARY_MINUS:
 		{
-			RC* val = Pop();
-			result_t res = Maths::Minus(val->Get());
+			Astral::Type::atype_t* val = Pop();
+			result_t res = Maths::Minus(val);
 
 			if (res.type == result_t::ResultType::R_OK)
 				stack.push(res.result);
@@ -141,9 +135,9 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::EQUALITY:
 		{
-			RC* rhs = Pop();
-			RC* lhs = Pop();
-			result_t res = Boolean::Equality(lhs->Get(), rhs->Get());
+			Astral::Type::atype_t* rhs = Pop();
+			Astral::Type::atype_t* lhs = Pop();
+			result_t res = Boolean::Equality(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
 				stack.push(res.result);
@@ -156,9 +150,9 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::NEQUALITY:
 		{
-			RC* rhs = Pop();
-			RC* lhs = Pop();
-			result_t res = Boolean::Nequality(lhs->Get(), rhs->Get());
+			Astral::Type::atype_t* rhs = Pop();
+			Astral::Type::atype_t* lhs = Pop();
+			result_t res = Boolean::Nequality(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
 				stack.push(res.result);
@@ -171,9 +165,9 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::GREATER:
 		{
-			RC* rhs = Pop();
-			RC* lhs = Pop();
-			result_t res = Boolean::Greater(lhs->Get(), rhs->Get());
+			Astral::Type::atype_t* rhs = Pop();
+			Astral::Type::atype_t* lhs = Pop();
+			result_t res = Boolean::Greater(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
 				stack.push(res.result);
@@ -186,9 +180,9 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::GREATER_EQUALS:
 		{
-			RC* rhs = Pop();
-			RC* lhs = Pop();
-			result_t res = Boolean::GreaterEquals(lhs->Get(), rhs->Get());
+			Astral::Type::atype_t* rhs = Pop();
+			Astral::Type::atype_t* lhs = Pop();
+			result_t res = Boolean::GreaterEquals(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
 				stack.push(res.result);
@@ -201,9 +195,9 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::LESS:
 		{
-			RC* rhs = Pop();
-			RC* lhs = Pop();
-			result_t res = Boolean::Less(lhs->Get(), rhs->Get());
+			Astral::Type::atype_t* rhs = Pop();
+			Astral::Type::atype_t* lhs = Pop();
+			result_t res = Boolean::Less(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
 				stack.push(res.result);
@@ -216,9 +210,9 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::LESS_EQUALS:
 		{
-			RC* rhs = Pop();
-			RC* lhs = Pop();
-			result_t res = Boolean::LessEquals(lhs->Get(), rhs->Get());
+			Astral::Type::atype_t* rhs = Pop();
+			Astral::Type::atype_t* lhs = Pop();
+			result_t res = Boolean::LessEquals(lhs, rhs);
 
 			if (res.type == result_t::ResultType::R_OK)
 				stack.push(res.result);
@@ -231,8 +225,8 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::NOT:
 		{
-			RC* val = Pop();
-			result_t res = Boolean::Not(val->Get());
+			Astral::Type::atype_t* val = Pop();
+			result_t res = Boolean::Not(val);
 
 			if (res.type == result_t::ResultType::R_OK)
 				stack.push(res.result);
@@ -245,14 +239,14 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::PRINT:
 		{
-			RC* val = Pop();
+			Astral::Type::atype_t* val = Pop();
 
 			//If we do not know the type we are printing, just print the address
-			if (Type::number_t* number_t = dynamic_cast<Type::number_t*>(val->Get()))
+			if (Type::number_t* number_t = dynamic_cast<Type::number_t*>(val))
 				std::cout << number_t->Value() << '\n';
-			else if (Type::string_t* string_t = dynamic_cast<Type::string_t*>(val->Get()))
+			else if (Type::string_t* string_t = dynamic_cast<Type::string_t*>(val))
 				std::cout << string_t->Value() << '\n';
-			else if (Type::void_t* void_t = dynamic_cast<Type::void_t*>(val->Get()))
+			else if (Type::void_t* void_t = dynamic_cast<Type::void_t*>(val))
 			{
 				Error("void reference", instruction.lexeme);
 				failed = true;

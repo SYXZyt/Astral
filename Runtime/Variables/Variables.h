@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "Variable.h"
+#include "../Memory/MemoryBlock.h"
 
 namespace Astral
 {
@@ -19,8 +20,8 @@ namespace Astral
 		bool DoesVariableExistInHighestScope(const char* name);
 		bool DoesVariableExist(const char* name);
 		void AddVariable(const char* vname);
-		void UpdateValue(const char* vname, RefCount<Type::atype_t>* value);
-		RefCount<Type::atype_t>* GetValue(const char* vname);
+		void UpdateValue(const char* vname, Type::atype_t* value);
+		Type::atype_t* GetValue(const char* vname);
 
 		void AddScope();
 		void RemoveScope();

@@ -11,7 +11,7 @@
 
 inline static Astral::result_t Success(Astral::Type::atype_t* val)
 {
-	return { Astral::result_t::ResultType::R_OK, new RefCount<Astral::Type::atype_t>(val) };
+	return { Astral::result_t::ResultType::R_OK, val };
 }
 
 inline static Astral::result_t FailTypes()

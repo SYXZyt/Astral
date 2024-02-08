@@ -15,6 +15,6 @@ namespace Astral
 		};
 
 		ResultType type;
-		RefCount<Type::atype_t>* result;
+		Type::atype_t* result;
 	};
 }

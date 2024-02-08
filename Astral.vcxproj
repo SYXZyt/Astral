@@ -156,6 +156,8 @@
     <ClInclude Include="Runtime\BooleanHandler.h" />
     <ClInclude Include="Runtime\Interpreter.h" />
     <ClInclude Include="Runtime\MathsHandler.h" />
+    <ClInclude Include="Runtime\Memory\GarbageCollector.h" />
+    <ClInclude Include="Runtime\Memory\MemoryBlock.h" />
     <ClInclude Include="Runtime\Result.h" />
     <ClInclude Include="Runtime\Types\AstralTypes.h" />
     <ClInclude Include="Runtime\Variables\Variable.h" />
@@ -189,6 +191,8 @@
     <ClCompile Include="Runtime\BooleanHandler.cpp" />
     <ClCompile Include="Runtime\Interpreter.cpp" />
     <ClCompile Include="Runtime\MathsHandler.cpp" />
+    <ClCompile Include="Runtime\Memory\GarbageCollector.cpp" />
+    <ClCompile Include="Runtime\Memory\MemoryBlock.cpp" />
     <ClCompile Include="Runtime\Types\AstralTypes.cpp" />
     <ClCompile Include="Runtime\Variables\Variable.cpp" />
     <ClCompile Include="Runtime\Variables\Variables.cpp" />

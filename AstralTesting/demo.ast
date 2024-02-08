@@ -1,5 +1,5 @@
 let x = "Hi :)";
-let y = x;
+let y = &x;
 
 print(x);
 print(y);

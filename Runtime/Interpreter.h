@@ -9,6 +9,7 @@
 #include "../ErrorManager.h"
 #include "Types/AstralTypes.h"
 #include "Variables/Variables.h"
+#include "Memory/GarbageCollector.h"
 #include "../Compilation/Compiler/OpType.h"
 #include "../Compilation/Compiler/Bytecode.h"
 
@@ -17,16 +18,16 @@ namespace Astral
 	class ASTRAL Interpreter final
 	{
 	private:
-		inline RefCount<Type::atype_t>* Pop()
+		inline Type::atype_t* Pop()
 		{
-			RefCount<Type::atype_t>* value = stack.top();
+			Type::atype_t* value = stack.top();
 			stack.pop();
 			return value;
 		}
 
 		Variables variables;
 
-		std::stack<RefCount<Type::atype_t>*> stack;
+		std::stack<Type::atype_t*> stack;
 
 		std::vector<Bytecode> rom;
 		int pc;
