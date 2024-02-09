@@ -37,6 +37,14 @@ Astral::Token Astral::Parser::Peek()
 	return tokens[pointer];
 }
 
+Astral::Token Astral::Parser::Peek(int lookahead)
+{
+	if ((size_t)(pointer + lookahead) >= tokens.size())
+		return Token();
+
+	return tokens[(size_t)(pointer + lookahead)];
+}
+
 Astral::Token Astral::Parser::Previous()
 {
 	if (pointer == 0)
@@ -220,7 +228,16 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 	if (Match(TokenType::NUMBER))
 	{
 		float* data = new float(std::stof(Previous().GetLexeme().lexeme));
-		return new Literal(data, Literal::LiteralType::NUMBER, Previous());
+		Expression* value = new Literal(data, Literal::LiteralType::NUMBER, Previous());
+
+		if (Peek().GetType() == TokenType::NOT)
+		{
+			Factorial* fact = new Factorial(value, Peek());
+			Advance();
+			return fact;
+		}
+
+		return value;
 	}
 
 	if (Match(TokenType::STRING))

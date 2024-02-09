@@ -22,6 +22,7 @@ namespace Astral
 
 		void Sync();
 		Token Peek();
+		Token Peek(int lookahead);
 		Token Previous();
 		Token Advance();
 		Token Consume(TokenType type, const std::string& message);
