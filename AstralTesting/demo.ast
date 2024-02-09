@@ -1,4 +1,4 @@
-let x = 10;
+{let x = 10;
 let y = x;
 
 print x;
@@ -6,4 +6,4 @@ print y;
 
 y = "X should also change";
 print x;
-print y;
+print y;}

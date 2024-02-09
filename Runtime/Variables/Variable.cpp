@@ -24,6 +24,7 @@ Astral::Variable::Variable(const char* name)
 	varname[len - 1] = '\0';
 
 	value = GarbageCollector::Instance().New();
+	value->referencing.push_back(this);
 }
 
 Astral::Variable::~Variable()

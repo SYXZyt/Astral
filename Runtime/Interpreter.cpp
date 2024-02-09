@@ -357,6 +357,8 @@ void Astral::Interpreter::Execute()
 	{
 		ExecuteInstruction(rom[pc++]);
 
+		GarbageCollector::Instance().Cleanup();
+
 		if (failed)
 			break;
 	}
