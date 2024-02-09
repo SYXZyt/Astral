@@ -138,6 +138,8 @@ void Astral::Compiler::GenerateExpression(const Expression* expression)
 		GenerateUnary(unary);
 	else if (const Factorial* factorial = dynamic_cast<const Factorial*>(expression))
 		GenerateFactorial(factorial);
+	else if (const IncrementExpression* increment = dynamic_cast<const IncrementExpression*>(expression))
+		GenerateIncrementExpression(increment);
 	else
 	{
 		throw "oop";
@@ -167,6 +169,59 @@ void Astral::Compiler::GenerateFactorial(const Factorial* factorial)
 	code.lexeme = factorial->GetToken().GetLexeme();
 	code.op = (uint8_t)OpType::FACTORIAL;
 	rom.push_back(code);
+}
+
+void Astral::Compiler::GenerateIncrementExpression(const IncrementExpression* increment)
+{
+	//If it is prefix (++x) we need to increment first, otherwise postfix (x++) we need to increment after
+	if (increment->IsPrefix())
+	{
+		Lexeme lexeme = increment->GetToken().GetLexeme();
+		lexeme.lexeme = "1";
+
+		Bytecode code;
+		code.lexeme = increment->GetExpression()->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::VARIABLE;
+		rom.push_back(code);
+
+		code.lexeme = lexeme;
+		code.op = (uint8_t)OpType::LIT_NUMBER;
+
+		rom.push_back(code);
+
+		code.op = (uint8_t)OpType::ADD;
+		rom.push_back(code);
+
+		code.lexeme = increment->GetExpression()->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::UPDATE_VAR;
+		rom.push_back(code);
+
+		GenerateExpression(increment->GetExpression());
+	}
+	else
+	{
+		GenerateExpression(increment->GetExpression());
+
+		Bytecode code;
+		code.lexeme = increment->GetExpression()->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::VARIABLE;
+
+		rom.push_back(code);
+
+		Lexeme lexeme = increment->GetToken().GetLexeme();
+		lexeme.lexeme = "1";
+
+		code.lexeme = lexeme;
+		code.op = (uint8_t)OpType::LIT_NUMBER;
+		rom.push_back(code);
+
+		code.op = (uint8_t)OpType::ADD;
+		rom.push_back(code);
+
+		code.lexeme = increment->GetExpression()->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::UPDATE_VAR;
+		rom.push_back(code);
+	}
 }
 
 void Astral::Compiler::GenerateStatement(const Statement* statement)

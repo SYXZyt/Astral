@@ -15,6 +15,7 @@ namespace Astral
 	{
 	private:
 		std::vector<Bytecode> rom;
+		std::vector<Bytecode> buffer;
 
 		std::vector<ParseTree*> tree;
 
@@ -27,6 +28,7 @@ namespace Astral
 		void GenerateGrouping(const Grouping* grouping);
 		void GenerateNode(const ParseTree* node);
 		void GenerateFactorial(const Factorial* factorial);
+		void GenerateIncrementExpression(const IncrementExpression* increment);
 
 		void GenerateStatement(const Statement* statement);
 		void GenerateProgram(const Program* program);

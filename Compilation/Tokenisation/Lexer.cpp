@@ -302,6 +302,12 @@ void Astral::Lexer::Tokenise()
 				PUSH_TOKEN();
 				Advance(2);
 			}
+			else if (Peek() == '+')
+			{
+				CHAR_TOKEN("++", TokenType::INCREMENT);
+				PUSH_TOKEN();
+				Advance(2);
+			}
 			else
 			{
 				CHAR_TOKEN("+", TokenType::PLUS);
@@ -314,6 +320,12 @@ void Astral::Lexer::Tokenise()
 			if (Peek() == '=')
 			{
 				CHAR_TOKEN("-=", TokenType::MINUS_EQUALS);
+				PUSH_TOKEN();
+				Advance(2);
+			}
+			else if (Peek() == '-')
+			{
+				CHAR_TOKEN("--", TokenType::DECREMENT);
 				PUSH_TOKEN();
 				Advance(2);
 			}

@@ -137,6 +137,7 @@
     <ClInclude Include="Compilation\Parsing\Expression.h" />
     <ClInclude Include="Compilation\Parsing\Expressions\BinaryOp.h" />
     <ClInclude Include="Compilation\Parsing\Expressions\Grouping.h" />
+    <ClInclude Include="Compilation\Parsing\Expressions\IncrementExpression.h" />
     <ClInclude Include="Compilation\Parsing\Expressions\Literal.h" />
     <ClInclude Include="Compilation\Parsing\Expressions\UnaryOp.h" />
     <ClInclude Include="Compilation\Parsing\Parser.h" />
@@ -176,6 +177,7 @@
     <ClCompile Include="Compilation\Parsing\Expression.cpp" />
     <ClCompile Include="Compilation\Parsing\Expressions\BinaryOp.cpp" />
     <ClCompile Include="Compilation\Parsing\Expressions\Grouping.cpp" />
+    <ClCompile Include="Compilation\Parsing\Expressions\IncrementExpression.cpp" />
     <ClCompile Include="Compilation\Parsing\Expressions\Literal.cpp" />
     <ClCompile Include="Compilation\Parsing\Expressions\UnaryOp.cpp" />
     <ClCompile Include="Compilation\Parsing\Parser.cpp" />

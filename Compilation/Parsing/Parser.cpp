@@ -220,6 +220,28 @@ Astral::Expression* Astral::Parser::ParseUnary()
 		return new UnaryOp(op, expr);
 	}
 
+	return ParsePrefix();
+}
+
+Astral::Expression* Astral::Parser::ParsePrefix()
+{
+	if (Match(TokenType::INCREMENT))
+	{
+		Token token = Previous();
+		if (Check(TokenType::IDEN))
+		{
+			Expression* variable = ParseLiteral();
+			IncrementExpression* prefix = new IncrementExpression(variable, true, token);
+			return prefix;
+		}
+		else
+		{
+			Error("Expected identifier", Peek());
+			failed = true;
+			return nullptr;
+		}
+	}
+
 	return ParseLiteral();
 }
 
@@ -249,7 +271,22 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 	if (Match(TokenType::IDEN))
 	{
 		std::string* data = new std::string(Previous().GetLexeme().lexeme);
-		return new Literal(data, Literal::LiteralType::IDENTIFER, Previous());
+		Expression* value = new Literal(data, Literal::LiteralType::IDENTIFER, Previous());
+
+		if (Peek().GetType() == TokenType::NOT)
+		{
+			Factorial* fact = new Factorial(value, Peek());
+			Advance();
+			return fact;
+		}
+		else if (Peek().GetType() == TokenType::INCREMENT)
+		{
+			IncrementExpression* postfix = new IncrementExpression(value, false, Peek());
+			Advance();
+			return postfix;
+		}
+
+		return value;
 	}
 
 	if (Match(TokenType::REFERENCE))

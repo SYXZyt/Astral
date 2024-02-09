@@ -26,6 +26,9 @@ namespace Astral
 		MODULO,
 		REFERENCE,
 
+		INCREMENT,
+		DECREMENT,
+
 		NOT,
 		LESS_THAN,
 		GREATER_THAN,
