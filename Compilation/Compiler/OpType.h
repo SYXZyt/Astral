@@ -20,6 +20,7 @@ namespace Astral
 		POW,
 		MOD,
 		NOT,
+		FACTORIAL,
 
 		EQUALITY,
 		NEQUALITY,
@@ -69,6 +70,8 @@ namespace Astral
 				return "POW";
 			case OpType::MOD:
 				return "MOD";
+			case OpType::FACTORIAL:
+				return "FACTORIAL";
 			case OpType::EQUALITY:
 				return "EQU";
 			case OpType::NEQUALITY:

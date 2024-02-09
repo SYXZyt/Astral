@@ -137,6 +137,20 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			}
 			break;
 		}
+		case OpType::FACTORIAL:
+		{
+			Astral::Type::atype_t* val = Pop();
+			result_t res = Maths::Factorial(val);
+
+			if (res.type == result_t::ResultType::R_OK)
+				Push(res.result);
+			else
+			{
+				Error("Type does not support factorial", instruction.lexeme);
+				failed = true;
+			}
+			break;
+		}
 		case OpType::EQUALITY:
 		{
 			Astral::Type::atype_t* rhs = Pop();

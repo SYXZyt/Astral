@@ -136,6 +136,8 @@ void Astral::Compiler::GenerateExpression(const Expression* expression)
 		GenerateBinary(binary);
 	else if (const UnaryOp* unary = dynamic_cast<const UnaryOp*>(expression))
 		GenerateUnary(unary);
+	else if (const Factorial* factorial = dynamic_cast<const Factorial*>(expression))
+		GenerateFactorial(factorial);
 	else
 	{
 		throw "oop";
@@ -155,6 +157,16 @@ void Astral::Compiler::GenerateNode(const ParseTree* node)
 		GenerateStatement(stmt);
 	else
 		throw "oop";
+}
+
+void Astral::Compiler::GenerateFactorial(const Factorial* factorial)
+{
+	GenerateExpression(factorial->GetExpression());
+
+	Bytecode code;
+	code.lexeme = factorial->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::FACTORIAL;
+	rom.push_back(code);
 }
 
 void Astral::Compiler::GenerateStatement(const Statement* statement)

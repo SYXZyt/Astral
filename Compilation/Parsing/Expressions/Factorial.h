@@ -11,7 +11,7 @@ namespace Astral
 		Expression* expr;
 
 	public:
-		inline Expression* GetExpression() { return expr; }
+		inline const Expression* GetExpression() const { return expr; }
 
 		void Dump(int indent = 0) final override;
 

@@ -12,4 +12,5 @@ namespace Astral::Maths
 	extern result_t Power(Type::atype_t* lhs, Type::atype_t* rhs);
 	extern result_t Modulo(Type::atype_t* lhs, Type::atype_t* rhs);
 	extern result_t Minus(Type::atype_t* val);
+	extern result_t Factorial(Type::atype_t* val);
 }
