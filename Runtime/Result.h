@@ -1,5 +1,4 @@
 #pragma once
-#include "../RefCount.h"
 #include "Types/AstralTypes.h"
 
 namespace Astral

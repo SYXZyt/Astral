@@ -1,9 +1,29 @@
-{let x = 10;
-let y = x;
+let y;
 
-print x;
+{
+	let x = 10;
+	{
+		let x = 10;
+		{
+			let x = 10;
+			{
+				let x = 10;
+				{
+					let x = 10;
+					{
+						let x = 10;
+						{
+							let x = "World!";
+							{
+								y = &x;
+								let x = "Hello";
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 print y;
-
-y = "X should also change";
-print x;
-print y;}

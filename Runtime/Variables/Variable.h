@@ -1,6 +1,5 @@
 #pragma once
 #include "../../Astral.h"
-#include "../../RefCount.h"
 #include "../Types/AstralTypes.h"
 #include "../Memory/GarbageCollector.h"
 

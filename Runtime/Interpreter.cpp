@@ -345,6 +345,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			break;
 		case OpType::SCOPE_END:
 			variables.RemoveScope();
+			GarbageCollector::Instance().Cleanup();
 			break;
 		default:
 			throw "oop";
@@ -356,8 +357,6 @@ void Astral::Interpreter::Execute()
 	while (pc < rom.size())
 	{
 		ExecuteInstruction(rom[pc++]);
-
-		GarbageCollector::Instance().Cleanup();
 
 		if (failed)
 			break;

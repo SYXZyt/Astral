@@ -34,6 +34,7 @@ void Astral::GarbageCollector::Cleanup()
 		//If a block has no references, it can be deleted
 		if (memory[i]->CanDelete())
 		{
+			delete memory[i];
 			memory.erase(memory.begin() + i);
 
 #ifdef _DEBUG
@@ -60,6 +61,7 @@ void Astral::GarbageCollector::Cleanup()
 		{
 			if (!danglingMemory[i]->isOnStack) //If this is not on the stack, then we know it is not in use and ready to be cleaned up
 			{
+				delete danglingMemory[i];
 				danglingMemory.erase(danglingMemory.begin() + i);
 #ifdef _DEBUG
 #ifdef _WIN32
