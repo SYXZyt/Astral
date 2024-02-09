@@ -241,6 +241,22 @@ Astral::Expression* Astral::Parser::ParsePrefix()
 			return nullptr;
 		}
 	}
+	else if (Match(TokenType::DECREMENT))
+	{
+		Token token = Previous();
+		if (Check(TokenType::IDEN))
+		{
+			Expression* variable = ParseLiteral();
+			DecrementExpression* prefix = new DecrementExpression(variable, true, token);
+			return prefix;
+		}
+		else
+		{
+			Error("Expected identifier", Peek());
+			failed = true;
+			return nullptr;
+		}
+	}
 
 	return ParseLiteral();
 }
@@ -282,6 +298,12 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 		else if (Peek().GetType() == TokenType::INCREMENT)
 		{
 			IncrementExpression* postfix = new IncrementExpression(value, false, Peek());
+			Advance();
+			return postfix;
+		}
+		else if (Peek().GetType() == TokenType::DECREMENT)
+		{
+			DecrementExpression* postfix = new DecrementExpression(value, false, Peek());
 			Advance();
 			return postfix;
 		}

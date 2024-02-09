@@ -140,6 +140,8 @@ void Astral::Compiler::GenerateExpression(const Expression* expression)
 		GenerateFactorial(factorial);
 	else if (const IncrementExpression* increment = dynamic_cast<const IncrementExpression*>(expression))
 		GenerateIncrementExpression(increment);
+	else if (const DecrementExpression* decrement = dynamic_cast<const DecrementExpression*>(expression))
+		GenerateDecrementExpression(decrement);
 	else
 	{
 		throw "oop";
@@ -176,6 +178,16 @@ void Astral::Compiler::GenerateIncrementExpression(const IncrementExpression* in
 	//If it is prefix (++x) we need to increment first, otherwise postfix (x++) we need to increment after
 	if (increment->IsPrefix())
 	{
+		if (
+			dynamic_cast<const IncrementExpression*>(increment->GetExpression()) ||
+			dynamic_cast<const DecrementExpression*>(increment->GetExpression())
+			)
+		{
+			Error("Cannot nest increment operator", increment->GetExpression()->GetToken());
+			failed = true;
+			return;
+		}
+
 		Lexeme lexeme = increment->GetToken().GetLexeme();
 		lexeme.lexeme = "1";
 
@@ -219,6 +231,69 @@ void Astral::Compiler::GenerateIncrementExpression(const IncrementExpression* in
 		rom.push_back(code);
 
 		code.lexeme = increment->GetExpression()->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::UPDATE_VAR;
+		rom.push_back(code);
+	}
+}
+
+void Astral::Compiler::GenerateDecrementExpression(const DecrementExpression* decrement)
+{
+	//If it is prefix (--x) we need to decrement first, otherwise postfix (x--) we need to decrement after
+	if (decrement->IsPrefix())
+	{
+		if (
+			dynamic_cast<const IncrementExpression*>(decrement->GetExpression()) ||
+			dynamic_cast<const DecrementExpression*>(decrement->GetExpression())
+			)
+		{
+			Error("Cannot nest decrement operator", decrement->GetExpression()->GetToken());
+			failed = true;
+			return;
+		}
+
+		Lexeme lexeme = decrement->GetToken().GetLexeme();
+		lexeme.lexeme = "1";
+
+		Bytecode code;
+		code.lexeme = decrement->GetExpression()->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::VARIABLE;
+		rom.push_back(code);
+
+		code.lexeme = lexeme;
+		code.op = (uint8_t)OpType::LIT_NUMBER;
+
+		rom.push_back(code);
+
+		code.op = (uint8_t)OpType::SUB;
+		rom.push_back(code);
+
+		code.lexeme = decrement->GetExpression()->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::UPDATE_VAR;
+		rom.push_back(code);
+
+		GenerateExpression(decrement->GetExpression());
+	}
+	else
+	{
+		GenerateExpression(decrement->GetExpression());
+
+		Bytecode code;
+		code.lexeme = decrement->GetExpression()->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::VARIABLE;
+
+		rom.push_back(code);
+
+		Lexeme lexeme = decrement->GetToken().GetLexeme();
+		lexeme.lexeme = "1";
+
+		code.lexeme = lexeme;
+		code.op = (uint8_t)OpType::LIT_NUMBER;
+		rom.push_back(code);
+
+		code.op = (uint8_t)OpType::SUB;
+		rom.push_back(code);
+
+		code.lexeme = decrement->GetExpression()->GetToken().GetLexeme();
 		code.op = (uint8_t)OpType::UPDATE_VAR;
 		rom.push_back(code);
 	}

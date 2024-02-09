@@ -280,7 +280,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			std::string name = instruction.lexeme.lexeme;
 			if (!variables.DoesVariableExist(name.c_str()))
 			{
-				Error("Variables does not exist", instruction.lexeme);
+				Error("Variable does not exist", instruction.lexeme);
 				failed = true;
 				break;
 			}

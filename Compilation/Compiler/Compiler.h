@@ -5,6 +5,7 @@
 
 #include "OpType.h"
 #include "Bytecode.h"
+#include "../../ErrorManager.h"
 #include "../Parsing/ParseTree.h"
 
 #include "../Parsing/AllNodeTypes.h"
@@ -29,6 +30,7 @@ namespace Astral
 		void GenerateNode(const ParseTree* node);
 		void GenerateFactorial(const Factorial* factorial);
 		void GenerateIncrementExpression(const IncrementExpression* increment);
+		void GenerateDecrementExpression(const DecrementExpression* decrement);
 
 		void GenerateStatement(const Statement* statement);
 		void GenerateProgram(const Program* program);
