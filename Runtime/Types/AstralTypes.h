@@ -4,12 +4,16 @@
 
 #include "../../Astral.h"
 
+namespace Astral { struct MemoryBlock; }
+
 namespace Astral::Type
 {
 	class ASTRAL atype_t
 	{
 	public:
 		bool isOnStack = false; //Used in GC to determine whether this is OK to delete or not
+
+		virtual atype_t* Copy() { return new atype_t(); }
 
 		virtual ~atype_t() {}
 	};
@@ -22,6 +26,8 @@ namespace Astral::Type
 	public:
 		inline float Value() const { return value; }
 		inline void SetValue(float value) { this->value = value; }
+
+		atype_t* Copy() final override { return new number_t(value); }
 
 		number_t() : value(0.0f), atype_t() {}
 		number_t(float v) : value(v), atype_t() {}
@@ -57,11 +63,40 @@ namespace Astral::Type
 			this->value[len - 1] = '\0';
 		}
 
+		atype_t* Copy() final override
+		{
+			size_t len = strlen(value);
+			++len;
+
+			char* value = new char[len];
+			strcpy_s(value, len, this->value);
+			value[len - 1] = '\0';
+
+			return new string_t(value);
+		}
+
 		string_t();
 		string_t(const char* value);
 		string_t(const std::string& string);
 		~string_t() final override;
 	};
 
-	class ASTRAL void_t final : public atype_t {};
+	class ASTRAL void_t final : public atype_t
+	{
+	public:
+		atype_t* Copy() final override { return new void_t(); }
+	};
+
+	class ASTRAL ref_t final : public atype_t
+	{
+	private:
+		MemoryBlock* block;
+
+	public:
+		MemoryBlock* GetBlock();
+
+		atype_t* Copy() final override { return new ref_t(block); }
+
+		ref_t(MemoryBlock* block) : block(block) {}
+	};
 }

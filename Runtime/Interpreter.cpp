@@ -1,5 +1,7 @@
 #include "Interpreter.h"
 
+Astral::Interpreter* Astral::Interpreter::instance = nullptr;
+
 void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 {
 	OpType op = (OpType)instruction.op;
@@ -269,7 +271,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 				break;
 			}
 
-			stack.push(variables.GetValue(name.c_str()));
+			Push(variables.GetValue(name.c_str())->Copy());
 
 			break;
 		}
@@ -298,7 +300,12 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			}
 
 			variables.AddVariable(name.c_str());
-			variables.UpdateValue(name.c_str(), Pop());
+
+			Type::atype_t* value = Pop();
+			if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(value))
+				variables.UpdateRef(name.c_str(), ref->GetBlock());
+			else
+				variables.UpdateValue(name.c_str(), value);
 
 			break;
 		}
@@ -312,8 +319,25 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 				break;
 			}
 
-			variables.UpdateValue(name.c_str(), Pop());
+			Type::atype_t* value = Pop();
+			if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(value))
+				variables.UpdateRef(name.c_str(), ref->GetBlock());
+			else
+				variables.UpdateValue(name.c_str(), value);
 
+			break;
+		}
+		case OpType::VARIABLE_REF:
+		{
+			std::string name = instruction.lexeme.lexeme;
+			if (!variables.DoesVariableExist(name.c_str()))
+			{
+				Error("Variable does not exist", instruction.lexeme);
+				failed = true;
+				break;
+			}
+
+			Push(new Type::ref_t(variables.GetVariable(name.c_str())->Value()));
 			break;
 		}
 		case OpType::SCOPE_BEG:
@@ -340,12 +364,6 @@ void Astral::Interpreter::Execute()
 
 Astral::Interpreter::~Interpreter()
 {
-	//while (!stack.empty())
-	//{
-	//	std::shared_ptr<Type::atype_t> value = Pop();
-
-	//	delete value;
-	//}
-
+	//GC will clear up our stack
 	GarbageCollector::FreeInstance();
 }

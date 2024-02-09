@@ -18,7 +18,6 @@ namespace Astral
 		inline MemoryBlock* Value() { return value; }
 
 		void SetValue(Type::atype_t* value);
-
 		void SetValue(MemoryBlock* value);
 
 		Variable(const char* name);

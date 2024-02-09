@@ -35,6 +35,7 @@ namespace Astral
 		void Cleanup();
 
 		void RegisterDanglingPointer(Type::atype_t* data);
+		void RemoveDanglingPointer(Type::atype_t* data);
 
 		~GarbageCollector();
 	};

@@ -4,6 +4,7 @@
 
 void Astral::Variable::SetValue(Type::atype_t* value)
 {
+	GarbageCollector::Instance().RemoveDanglingPointer(value);
 	delete this->value->data;
 	this->value->data = value;
 }
@@ -12,6 +13,7 @@ void Astral::Variable::SetValue(MemoryBlock* value)
 {
 	this->value->RemoveReference(this);
 	this->value = value;
+	this->value->referencing.push_back(this);
 }
 
 Astral::Variable::Variable(const char* name)

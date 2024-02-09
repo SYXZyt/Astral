@@ -18,6 +18,8 @@ namespace Astral
 	class ASTRAL Interpreter final
 	{
 	private:
+		static Interpreter* instance;
+
 		inline Type::atype_t* Pop()
 		{
 			Type::atype_t* value = stack.top();
@@ -48,7 +50,11 @@ namespace Astral
 
 		inline bool Failed() const { return failed; }
 
-		Interpreter(const std::vector<Bytecode>& rom) : rom(rom), pc(0), failed(false) {}
+		Interpreter(const std::vector<Bytecode>& rom) : rom(rom), pc(0), failed(false) 
+		{
+			instance = this;
+		}
+
 		~Interpreter();
 	};
 }

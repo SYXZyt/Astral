@@ -4,7 +4,9 @@ Astral::GarbageCollector* Astral::GarbageCollector::instance = nullptr;
 
 Astral::MemoryBlock* Astral::GarbageCollector::New()
 {
-    return new MemoryBlock(new Type::void_t());
+    MemoryBlock* block = new MemoryBlock(new Type::void_t());
+	memory.push_back(block);
+	return block;
 }
 
 void Astral::GarbageCollector::Cleanup()
@@ -33,8 +35,23 @@ void Astral::GarbageCollector::RegisterDanglingPointer(Type::atype_t* data)
 	danglingMemory.push_back(data);
 }
 
+void Astral::GarbageCollector::RemoveDanglingPointer(Type::atype_t* data)
+{
+	for (int i = danglingMemory.size() - 1; i >= 0; i--)
+	{
+		if (danglingMemory[i] == data)
+		{
+			danglingMemory.erase(danglingMemory.begin() + i);
+			return;
+		}
+	}
+}
+
 Astral::GarbageCollector::~GarbageCollector()
 {
 	for (MemoryBlock* block : memory)
 		delete block;
+
+	for (Type::atype_t* data : danglingMemory)
+		delete data;
 }

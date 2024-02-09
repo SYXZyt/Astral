@@ -1,2 +1,9 @@
-let x = 1 + 2;
-print(x);
+let x = 10;
+let y = x;
+
+print x;
+print y;
+
+y = "X should also change";
+print x;
+print y;

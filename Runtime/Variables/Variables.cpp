@@ -54,6 +54,11 @@ void Astral::Variables::UpdateValue(const char* vname, Type::atype_t* value)
 	GetVariable(vname)->SetValue(value);
 }
 
+void Astral::Variables::UpdateRef(const char* vname, MemoryBlock* value)
+{
+	GetVariable(vname)->SetValue(value);
+}
+
 Astral::Type::atype_t* Astral::Variables::GetValue(const char* vname)
 {
 	return GetVariable(vname)->Value()->data;
