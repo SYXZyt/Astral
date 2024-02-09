@@ -53,7 +53,7 @@ void Astral::Lexer::Advance(int count)
 
 	if (currentChar == '\n')
 	{
-		posOnLine = 0;
+		posOnLine = -1;
 		++line;
 	}
 }
@@ -181,6 +181,9 @@ Astral::Token Astral::Lexer::GenerateString(char strChar)
 					break;
 				}
 			}
+
+			Advance();
+			continue;
 		}
 
 		//Handle an unterminated string, either EOF or EOL
@@ -252,6 +255,8 @@ Astral::Token Astral::Lexer::GenerateIdentifier()
 		token.SetType(TokenType::WHILE);
 	else if (iden == "return")
 		token.SetType(TokenType::RETURN);
+	else if (iden == "print")
+		token.SetType(TokenType::PRINT);
 
 	return token;
 }
@@ -291,15 +296,33 @@ void Astral::Lexer::Tokenise()
 
 		if (currentChar == '+')
 		{
-			CHAR_TOKEN("+", TokenType::PLUS);
-			PUSH_TOKEN();
-			Advance();
+			if (Peek() == '=')
+			{
+				CHAR_TOKEN("+=", TokenType::PLUS_EQUALS);
+				PUSH_TOKEN();
+				Advance(2);
+			}
+			else
+			{
+				CHAR_TOKEN("+", TokenType::PLUS);
+				PUSH_TOKEN();
+				Advance();
+			}
 		}
 		else if (currentChar == '-')
 		{
-			CHAR_TOKEN("-", TokenType::MINUS);
-			PUSH_TOKEN();
-			Advance();
+			if (Peek() == '=')
+			{
+				CHAR_TOKEN("-=", TokenType::MINUS_EQUALS);
+				PUSH_TOKEN();
+				Advance(2);
+			}
+			else
+			{
+				CHAR_TOKEN("-", TokenType::MINUS);
+				PUSH_TOKEN();
+				Advance();
+			}
 		}
 		else if (currentChar == '/')
 		{
@@ -456,6 +479,12 @@ void Astral::Lexer::Tokenise()
 		else if (currentChar == '%')
 		{
 			CHAR_TOKEN("%", TokenType::MODULO);
+			PUSH_TOKEN();
+			Advance();
+		}
+		else if (currentChar == '&')
+		{
+			CHAR_TOKEN("&", TokenType::REFERENCE);
 			PUSH_TOKEN();
 			Advance();
 		}

@@ -26,9 +26,14 @@ namespace Astral
 		void GenerateExpression(const Expression* expression);
 		void GenerateGrouping(const Grouping* grouping);
 		void GenerateNode(const ParseTree* node);
+		void GenerateFactorial(const Factorial* factorial);
 
 		void GenerateStatement(const Statement* statement);
 		void GenerateProgram(const Program* program);
+		void GeneratePrint(const PrintStatement* printStatement);
+		void GenerateLet(const VariableDefinition* variable);
+		void GenerateAssign(const VariableAssignment* variable);
+		void GenerateBlock(const Block* block);
 
 	public:
 		inline bool Failed() const { return failed; }

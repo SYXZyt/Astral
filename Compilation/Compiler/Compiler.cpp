@@ -15,9 +15,32 @@ void Astral::Compiler::GenerateLiteral(const Literal* literal)
 		case Literal::LiteralType::BOOLEAN:
 		{
 			Bytecode code;
-			code.lexeme = literal->GetToken().GetLexeme();
 			code.op = (uint8_t)OpType::LIT_NUMBER;
 			code.lexeme.lexeme = *(bool*)literal->data ? "1" : "0";
+			rom.push_back(code);
+			break;
+		}
+		case Literal::LiteralType::STRING:
+		{
+			Bytecode code;
+			code.lexeme = literal->GetToken().GetLexeme();
+			code.op = (uint8_t)OpType::LIT_STRING;
+			rom.push_back(code);
+			break;
+		}
+		case Literal::LiteralType::IDENTIFER:
+		{
+			Bytecode code;
+			code.lexeme = literal->GetToken().GetLexeme();
+			code.op = (uint8_t)OpType::VARIABLE;
+			rom.push_back(code);
+			break;
+		}
+		case Literal::LiteralType::REFERENCE:
+		{
+			Bytecode code;
+			code.lexeme = literal->GetToken().GetLexeme();
+			code.op = (uint8_t)OpType::VARIABLE_REF;
 			rom.push_back(code);
 			break;
 		}
@@ -113,6 +136,8 @@ void Astral::Compiler::GenerateExpression(const Expression* expression)
 		GenerateBinary(binary);
 	else if (const UnaryOp* unary = dynamic_cast<const UnaryOp*>(expression))
 		GenerateUnary(unary);
+	else if (const Factorial* factorial = dynamic_cast<const Factorial*>(expression))
+		GenerateFactorial(factorial);
 	else
 	{
 		throw "oop";
@@ -134,10 +159,28 @@ void Astral::Compiler::GenerateNode(const ParseTree* node)
 		throw "oop";
 }
 
+void Astral::Compiler::GenerateFactorial(const Factorial* factorial)
+{
+	GenerateExpression(factorial->GetExpression());
+
+	Bytecode code;
+	code.lexeme = factorial->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::FACTORIAL;
+	rom.push_back(code);
+}
+
 void Astral::Compiler::GenerateStatement(const Statement* statement)
 {
 	if (const Program* program = dynamic_cast<const Program*>(statement))
 		GenerateProgram(program);
+	else if (const PrintStatement* print = dynamic_cast<const PrintStatement*>(statement))
+		GeneratePrint(print);
+	else if (const VariableDefinition* var = dynamic_cast<const VariableDefinition*>(statement))
+		GenerateLet(var);
+	else if (const VariableAssignment* assign = dynamic_cast<const VariableAssignment*>(statement))
+		GenerateAssign(assign);
+	else if (const Block* block = dynamic_cast<const Block*>(statement))
+		GenerateBlock(block);
 	else
 		throw "oop";
 }
@@ -146,6 +189,58 @@ void Astral::Compiler::GenerateProgram(const Program* program)
 {
 	for (ParseTree* node : program->Statements())
 		GenerateNode(node);
+}
+
+void Astral::Compiler::GeneratePrint(const PrintStatement* printStatement)
+{
+	GenerateExpression(printStatement->Expr());
+
+	Bytecode code;
+	code.lexeme = printStatement->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::PRINT;
+	rom.push_back(code);
+}
+
+void Astral::Compiler::GenerateLet(const VariableDefinition* variable)
+{
+	//If the expression is non-null, we need to compile that since we have to assign to its result on the stack
+	OpType assignType = OpType::ASSIGN_VOID;
+	if (variable->Expr())
+	{
+		GenerateExpression(variable->Expr());
+		assignType = OpType::ASSIGN;
+	}
+
+	Bytecode code;
+	code.lexeme = variable->Name().GetLexeme();
+	code.op = (uint8_t)assignType;
+	rom.push_back(code);
+}
+
+void Astral::Compiler::GenerateAssign(const VariableAssignment* variable)
+{
+	GenerateExpression(variable->Expr());
+
+	Bytecode code;
+	code.lexeme = variable->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::UPDATE_VAR;
+	rom.push_back(code);
+}
+
+void Astral::Compiler::GenerateBlock(const Block* block)
+{
+	Bytecode scopeBegin;
+	scopeBegin.lexeme = block->GetToken().GetLexeme();
+	scopeBegin.op = (uint8_t)OpType::SCOPE_BEG;
+	rom.push_back(scopeBegin);
+
+	for (Statement* stmt : block->Statements())
+		GenerateStatement(stmt);
+
+	Bytecode scopeEnd;
+	scopeEnd.lexeme = block->GetToken().GetLexeme();
+	scopeEnd.op = (uint8_t)OpType::SCOPE_END;
+	rom.push_back(scopeEnd);
 }
 
 void Astral::Compiler::GenerateBytecode()

@@ -9,6 +9,9 @@ namespace Astral
 	{
 		NOP,
 		LIT_NUMBER,
+		LIT_STRING,
+		VARIABLE,
+		VARIABLE_REF,
 		ADD,
 		SUB,
 		MUL,
@@ -17,6 +20,7 @@ namespace Astral
 		POW,
 		MOD,
 		NOT,
+		FACTORIAL,
 
 		EQUALITY,
 		NEQUALITY,
@@ -26,6 +30,16 @@ namespace Astral
 
 		LESS,
 		LESS_EQUALS,
+
+		//Statements
+		PRINT,
+		ASSIGN_VOID,
+		ASSIGN,
+		UPDATE_VAR,
+		UPDATE_REF,
+
+		SCOPE_BEG,
+		SCOPE_END,
 	};
 
 	inline ASTRAL const char* OpTypeToString(OpType type)
@@ -36,6 +50,12 @@ namespace Astral
 				return "NOP";
 			case OpType::LIT_NUMBER:
 				return "NUMBER";
+			case OpType::LIT_STRING:
+				return "STRING";
+			case OpType::VARIABLE:
+				return "VAR";
+			case OpType::VARIABLE_REF:
+				return "VAR_REF";
 			case OpType::ADD:
 				return "ADD";
 			case OpType::SUB:
@@ -50,12 +70,28 @@ namespace Astral
 				return "POW";
 			case OpType::MOD:
 				return "MOD";
+			case OpType::FACTORIAL:
+				return "FACTORIAL";
 			case OpType::EQUALITY:
 				return "EQU";
 			case OpType::NEQUALITY:
 				return "NEQ";
 			case OpType::NOT:
 				return "NOT";
+			case OpType::PRINT:
+				return "PRINT";
+			case OpType::ASSIGN:
+				return "ASSIGN";
+			case OpType::ASSIGN_VOID:
+				return "ASSIGN_VOID";
+			case OpType::UPDATE_VAR:
+				return "UPD_VAR";
+			case OpType::UPDATE_REF:
+				return "UPD_REF";
+			case OpType::SCOPE_BEG:
+				return "SCOPE_BEG";
+			case OpType::SCOPE_END:
+				return "SCOPE_END";
 			default:
 				return "UNKNOWN";
 		}

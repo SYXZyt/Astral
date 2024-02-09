@@ -22,6 +22,7 @@ namespace Astral
 
 		void Sync();
 		Token Peek();
+		Token Peek(int lookahead);
 		Token Previous();
 		Token Advance();
 		Token Consume(TokenType type, const std::string& message);
@@ -41,6 +42,13 @@ namespace Astral
 		Expression* ParseUnary();
 		Expression* ParseLiteral();
 
+		Statement* ParseStatement();
+		Statement* ParseDeclarations();
+		Statement* ParseBlock();
+		Statement* ParseLetStatement();
+		Statement* ParsePrintStatement();
+		Statement* ParseAssignment();
+			
 	public:
 		inline bool HasFailed() const { return failed; }
 

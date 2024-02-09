@@ -1,5 +1,9 @@
 #include "Parser.h"
 
+#define PreviousOrFirst() pointer >= tokens.size() ? tokens[0] : Previous()
+#define PreviousOrLast() pointer >= tokens.size() ? tokens[tokens.size() - 1] : Previous()
+#define PeekOrLast() pointer >= tokens.size() ? tokens[tokens.size() - 1] : Peek()
+
 void Astral::Parser::Sync()
 {
 	Advance();
@@ -11,14 +15,14 @@ void Astral::Parser::Sync()
 
 		switch (Previous().GetType())
 		{
-			case TokenType::FUNC:
-			case TokenType::LET:
-			case TokenType::FOR:
-			case TokenType::IF:
-			case TokenType::ELSE:
-			case TokenType::WHILE:
-			case TokenType::RETURN:
-				return;
+		case TokenType::FUNC:
+		case TokenType::LET:
+		case TokenType::FOR:
+		case TokenType::IF:
+		case TokenType::ELSE:
+		case TokenType::WHILE:
+		case TokenType::RETURN:
+			return;
 		}
 
 		Advance();
@@ -33,10 +37,18 @@ Astral::Token Astral::Parser::Peek()
 	return tokens[pointer];
 }
 
+Astral::Token Astral::Parser::Peek(int lookahead)
+{
+	if ((size_t)(pointer + lookahead) >= tokens.size())
+		return Token();
+
+	return tokens[(size_t)(pointer + lookahead)];
+}
+
 Astral::Token Astral::Parser::Previous()
 {
 	if (pointer == 0)
-		return Token();
+		return tokens[0];
 
 	return tokens[pointer - 1ull];
 }
@@ -54,7 +66,7 @@ Astral::Token Astral::Parser::Consume(TokenType type, const std::string& message
 	if (Check(type))
 		return Advance();
 
-	Astral::Error(message.c_str(), Peek());
+	Astral::Error(message.c_str(), PreviousOrLast());
 	failed = true;
 	return {};
 }
@@ -216,7 +228,37 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 	if (Match(TokenType::NUMBER))
 	{
 		float* data = new float(std::stof(Previous().GetLexeme().lexeme));
-		return new Literal(data, Literal::LiteralType::NUMBER, Previous());
+		Expression* value = new Literal(data, Literal::LiteralType::NUMBER, Previous());
+
+		if (Peek().GetType() == TokenType::NOT)
+		{
+			Factorial* fact = new Factorial(value, Peek());
+			Advance();
+			return fact;
+		}
+
+		return value;
+	}
+
+	if (Match(TokenType::STRING))
+	{
+		std::string* data = new std::string(Previous().GetLexeme().lexeme);
+		return new Literal(data, Literal::LiteralType::STRING, Previous());
+	}
+
+	if (Match(TokenType::IDEN))
+	{
+		std::string* data = new std::string(Previous().GetLexeme().lexeme);
+		return new Literal(data, Literal::LiteralType::IDENTIFER, Previous());
+	}
+
+	if (Match(TokenType::REFERENCE))
+	{
+		//Make sure we are getting the reference of a variable
+		Token varName = Consume(TokenType::IDEN, "Expected variable name");
+
+		std::string* data = new std::string(Previous().GetLexeme().lexeme);
+		return new Literal(data, Literal::LiteralType::REFERENCE, varName);
 	}
 
 	if (Match(TokenType::L_BRA))
@@ -242,18 +284,133 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 		return new Literal(data, Literal::LiteralType::BOOLEAN, Previous());
 	}
 
-	Error("Expected value", pointer == 0 ? Peek() : Previous());
+	failed = true;
+	Error("Expected expression", PeekOrLast());
 	failed = true;
 	Sync();
 
 	return nullptr;
 }
 
+Astral::Statement* Astral::Parser::ParseStatement()
+{
+	return ParseDeclarations();
+}
+
+Astral::Statement* Astral::Parser::ParseDeclarations()
+{
+	if (Match(TokenType::PRINT))
+		return ParsePrintStatement();
+
+	if (Match(TokenType::LET))
+		return ParseLetStatement();
+
+	if (Match(TokenType::IDEN))
+		return ParseAssignment();
+
+	if (Match(TokenType::L_CURLY))
+		return ParseBlock();
+
+	Error("Expected statement", PeekOrLast());
+	Sync();
+	failed = true;
+	return nullptr;
+}
+
+Astral::Statement* Astral::Parser::ParseBlock()
+{
+	std::vector<Statement*> statements;
+
+	Block* block = new Block(Previous());
+
+	while (!Match(TokenType::R_CURLY))
+	{
+		statements.push_back(ParseStatement());
+
+		if (IsEof())
+		{
+			Error("Expected '}'", PeekOrLast());
+			failed = true;
+			break;
+		}
+	}
+
+	block->SetStatements(statements);
+	return block;
+}
+
+Astral::Statement* Astral::Parser::ParseLetStatement()
+{
+	Token let = Previous();
+	Token name = Consume(TokenType::IDEN, "Expected variable name");
+
+	Expression* expr = nullptr;
+	if (Match(TokenType::ASSIGNMENT))
+		expr = ParseExpression();
+
+	Consume(TokenType::SEMICOLON, "Expected ';'");
+	return new VariableDefinition(let, name, expr);
+}
+
+Astral::Statement* Astral::Parser::ParsePrintStatement()
+{
+	Token token = pointer == 0 ? tokens[0] : Previous();
+
+	Expression* expr = ParseExpression();
+	Consume(TokenType::SEMICOLON, "Expected ';'");
+	return new PrintStatement(token, expr);
+}
+
+Astral::Statement* Astral::Parser::ParseAssignment()
+{
+	Token name = Previous();
+
+	Expression* expr;
+	if (Match(TokenType::PLUS_EQUALS))
+	{
+		//Do some trickey here to turn += x into = ? + x
+		expr = ParseExpression();
+
+		if (expr)
+		{
+			Lexeme l = expr->GetToken().GetLexeme();
+			l.lexeme = "+";
+
+			BinaryOp* op = new BinaryOp(new Literal(new std::string(name.GetLexeme().lexeme), Literal::LiteralType::IDENTIFER, name), Token(l, TokenType::PLUS), expr);
+			expr = op;
+		}
+	}
+	else if (Match(TokenType::MINUS_EQUALS))
+	{
+		//Do some trickey here to turn -= x into = ? - x
+		expr = ParseExpression();
+
+		if (expr)
+		{
+			Lexeme l = expr->GetToken().GetLexeme();
+			l.lexeme = "-";
+
+			BinaryOp* op = new BinaryOp(new Literal(new std::string(name.GetLexeme().lexeme), Literal::LiteralType::IDENTIFER, name), Token(l, TokenType::MINUS), expr);
+			expr = op;
+		}
+	}
+	else
+	{
+		Consume(TokenType::ASSIGNMENT, "Expected '='");
+
+		expr = ParseExpression();
+	}
+
+	Consume(TokenType::SEMICOLON, "Expected ';'");
+
+	return new VariableAssignment(name, expr);
+}
+
 void Astral::Parser::Parse()
 {
 	while (!IsEof())
 	{
-		tree.push_back(ParseExpression());
+		tree.push_back(ParseStatement());
 	}
 
 	Program* program = new Program(tokens[0]);

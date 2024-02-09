@@ -24,6 +24,7 @@ namespace Astral
 		DOT,
 		HAT,
 		MODULO,
+		REFERENCE,
 
 		NOT,
 		LESS_THAN,
@@ -35,6 +36,9 @@ namespace Astral
 		EQUALS,
 		NOT_EQUALS,
 
+		PLUS_EQUALS,
+		MINUS_EQUALS,
+
 		//Keywords
 		_TRUE,
 		_FALSE,
@@ -45,6 +49,7 @@ namespace Astral
 		ELSE,
 		WHILE,
 		RETURN,
+		PRINT,
 	};
 
 	ASTRAL inline std::ostream& operator<<(std::ostream& os, const TokenType& t)
@@ -87,7 +92,12 @@ namespace Astral
 			case TokenType::SEMICOLON:
 				os << "<SEMICOLON>";
 				break;
-
+			case TokenType::PLUS_EQUALS:
+				os << "<PLUS_EQUALS>";
+				break;
+			case TokenType::MINUS_EQUALS:
+				os << "<MINUS_EQUALS>";
+				break;
 			case TokenType::COMMA:
 				os << "<COMMA>";
 				break;
@@ -143,6 +153,9 @@ namespace Astral
 				break;
 			case TokenType::RETURN:
 				os << "<RETURN>";
+				break;
+			case TokenType::PRINT:
+				os << "<PRINT>";
 				break;
 
 			default:
