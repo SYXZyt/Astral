@@ -20,6 +20,7 @@ namespace Astral
 		POW,
 		MOD,
 		NOT,
+		FACTORIAL,
 
 		EQUALITY,
 		NEQUALITY,
@@ -35,6 +36,7 @@ namespace Astral
 		ASSIGN_VOID,
 		ASSIGN,
 		UPDATE_VAR,
+		UPDATE_REF,
 
 		SCOPE_BEG,
 		SCOPE_END,
@@ -68,6 +70,8 @@ namespace Astral
 				return "POW";
 			case OpType::MOD:
 				return "MOD";
+			case OpType::FACTORIAL:
+				return "FACTORIAL";
 			case OpType::EQUALITY:
 				return "EQU";
 			case OpType::NEQUALITY:
@@ -80,6 +84,10 @@ namespace Astral
 				return "ASSIGN";
 			case OpType::ASSIGN_VOID:
 				return "ASSIGN_VOID";
+			case OpType::UPDATE_VAR:
+				return "UPD_VAR";
+			case OpType::UPDATE_REF:
+				return "UPD_REF";
 			case OpType::SCOPE_BEG:
 				return "SCOPE_BEG";
 			case OpType::SCOPE_END:

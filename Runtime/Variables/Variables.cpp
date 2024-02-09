@@ -45,18 +45,23 @@ bool Astral::Variables::DoesVariableExist(const char* name)
 
 void Astral::Variables::AddVariable(const char* vname)
 {
-	Variable* v = new Variable(vname, new RefCount<Type::atype_t>(new Type::void_t()));
+	Variable* v = new Variable(vname);
 	variables[variables.size() - 1].push_back(v);
 }
 
-void Astral::Variables::UpdateValue(const char* vname, RefCount<Type::atype_t>* value)
+void Astral::Variables::UpdateValue(const char* vname, Type::atype_t* value)
 {
-	GetVariable(vname)->SetValue(value->Get());
+	GetVariable(vname)->SetValue(value);
 }
 
-RefCount<Astral::Type::atype_t>* Astral::Variables::GetValue(const char* vname)
+void Astral::Variables::UpdateRef(const char* vname, MemoryBlock* value)
 {
-	return GetVariable(vname)->Value();
+	GetVariable(vname)->SetValue(value);
+}
+
+Astral::Type::atype_t* Astral::Variables::GetValue(const char* vname)
+{
+	return GetVariable(vname)->Value()->data;
 }
 
 void Astral::Variables::AddScope()

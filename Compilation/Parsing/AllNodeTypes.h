@@ -3,6 +3,7 @@
 #include "Expressions/Literal.h"
 #include "Expressions/BinaryOp.h"
 #include "Expressions/Grouping.h"
+#include "Expressions/Factorial.h"
 
 #include "Statements/Block.h"
 #include "Statements/Program.h"

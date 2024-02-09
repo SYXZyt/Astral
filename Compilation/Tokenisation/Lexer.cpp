@@ -296,15 +296,33 @@ void Astral::Lexer::Tokenise()
 
 		if (currentChar == '+')
 		{
-			CHAR_TOKEN("+", TokenType::PLUS);
-			PUSH_TOKEN();
-			Advance();
+			if (Peek() == '=')
+			{
+				CHAR_TOKEN("+=", TokenType::PLUS_EQUALS);
+				PUSH_TOKEN();
+				Advance(2);
+			}
+			else
+			{
+				CHAR_TOKEN("+", TokenType::PLUS);
+				PUSH_TOKEN();
+				Advance();
+			}
 		}
 		else if (currentChar == '-')
 		{
-			CHAR_TOKEN("-", TokenType::MINUS);
-			PUSH_TOKEN();
-			Advance();
+			if (Peek() == '=')
+			{
+				CHAR_TOKEN("-=", TokenType::MINUS_EQUALS);
+				PUSH_TOKEN();
+				Advance(2);
+			}
+			else
+			{
+				CHAR_TOKEN("-", TokenType::MINUS);
+				PUSH_TOKEN();
+				Advance();
+			}
 		}
 		else if (currentChar == '/')
 		{

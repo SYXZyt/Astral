@@ -36,6 +36,9 @@ namespace Astral
 		EQUALS,
 		NOT_EQUALS,
 
+		PLUS_EQUALS,
+		MINUS_EQUALS,
+
 		//Keywords
 		_TRUE,
 		_FALSE,
@@ -89,7 +92,12 @@ namespace Astral
 			case TokenType::SEMICOLON:
 				os << "<SEMICOLON>";
 				break;
-
+			case TokenType::PLUS_EQUALS:
+				os << "<PLUS_EQUALS>";
+				break;
+			case TokenType::MINUS_EQUALS:
+				os << "<MINUS_EQUALS>";
+				break;
 			case TokenType::COMMA:
 				os << "<COMMA>";
 				break;

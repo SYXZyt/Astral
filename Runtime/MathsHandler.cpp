@@ -11,12 +11,21 @@
 
 inline static Astral::result_t Success(Astral::Type::atype_t* val)
 {
-	return { Astral::result_t::ResultType::R_OK, new RefCount<Astral::Type::atype_t>(val) };
+	return { Astral::result_t::ResultType::R_OK, val };
 }
 
 inline static Astral::result_t FailTypes()
 {
 	return { Astral::result_t::ResultType::R_INVALID_TYPES, nullptr };
+}
+
+static Astral::result_t Factorial_Number(Astral::Type::number_t* val)
+{
+	int fact = 1;
+	for (int i = 1; i <= (int)val->Value(); ++i)
+		fact *= i;
+
+	return Success(new Astral::Type::number_t((float)fact));
 }
 
 static Astral::result_t Power_Number_Number(Astral::Type::number_t* lhs, Astral::Type::number_t* rhs)
@@ -205,4 +214,17 @@ Astral::result_t Astral::Maths::Minus(Type::atype_t* val)
 	}
 	else
 		return FailTypes();
+}
+
+Astral::result_t Astral::Maths::Factorial(Type::atype_t* val)
+{
+	if (!val)
+		return { Astral::result_t::ResultType::R_FAIL, nullptr };
+
+	if (Type::number_t* num = dynamic_cast<Type::number_t*>(val))
+		return Factorial_Number(num);
+	else
+		return FailTypes();
+
+	return result_t();
 }

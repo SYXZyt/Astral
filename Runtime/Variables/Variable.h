@@ -1,26 +1,25 @@
 #pragma once
 #include "../../Astral.h"
-#include "../../RefCount.h"
 #include "../Types/AstralTypes.h"
+#include "../Memory/GarbageCollector.h"
 
 namespace Astral
 {
+	struct MemoryBlock;
 	class ASTRAL Variable final
 	{
 	private:
 		char* varname;
-		RefCount<Type::atype_t>* value;
+		MemoryBlock* value;
 
 	public:
 		inline const char* Name() const { return varname; }
-		inline RefCount<Type::atype_t>* Value() { return value; }
+		inline MemoryBlock* Value() { return value; }
 
-		inline void SetValue(Type::atype_t* value)
-		{
-			this->value->Update(value);
-		}
+		void SetValue(Type::atype_t* value);
+		void SetValue(MemoryBlock* value);
 
-		Variable(const char* name, RefCount<Type::atype_t>* value);
+		Variable(const char* name);
 		~Variable();
 	};
 }

@@ -26,6 +26,7 @@ namespace Astral
 		void GenerateExpression(const Expression* expression);
 		void GenerateGrouping(const Grouping* grouping);
 		void GenerateNode(const ParseTree* node);
+		void GenerateFactorial(const Factorial* factorial);
 
 		void GenerateStatement(const Statement* statement);
 		void GenerateProgram(const Program* program);

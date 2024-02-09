@@ -18,7 +18,12 @@ namespace Astral
 
 	inline ASTRAL std::ostream& operator<<(std::ostream& os, const Bytecode& bytecode)
 	{
-		os << OpTypeToString((OpType)bytecode.op) << '\t';
+		const char* repr = OpTypeToString((OpType)bytecode.op);
+
+		os << repr << "\t";
+		if (strnlen_s(repr, 16) < 8)
+			os << '\t';
+
 		std::stringstream ss;
 		ss << std::hex << std::setw(2) << std::setfill('0') << (unsigned)bytecode.op << '\t';
 		os << ss.str();
