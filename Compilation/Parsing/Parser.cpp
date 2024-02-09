@@ -15,14 +15,14 @@ void Astral::Parser::Sync()
 
 		switch (Previous().GetType())
 		{
-			case TokenType::FUNC:
-			case TokenType::LET:
-			case TokenType::FOR:
-			case TokenType::IF:
-			case TokenType::ELSE:
-			case TokenType::WHILE:
-			case TokenType::RETURN:
-				return;
+		case TokenType::FUNC:
+		case TokenType::LET:
+		case TokenType::FOR:
+		case TokenType::IF:
+		case TokenType::ELSE:
+		case TokenType::WHILE:
+		case TokenType::RETURN:
+			return;
 		}
 
 		Advance();
@@ -330,7 +330,7 @@ Astral::Statement* Astral::Parser::ParseLetStatement()
 	Expression* expr = nullptr;
 	if (Match(TokenType::ASSIGNMENT))
 		expr = ParseExpression();
-	
+
 	Consume(TokenType::SEMICOLON, "Expected ';'");
 	return new VariableDefinition(let, name, expr);
 }
@@ -348,11 +348,44 @@ Astral::Statement* Astral::Parser::ParseAssignment()
 {
 	Token name = Previous();
 
-	Consume(TokenType::ASSIGNMENT, "Expected '='");
+	Expression* expr;
+	if (Match(TokenType::PLUS_EQUALS))
+	{
+		//Do some trickey here to turn += x into = ? + x
+		expr = ParseExpression();
 
-	Expression* expr = ParseExpression();
+		if (expr)
+		{
+			Lexeme l = expr->GetToken().GetLexeme();
+			l.lexeme = "+";
+
+			BinaryOp* op = new BinaryOp(new Literal(new std::string(name.GetLexeme().lexeme), Literal::LiteralType::IDENTIFER, name), Token(l, TokenType::PLUS), expr);
+			expr = op;
+		}
+	}
+	else if (Match(TokenType::MINUS_EQUALS))
+	{
+		//Do some trickey here to turn -= x into = ? - x
+		expr = ParseExpression();
+
+		if (expr)
+		{
+			Lexeme l = expr->GetToken().GetLexeme();
+			l.lexeme = "-";
+
+			BinaryOp* op = new BinaryOp(new Literal(new std::string(name.GetLexeme().lexeme), Literal::LiteralType::IDENTIFER, name), Token(l, TokenType::MINUS), expr);
+			expr = op;
+		}
+	}
+	else
+	{
+		Consume(TokenType::ASSIGNMENT, "Expected '='");
+
+		expr = ParseExpression();
+	}
 
 	Consume(TokenType::SEMICOLON, "Expected ';'");
+
 	return new VariableAssignment(name, expr);
 }
 

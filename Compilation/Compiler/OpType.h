@@ -82,9 +82,9 @@ namespace Astral
 			case OpType::ASSIGN_VOID:
 				return "ASSIGN_VOID";
 			case OpType::UPDATE_VAR:
-				return "UPDATE_VAR";
+				return "UPD_VAR";
 			case OpType::UPDATE_REF:
-				return "UPDATE_REF";
+				return "UPD_REF";
 			case OpType::SCOPE_BEG:
 				return "SCOPE_BEG";
 			case OpType::SCOPE_END:
