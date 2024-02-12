@@ -20,6 +20,7 @@ namespace Astral
 
 		bool failed;
 
+		void Error(const char* message, const Token& token);
 		void Sync();
 		Token Peek();
 		Token Peek(int lookahead);

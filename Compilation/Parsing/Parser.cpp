@@ -4,6 +4,16 @@
 #define PreviousOrLast() pointer >= tokens.size() ? tokens[tokens.size() - 1] : Previous()
 #define PeekOrLast() pointer >= tokens.size() ? tokens[tokens.size() - 1] : Peek()
 
+#define NULL_RET(expr)\
+if (!expr)\
+	return nullptr
+
+void Astral::Parser::Error(const char* message, const Token& token)
+{
+	Astral::Error(message, token);
+	Sync();
+}
+
 void Astral::Parser::Sync()
 {
 	Advance();
@@ -66,7 +76,7 @@ Astral::Token Astral::Parser::Consume(TokenType type, const std::string& message
 	if (Check(type))
 		return Advance();
 
-	Astral::Error(message.c_str(), PreviousOrLast());
+	Error(message.c_str(), PreviousOrLast());
 	failed = true;
 	return {};
 }
@@ -106,6 +116,7 @@ Astral::Expression* Astral::Parser::ParseExpression()
 Astral::Expression* Astral::Parser::ParseEquality()
 {
 	Expression* expr = ParseComparison();
+	NULL_RET(expr);
 
 	TokenType types[2]
 	{
@@ -116,6 +127,7 @@ Astral::Expression* Astral::Parser::ParseEquality()
 	{
 		Token op = Previous();
 		Expression* right = ParseComparison();
+		NULL_RET(right);
 
 		Expression* temp = expr;
 		expr = new BinaryOp(temp, op, right);
@@ -127,6 +139,7 @@ Astral::Expression* Astral::Parser::ParseEquality()
 Astral::Expression* Astral::Parser::ParseComparison()
 {
 	Expression* expr = ParseTerm();
+	NULL_RET(expr);
 
 	TokenType types[4]
 	{
@@ -139,6 +152,7 @@ Astral::Expression* Astral::Parser::ParseComparison()
 	{
 		Token op = Previous();
 		Expression* right = ParseTerm();
+		NULL_RET(right);
 
 		Expression* temp = expr;
 		expr = new BinaryOp(temp, op, right);
@@ -150,6 +164,7 @@ Astral::Expression* Astral::Parser::ParseComparison()
 Astral::Expression* Astral::Parser::ParseTerm()
 {
 	Expression* expr = ParseFactor();
+	NULL_RET(expr);
 
 	TokenType types[2]
 	{
@@ -160,6 +175,7 @@ Astral::Expression* Astral::Parser::ParseTerm()
 	{
 		Token op = Previous();
 		Expression* right = ParseFactor();
+		NULL_RET(right);
 
 		Expression* temp = expr;
 		expr = new BinaryOp(temp, op, right);
@@ -171,6 +187,7 @@ Astral::Expression* Astral::Parser::ParseTerm()
 Astral::Expression* Astral::Parser::ParseFactor()
 {
 	Expression* expr = ParsePower();
+	NULL_RET(expr);
 
 	TokenType types[3]
 	{
@@ -182,6 +199,7 @@ Astral::Expression* Astral::Parser::ParseFactor()
 	{
 		Token op = Previous();
 		Expression* right = ParsePower();
+		NULL_RET(right);
 
 		Expression* temp = expr;
 		expr = new BinaryOp(temp, op, right);
@@ -193,11 +211,13 @@ Astral::Expression* Astral::Parser::ParseFactor()
 Astral::Expression* Astral::Parser::ParsePower()
 {
 	Expression* expr = ParseUnary();
+	NULL_RET(expr);
 
 	while (Match(TokenType::HAT))
 	{
 		Token op = Previous();
 		Expression* right = ParseUnary();
+		NULL_RET(right);
 
 		Expression* temp = expr;
 		expr = new BinaryOp(temp, op, right);
@@ -217,6 +237,8 @@ Astral::Expression* Astral::Parser::ParseUnary()
 	{
 		Token op = Previous();
 		Expression* expr = ParseUnary();
+		NULL_RET(expr);
+
 		return new UnaryOp(op, expr);
 	}
 
@@ -231,6 +253,8 @@ Astral::Expression* Astral::Parser::ParsePrefix()
 		if (Check(TokenType::IDEN))
 		{
 			Expression* variable = ParseLiteral();
+			NULL_RET(variable);
+
 			IncrementExpression* prefix = new IncrementExpression(variable, true, token);
 			return prefix;
 		}
@@ -247,6 +271,8 @@ Astral::Expression* Astral::Parser::ParsePrefix()
 		if (Check(TokenType::IDEN))
 		{
 			Expression* variable = ParseLiteral();
+			NULL_RET(variable);
+
 			DecrementExpression* prefix = new DecrementExpression(variable, true, token);
 			return prefix;
 		}
@@ -323,6 +349,8 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 	if (Match(TokenType::L_BRA))
 	{
 		Expression* expr = ParseExpression();
+		NULL_RET(expr);
+
 		Consume(TokenType::R_BRA, "Expected ')'");
 		return new Grouping(expr, Previous());
 	}
@@ -343,10 +371,8 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 		return new Literal(data, Literal::LiteralType::BOOLEAN, Previous());
 	}
 
-	failed = true;
 	Error("Expected expression", PeekOrLast());
 	failed = true;
-	Sync();
 
 	return nullptr;
 }
@@ -398,7 +424,6 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 		{
 			Error("Expected identifier", Peek());
 			failed = true;
-			Sync();
 			return nullptr;
 		}
 	}
@@ -431,7 +456,6 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 		{
 			Error("Expected identifier", Peek());
 			failed = true;
-			Sync();
 			return nullptr;
 		}
 	}
@@ -442,7 +466,6 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 	}
 
 	Error("Expected statement", PeekOrLast());
-	Sync();
 	failed = true;
 	return nullptr;
 }
@@ -478,7 +501,10 @@ Astral::Statement* Astral::Parser::ParseLetStatement()
 
 	Expression* expr = nullptr;
 	if (Match(TokenType::ASSIGNMENT))
+	{
 		expr = ParseExpression();
+		NULL_RET(expr);
+	}
 
 	Consume(TokenType::SEMICOLON, "Expected ';'");
 	return new VariableDefinition(let, name, expr);
@@ -489,6 +515,8 @@ Astral::Statement* Astral::Parser::ParsePrintStatement()
 	Token token = pointer == 0 ? tokens[0] : Previous();
 
 	Expression* expr = ParseExpression();
+	NULL_RET(expr);
+
 	Consume(TokenType::SEMICOLON, "Expected ';'");
 	return new PrintStatement(token, expr);
 }
@@ -502,6 +530,7 @@ Astral::Statement* Astral::Parser::ParseAssignment()
 	{
 		//Do some trickey here to turn += x into = ? + x
 		expr = ParseExpression();
+		NULL_RET(expr);
 
 		if (expr)
 		{
@@ -516,6 +545,7 @@ Astral::Statement* Astral::Parser::ParseAssignment()
 	{
 		//Do some trickey here to turn -= x into = ? - x
 		expr = ParseExpression();
+		NULL_RET(expr);
 
 		if (expr)
 		{
@@ -561,10 +591,10 @@ Astral::Statement* Astral::Parser::ParseAssignment()
 		Consume(TokenType::ASSIGNMENT, "Expected '='");
 
 		expr = ParseExpression();
+		NULL_RET(expr);
 	}
 
 	Consume(TokenType::SEMICOLON, "Expected ';'");
-
 	return new VariableAssignment(name, expr);
 }
 
