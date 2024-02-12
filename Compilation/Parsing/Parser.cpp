@@ -436,6 +436,11 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 		}
 	}
 
+	if (Match(TokenType::SEMICOLON))
+	{
+		return nullptr;
+	}
+
 	Error("Expected statement", PeekOrLast());
 	Sync();
 	failed = true;
@@ -450,7 +455,9 @@ Astral::Statement* Astral::Parser::ParseBlock()
 
 	while (!Match(TokenType::R_CURLY))
 	{
-		statements.push_back(ParseStatement());
+		Statement* stmt = ParseStatement();
+		if (stmt)
+			statements.push_back(stmt);
 
 		if (IsEof())
 		{
@@ -565,8 +572,13 @@ void Astral::Parser::Parse()
 {
 	while (!IsEof())
 	{
-		tree.push_back(ParseStatement());
+		Statement* stmt = ParseStatement();
+		if (stmt)
+			tree.push_back(stmt);
 	}
+
+	if (tokens.size() == 0)
+		return;
 
 	Program* program = new Program(tokens[0]);
 	program->SetStatements(tree);

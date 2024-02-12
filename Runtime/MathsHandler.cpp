@@ -56,28 +56,6 @@ static Astral::result_t Addition_String_String(Astral::Type::string_t* lhs, Astr
 	return Success(new Astral::Type::string_t(result));
 }
 
-static Astral::result_t Addition_Number_String(Astral::Type::number_t* lhs, Astral::Type::string_t* rhs)
-{
-	std::string num = std::to_string(lhs->Value());
-	num.erase(num.find_last_not_of('0') + 1, std::string::npos);
-	num.erase(num.find_last_not_of('.') + 1, std::string::npos);
-
-	std::string result = num + rhs->Value();
-
-	return Success(new Astral::Type::string_t(result));
-}
-
-static Astral::result_t Addition_String_Number(Astral::Type::string_t* lhs, Astral::Type::number_t* rhs)
-{
-	std::string num = std::to_string(rhs->Value());
-	num.erase(num.find_last_not_of('0') + 1, std::string::npos);
-	num.erase(num.find_last_not_of('.') + 1, std::string::npos);
-
-	std::string result = lhs->Value() + num;
-
-	return Success(new Astral::Type::string_t(result));
-}
-
 static Astral::result_t Subtraction_Number_Number(Astral::Type::number_t* lhs, Astral::Type::number_t* rhs)
 {
 	float res = lhs->Value() - rhs->Value();
@@ -105,8 +83,13 @@ static Astral::result_t Division_Number_Number(Astral::Type::number_t* lhs, Astr
 
 Astral::result_t Astral::Maths::Addition(Type::atype_t* lhs, Type::atype_t* rhs)
 {
-	if (!lhs || !rhs)
-		return { Astral::result_t::ResultType::R_FAIL, nullptr };
+	if (
+		!lhs ||
+		!rhs ||
+		dynamic_cast<Type::void_t*>(lhs) ||
+		dynamic_cast<Type::void_t*>(rhs)
+		)
+		return { Astral::result_t::ResultType::R_VOID_REFERENCE, nullptr };
 
 	Type::number_t* lhs_number = dynamic_cast<Type::number_t*>(lhs);
 	Type::string_t* lhs_string = dynamic_cast<Type::string_t*>(lhs);
@@ -117,10 +100,6 @@ Astral::result_t Astral::Maths::Addition(Type::atype_t* lhs, Type::atype_t* rhs)
 	if (lhs_number && rhs_number)
 		return Addition_Number_Number(lhs_number, rhs_number);
 	else if (lhs_number && rhs_string)
-		return Addition_Number_String(lhs_number, rhs_string);
-	else if (lhs_string && rhs_number)
-		return Addition_String_Number(lhs_string, rhs_number);
-	else if (lhs_string && rhs_string)
 		return Addition_String_String(lhs_string, rhs_string);
 	else
 		return FailTypes();
@@ -128,8 +107,13 @@ Astral::result_t Astral::Maths::Addition(Type::atype_t* lhs, Type::atype_t* rhs)
 
 Astral::result_t Astral::Maths::Subtraction(Type::atype_t* lhs, Type::atype_t* rhs)
 {
-	if (!lhs || !rhs)
-		return { Astral::result_t::ResultType::R_FAIL, nullptr };
+	if (
+		!lhs ||
+		!rhs ||
+		dynamic_cast<Type::void_t*>(lhs) ||
+		dynamic_cast<Type::void_t*>(rhs)
+		)
+		return { Astral::result_t::ResultType::R_VOID_REFERENCE, nullptr };
 
 	Type::number_t* lhs_number = dynamic_cast<Type::number_t*>(lhs);
 
@@ -143,8 +127,13 @@ Astral::result_t Astral::Maths::Subtraction(Type::atype_t* lhs, Type::atype_t* r
 
 Astral::result_t Astral::Maths::Multiplication(Type::atype_t* lhs, Type::atype_t* rhs)
 {
-	if (!lhs || !rhs)
-		return { Astral::result_t::ResultType::R_FAIL, nullptr };
+	if (
+		!lhs ||
+		!rhs ||
+		dynamic_cast<Type::void_t*>(lhs) ||
+		dynamic_cast<Type::void_t*>(rhs)
+		)
+		return { Astral::result_t::ResultType::R_VOID_REFERENCE, nullptr };
 
 	Type::number_t* lhs_number = dynamic_cast<Type::number_t*>(lhs);
 
@@ -158,8 +147,13 @@ Astral::result_t Astral::Maths::Multiplication(Type::atype_t* lhs, Type::atype_t
 
 Astral::result_t Astral::Maths::Divide(Type::atype_t* lhs, Type::atype_t* rhs)
 {
-	if (!lhs || !rhs)
-		return { Astral::result_t::ResultType::R_FAIL, nullptr };
+	if (
+		!lhs ||
+		!rhs ||
+		dynamic_cast<Type::void_t*>(lhs) ||
+		dynamic_cast<Type::void_t*>(rhs)
+		)
+		return { Astral::result_t::ResultType::R_VOID_REFERENCE, nullptr };
 
 	Type::number_t* lhs_number = dynamic_cast<Type::number_t*>(lhs);
 
@@ -173,8 +167,13 @@ Astral::result_t Astral::Maths::Divide(Type::atype_t* lhs, Type::atype_t* rhs)
 
 Astral::result_t Astral::Maths::Power(Type::atype_t* lhs, Type::atype_t* rhs)
 {
-	if (!lhs || !rhs)
-		return { Astral::result_t::ResultType::R_FAIL, nullptr };
+	if (
+		!lhs ||
+		!rhs ||
+		dynamic_cast<Type::void_t*>(lhs) ||
+		dynamic_cast<Type::void_t*>(rhs)
+		)
+		return { Astral::result_t::ResultType::R_VOID_REFERENCE, nullptr };
 
 	Type::number_t* lhs_number = dynamic_cast<Type::number_t*>(lhs);
 
@@ -188,8 +187,13 @@ Astral::result_t Astral::Maths::Power(Type::atype_t* lhs, Type::atype_t* rhs)
 
 Astral::result_t Astral::Maths::Modulo(Type::atype_t* lhs, Type::atype_t* rhs)
 {
-	if (!lhs || !rhs)
-		return { Astral::result_t::ResultType::R_FAIL, nullptr };
+	if (
+		!lhs ||
+		!rhs ||
+		dynamic_cast<Type::void_t*>(lhs) ||
+		dynamic_cast<Type::void_t*>(rhs)
+		)
+		return { Astral::result_t::ResultType::R_VOID_REFERENCE, nullptr };
 
 	Type::number_t* lhs_number = dynamic_cast<Type::number_t*>(lhs);
 
@@ -203,8 +207,11 @@ Astral::result_t Astral::Maths::Modulo(Type::atype_t* lhs, Type::atype_t* rhs)
 
 Astral::result_t Astral::Maths::Minus(Type::atype_t* val)
 {
-	if (!val)
-		return { Astral::result_t::ResultType::R_FAIL, nullptr };
+	if (
+		!val ||
+		dynamic_cast<Type::void_t*>(val)
+		)
+		return { Astral::result_t::ResultType::R_VOID_REFERENCE, nullptr };
 
 	if (Type::number_t* num = dynamic_cast<Type::number_t*>(val))
 	{
@@ -218,8 +225,11 @@ Astral::result_t Astral::Maths::Minus(Type::atype_t* val)
 
 Astral::result_t Astral::Maths::Factorial(Type::atype_t* val)
 {
-	if (!val)
-		return { Astral::result_t::ResultType::R_FAIL, nullptr };
+	if (
+		!val ||
+		dynamic_cast<Type::void_t*>(val)
+		)
+		return { Astral::result_t::ResultType::R_VOID_REFERENCE, nullptr };
 
 	if (Type::number_t* num = dynamic_cast<Type::number_t*>(val))
 		return Factorial_Number(num);

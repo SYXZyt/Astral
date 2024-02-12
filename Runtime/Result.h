@@ -11,6 +11,7 @@ namespace Astral
 			R_FAIL,
 			R_DIV_BY_ZERO,
 			R_INVALID_TYPES,
+			R_VOID_REFERENCE,
 		};
 
 		ResultType type;

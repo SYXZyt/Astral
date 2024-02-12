@@ -30,6 +30,11 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 
 			if (res.type == result_t::ResultType::R_OK)
 				Push(res.result);
+			else if (res.type == result_t::ResultType::R_VOID_REFERENCE)
+			{
+				Error("Void reference", instruction.lexeme);
+				failed = true;
+			}
 			else
 			{
 				Error("Cannot add types", instruction.lexeme);

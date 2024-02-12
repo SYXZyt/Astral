@@ -54,10 +54,13 @@ static Astral::result_t Not_Number(Astral::Type::number_t* val)
 
 Astral::result_t Astral::Boolean::Equality(Type::atype_t* lhs, Type::atype_t* rhs)
 {
-	if (!lhs || !rhs)
-	{
-		return { Astral::result_t::ResultType::R_FAIL, nullptr };
-	}
+	if (
+		!lhs ||
+		!rhs ||
+		dynamic_cast<Type::void_t*>(lhs) ||
+		dynamic_cast<Type::void_t*>(rhs)
+		)
+		return { Astral::result_t::ResultType::R_VOID_REFERENCE, nullptr };
 
 	Type::number_t* lhs_number = dynamic_cast<Type::number_t*>(lhs);
 
@@ -73,10 +76,13 @@ Astral::result_t Astral::Boolean::Equality(Type::atype_t* lhs, Type::atype_t* rh
 
 Astral::result_t Astral::Boolean::Nequality(Type::atype_t* lhs, Type::atype_t* rhs)
 {
-	if (!lhs || !rhs)
-	{
-		return { Astral::result_t::ResultType::R_FAIL, nullptr };
-	}
+	if (
+		!lhs ||
+		!rhs ||
+		dynamic_cast<Type::void_t*>(lhs) ||
+		dynamic_cast<Type::void_t*>(rhs)
+		)
+		return { Astral::result_t::ResultType::R_VOID_REFERENCE, nullptr };
 
 	Type::number_t* lhs_number = dynamic_cast<Type::number_t*>(lhs);
 
@@ -92,10 +98,13 @@ Astral::result_t Astral::Boolean::Nequality(Type::atype_t* lhs, Type::atype_t* r
 
 Astral::result_t Astral::Boolean::Greater(Type::atype_t* lhs, Type::atype_t* rhs)
 {
-	if (!lhs || !rhs)
-	{
-		return { Astral::result_t::ResultType::R_FAIL, nullptr };
-	}
+	if (
+		!lhs ||
+		!rhs ||
+		dynamic_cast<Type::void_t*>(lhs) ||
+		dynamic_cast<Type::void_t*>(rhs)
+		)
+		return { Astral::result_t::ResultType::R_VOID_REFERENCE, nullptr };
 
 	Type::number_t* lhs_number = dynamic_cast<Type::number_t*>(lhs);
 
@@ -111,10 +120,13 @@ Astral::result_t Astral::Boolean::Greater(Type::atype_t* lhs, Type::atype_t* rhs
 
 Astral::result_t Astral::Boolean::GreaterEquals(Type::atype_t* lhs, Type::atype_t* rhs)
 {
-	if (!lhs || !rhs)
-	{
-		return { Astral::result_t::ResultType::R_FAIL, nullptr };
-	}
+	if (
+		!lhs ||
+		!rhs ||
+		dynamic_cast<Type::void_t*>(lhs) ||
+		dynamic_cast<Type::void_t*>(rhs)
+		)
+		return { Astral::result_t::ResultType::R_VOID_REFERENCE, nullptr };
 
 	Type::number_t* lhs_number = dynamic_cast<Type::number_t*>(lhs);
 
@@ -130,10 +142,13 @@ Astral::result_t Astral::Boolean::GreaterEquals(Type::atype_t* lhs, Type::atype_
 
 Astral::result_t Astral::Boolean::Less(Type::atype_t* lhs, Type::atype_t* rhs)
 {
-	if (!lhs || !rhs)
-	{
-		return { Astral::result_t::ResultType::R_FAIL, nullptr };
-	}
+	if (
+		!lhs ||
+		!rhs ||
+		dynamic_cast<Type::void_t*>(lhs) ||
+		dynamic_cast<Type::void_t*>(rhs)
+		)
+		return { Astral::result_t::ResultType::R_VOID_REFERENCE, nullptr };
 
 	Type::number_t* lhs_number = dynamic_cast<Type::number_t*>(lhs);
 
@@ -149,10 +164,13 @@ Astral::result_t Astral::Boolean::Less(Type::atype_t* lhs, Type::atype_t* rhs)
 
 Astral::result_t Astral::Boolean::LessEquals(Type::atype_t* lhs, Type::atype_t* rhs)
 {
-	if (!lhs || !rhs)
-	{
-		return { Astral::result_t::ResultType::R_FAIL, nullptr };
-	}
+	if (
+		!lhs ||
+		!rhs ||
+		dynamic_cast<Type::void_t*>(lhs) ||
+		dynamic_cast<Type::void_t*>(rhs)
+		)
+		return { Astral::result_t::ResultType::R_VOID_REFERENCE, nullptr };
 
 	Type::number_t* lhs_number = dynamic_cast<Type::number_t*>(lhs);
 
@@ -168,8 +186,11 @@ Astral::result_t Astral::Boolean::LessEquals(Type::atype_t* lhs, Type::atype_t* 
 
 Astral::result_t Astral::Boolean::Not(Type::atype_t* val)
 {
-	if (!val)
-		return { Astral::result_t::ResultType::R_FAIL, nullptr };
+	if (
+		!val ||
+		dynamic_cast<Type::void_t*>(val)
+		)
+		return { Astral::result_t::ResultType::R_VOID_REFERENCE, nullptr };
 
 	Type::number_t* val_number = dynamic_cast<Type::number_t*>(val);
 
