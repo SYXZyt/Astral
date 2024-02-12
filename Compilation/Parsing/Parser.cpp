@@ -370,6 +370,72 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 	if (Match(TokenType::L_CURLY))
 		return ParseBlock();
 
+	if (Match(TokenType::INCREMENT))
+	{
+		if (Peek().GetType() == TokenType::IDEN)
+		{
+			Token varName = Advance();
+			Consume(TokenType::SEMICOLON, "Expected ';'");
+
+			Lexeme lex = varName.GetLexeme();
+			lex.lexeme = "1";
+
+			Token temp;
+			temp.SetLexeme(lex);
+			temp.SetType(TokenType::NUMBER);
+
+			Literal* numberOne = new Literal(new float(1.0), Literal::LiteralType::NUMBER, temp);
+			Literal* variable = new Literal(new std::string(varName.GetLexeme().lexeme), Literal::LiteralType::IDENTIFER, varName);
+
+			lex.lexeme = "+";
+			temp.SetLexeme(lex);
+			temp.SetType(TokenType::PLUS);
+
+			BinaryOp* op = new BinaryOp(variable, temp, numberOne);
+			return new VariableAssignment(varName, op);
+		}
+		else
+		{
+			Error("Expected identifier", Peek());
+			failed = true;
+			Sync();
+			return nullptr;
+		}
+	}
+
+	if (Match(TokenType::DECREMENT))
+	{
+		if (Peek().GetType() == TokenType::IDEN)
+		{
+			Token varName = Advance();
+			Consume(TokenType::SEMICOLON, "Expected ';'");
+
+			Lexeme lex = varName.GetLexeme();
+			lex.lexeme = "1";
+
+			Token temp;
+			temp.SetLexeme(lex);
+			temp.SetType(TokenType::NUMBER);
+
+			Literal* numberOne = new Literal(new float(1.0), Literal::LiteralType::NUMBER, temp);
+			Literal* variable = new Literal(new std::string(varName.GetLexeme().lexeme), Literal::LiteralType::IDENTIFER, varName);
+
+			lex.lexeme = "-";
+			temp.SetLexeme(lex);
+			temp.SetType(TokenType::MINUS);
+
+			BinaryOp* op = new BinaryOp(variable, temp, numberOne);
+			return new VariableAssignment(varName, op);
+		}
+		else
+		{
+			Error("Expected identifier", Peek());
+			failed = true;
+			Sync();
+			return nullptr;
+		}
+	}
+
 	Error("Expected statement", PeekOrLast());
 	Sync();
 	failed = true;
@@ -452,6 +518,36 @@ Astral::Statement* Astral::Parser::ParseAssignment()
 			BinaryOp* op = new BinaryOp(new Literal(new std::string(name.GetLexeme().lexeme), Literal::LiteralType::IDENTIFER, name), Token(l, TokenType::MINUS), expr);
 			expr = op;
 		}
+	}
+	else if (Match(TokenType::INCREMENT))
+	{
+		//Just make this a += 1 statement
+		Lexeme lex = Previous().GetLexeme();
+		lex.lexeme = "1";
+		Token tok;
+		tok.SetLexeme(lex);
+		tok.SetType(TokenType::NUMBER);
+
+		expr = new Literal(new float(1), Literal::LiteralType::NUMBER, tok);
+
+		lex.lexeme = "+";
+		BinaryOp* op = new BinaryOp(new Literal(new std::string(name.GetLexeme().lexeme), Literal::LiteralType::IDENTIFER, name), Token(lex, TokenType::PLUS), expr);
+		expr = op;
+	}
+	else if (Match(TokenType::DECREMENT))
+	{
+		//Just make this a += 1 statement
+		Lexeme lex = Previous().GetLexeme();
+		lex.lexeme = "1";
+		Token tok;
+		tok.SetLexeme(lex);
+		tok.SetType(TokenType::NUMBER);
+
+		expr = new Literal(new float(1), Literal::LiteralType::NUMBER, tok);
+
+		lex.lexeme = "-";
+		BinaryOp* op = new BinaryOp(new Literal(new std::string(name.GetLexeme().lexeme), Literal::LiteralType::IDENTIFER, name), Token(lex, TokenType::MINUS), expr);
+		expr = op;
 	}
 	else
 	{
