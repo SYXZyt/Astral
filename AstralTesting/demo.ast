@@ -1,0 +1,6 @@
+let a = "Global scope";
+
+{
+	let a = a + " =D";
+	print a;
+}

@@ -99,7 +99,7 @@ Astral::result_t Astral::Maths::Addition(Type::atype_t* lhs, Type::atype_t* rhs)
 
 	if (lhs_number && rhs_number)
 		return Addition_Number_Number(lhs_number, rhs_number);
-	else if (lhs_number && rhs_string)
+	else if (lhs_string && rhs_string)
 		return Addition_String_String(lhs_string, rhs_string);
 	else
 		return FailTypes();
