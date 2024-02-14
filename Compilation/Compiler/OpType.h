@@ -8,6 +8,7 @@ namespace Astral
 	enum class ASTRAL OpType : uint8_t
 	{
 		NOP,
+
 		LIT_NUMBER,
 		LIT_STRING,
 		VARIABLE,
@@ -37,6 +38,10 @@ namespace Astral
 		ASSIGN,
 		UPDATE_VAR,
 		UPDATE_REF,
+
+		IF,
+		IF_ELSE,
+		SKIP_BLOCK,
 
 		SCOPE_BEG,
 		SCOPE_END,
@@ -92,6 +97,12 @@ namespace Astral
 				return "SCOPE_BEG";
 			case OpType::SCOPE_END:
 				return "SCOPE_END";
+			case OpType::IF:
+				return "IF";
+			case OpType::IF_ELSE:
+				return "IF_ELSE";
+			case OpType::SKIP_BLOCK:
+				return "SKIP_BLOCK";
 			default:
 				return "UNKNOWN";
 		}

@@ -311,6 +311,8 @@ void Astral::Compiler::GenerateStatement(const Statement* statement)
 		GenerateAssign(assign);
 	else if (const Block* block = dynamic_cast<const Block*>(statement))
 		GenerateBlock(block);
+	else if (const IfStatement* ifStatement = dynamic_cast<const IfStatement*>(statement))
+		GenerateIf(ifStatement);
 	else
 		throw "oop";
 }
@@ -371,6 +373,37 @@ void Astral::Compiler::GenerateBlock(const Block* block)
 	scopeEnd.lexeme = block->GetToken().GetLexeme();
 	scopeEnd.op = (uint8_t)OpType::SCOPE_END;
 	rom.push_back(scopeEnd);
+}
+
+void Astral::Compiler::GenerateIf(const IfStatement* ifStatement)
+{
+	GenerateExpression(ifStatement->IfExpression());
+
+	Bytecode code;
+	code.lexeme = ifStatement->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::IF;
+
+	//If we have an else block, we need a different operation as it needs to handle skipping the else block
+	if (ifStatement->ElseBlock())
+		code.op = (uint8_t)OpType::IF_ELSE;
+
+	rom.push_back(code);
+
+	BeginBlock(ifStatement->GetToken());
+	GenerateStatement(ifStatement->IfBlock());
+	EndBlock(ifStatement->GetToken());
+
+	if (ifStatement->ElseBlock())
+	{
+		Bytecode skip;
+		skip.lexeme = ifStatement->GetToken().GetLexeme();
+		skip.op = (uint8_t)OpType::SKIP_BLOCK;
+		rom.push_back(skip);
+
+		BeginBlock(ifStatement->GetToken());
+		GenerateStatement(ifStatement->ElseBlock());
+		EndBlock(ifStatement->GetToken());
+	}
 }
 
 void Astral::Compiler::GenerateBytecode()

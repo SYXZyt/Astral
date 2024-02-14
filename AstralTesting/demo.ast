@@ -1,6 +1,8 @@
-let a = "Global scope";
-
+if (true)
 {
-	let a = a + " =D";
-	print a;
+	print "true block";
+}
+else
+{
+	print "false block";
 }

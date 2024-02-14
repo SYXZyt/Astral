@@ -12,6 +12,7 @@ void Astral::Parser::Error(const char* message, const Token& token)
 {
 	Astral::Error(message, token);
 	Sync();
+	failed = true;
 }
 
 void Astral::Parser::Sync()
@@ -396,6 +397,9 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 	if (Match(TokenType::L_CURLY))
 		return ParseBlock();
 
+	if (Match(TokenType::IF))
+		return ParseIfStatement();
+
 	if (Match(TokenType::INCREMENT))
 	{
 		if (Peek().GetType() == TokenType::IDEN)
@@ -596,6 +600,35 @@ Astral::Statement* Astral::Parser::ParseAssignment()
 
 	Consume(TokenType::SEMICOLON, "Expected ';'");
 	return new VariableAssignment(name, expr);
+}
+
+Astral::Statement* Astral::Parser::ParseIfStatement()
+{
+	Token _if = Previous();
+	//Check that we have the (
+	if (Peek().GetType() != TokenType::L_BRA)
+	{
+		Error("Expected '(' after if", Peek());
+		return nullptr;
+	}
+
+	Expression* ifExpression = ParseExpression();
+	NULL_RET(ifExpression);
+
+	Statement* ifBlock = ParseStatement();
+	NULL_RET(ifBlock);
+
+	Statement* elseBlock = nullptr;
+
+	//Now check if we have an else branch. It is optional so do not throw if it is missing
+	if (Peek().GetType() == TokenType::ELSE)
+	{
+		Advance();
+		elseBlock = ParseStatement();
+		NULL_RET(elseBlock);
+	}
+
+	return new IfStatement(_if, ifExpression, ifBlock, elseBlock);
 }
 
 void Astral::Parser::Parse()

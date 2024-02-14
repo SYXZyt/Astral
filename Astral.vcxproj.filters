@@ -123,6 +123,9 @@
     <ClInclude Include="Compilation\Parsing\Expressions\DecrementExpression.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Compilation\Parsing\Statements\IfStatement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
@@ -210,6 +213,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Compilation\Parsing\Expressions\DecrementExpression.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compilation\Parsing\Statements\IfStatement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

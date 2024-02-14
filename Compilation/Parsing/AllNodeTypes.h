@@ -9,6 +9,7 @@
 
 #include "Statements/Block.h"
 #include "Statements/Program.h"
+#include "Statements/IfStatement.h"
 #include "Statements/PrintStatement.h"
 #include "Statements/VariableDefinition.h"
 #include "Statements/VariableAssignment.h"
