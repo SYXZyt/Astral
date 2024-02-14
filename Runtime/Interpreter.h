@@ -20,6 +20,29 @@ namespace Astral
 	private:
 		static Interpreter* instance;
 
+		inline void SkipBlock()
+		{
+			int nest = -1;
+
+			while (true)
+			{
+				Bytecode& instruction = rom[pc];
+				if (instruction.op == (uint8_t)OpType::SCOPE_BEG)
+					++nest;
+				if (instruction.op == (uint8_t)OpType::SCOPE_END)
+				{
+					if (nest == 0)
+					{
+						++pc;
+						break;
+					}
+					--nest;
+				}
+
+				++pc;
+			}
+		}
+
 		inline Type::atype_t* Pop()
 		{
 			Type::atype_t* value = stack.top();

@@ -7,6 +7,9 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 	OpType op = (OpType)instruction.op;
 	switch (op)
 	{
+		case OpType::GC:
+			GarbageCollector::Instance().Cleanup();
+			break;
 		case OpType::LIT_NUMBER:
 		{
 			float v = std::stof(instruction.lexeme.lexeme);
@@ -364,7 +367,48 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			break;
 		case OpType::SCOPE_END:
 			variables.RemoveScope();
-			GarbageCollector::Instance().Cleanup();
+			break;
+		case OpType::IF:
+		{
+			Type::atype_t* result = Pop();
+			if (Type::number_t* num = dynamic_cast<Type::number_t*>(result))
+			{
+				//If the result is not true, skip the block
+				if (!num->Value())
+					SkipBlock();
+			}
+			else
+			{
+				Error("Could not evaluate expression to a boolean value", instruction.lexeme);
+				failed = true;
+				return;
+			}
+
+			break;
+		}
+		case OpType::IF_ELSE:
+		{
+			Type::atype_t* result = Pop();
+			if (Type::number_t* num = dynamic_cast<Type::number_t*>(result))
+			{
+				//If the result is not true, skip the block
+				if (!num->Value())
+				{
+					SkipBlock();
+					++pc; //Skip the skipblock instruction
+				}
+			}
+			else
+			{
+				Error("Could not evaluate expression to a boolean value", instruction.lexeme);
+				failed = true;
+				return;
+			}
+
+			break;
+		}
+		case OpType::SKIP_BLOCK:
+			SkipBlock();
 			break;
 		default:
 			throw "oop";

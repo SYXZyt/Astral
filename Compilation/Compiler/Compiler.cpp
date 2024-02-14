@@ -389,9 +389,9 @@ void Astral::Compiler::GenerateIf(const IfStatement* ifStatement)
 
 	rom.push_back(code);
 
-	BeginBlock(ifStatement->GetToken());
+	BeginBlock();
 	GenerateStatement(ifStatement->IfBlock());
-	EndBlock(ifStatement->GetToken());
+	EndBlock();
 
 	if (ifStatement->ElseBlock())
 	{
@@ -400,10 +400,12 @@ void Astral::Compiler::GenerateIf(const IfStatement* ifStatement)
 		skip.op = (uint8_t)OpType::SKIP_BLOCK;
 		rom.push_back(skip);
 
-		BeginBlock(ifStatement->GetToken());
+		BeginBlock();
 		GenerateStatement(ifStatement->ElseBlock());
-		EndBlock(ifStatement->GetToken());
+		EndBlock();
 	}
+
+	GCPass();
 }
 
 void Astral::Compiler::GenerateBytecode()

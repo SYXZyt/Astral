@@ -22,19 +22,27 @@ namespace Astral
 
 		bool failed = false;
 
-		inline void BeginBlock(const Token& t)
+		inline void BeginBlock()
 		{
 			Bytecode code;
-			code.lexeme = t.GetLexeme();
+			code.lexeme = Lexeme();
 			code.op = (uint8_t)OpType::SCOPE_BEG;
 			rom.push_back(code);
 		}
 
-		inline void EndBlock(const Token& t)
+		inline void EndBlock()
 		{
 			Bytecode code;
-			code.lexeme = t.GetLexeme();
+			code.lexeme = Lexeme();
 			code.op = (uint8_t)OpType::SCOPE_END;
+			rom.push_back(code);
+		}
+
+		inline void GCPass()
+		{
+			Bytecode code;
+			code.lexeme = Lexeme();
+			code.op = (uint8_t)OpType::GC;
 			rom.push_back(code);
 		}
 

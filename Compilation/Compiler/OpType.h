@@ -8,6 +8,7 @@ namespace Astral
 	enum class ASTRAL OpType : uint8_t
 	{
 		NOP,
+		GC,
 
 		LIT_NUMBER,
 		LIT_STRING,
@@ -53,6 +54,8 @@ namespace Astral
 		{
 			case OpType::NOP:
 				return "NOP";
+			case OpType::GC:
+				return "GC";
 			case OpType::LIT_NUMBER:
 				return "NUMBER";
 			case OpType::LIT_STRING:
