@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include <iostream>
 
 #include "../Tokenisation/Token.h"
@@ -21,3 +24,5 @@ namespace Astral
 		virtual ~ParseTree() {}
 	};
 }
+
+#pragma warning(pop)

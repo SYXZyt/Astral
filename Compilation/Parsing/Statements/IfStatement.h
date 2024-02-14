@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include "../Statement.h"
 #include "../Expression.h"
 
@@ -30,3 +33,5 @@ namespace Astral
 		~IfStatement() override;
 	};
 }
+
+#pragma warning(pop)

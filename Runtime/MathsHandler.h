@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include "Result.h"
 #include "../Astral.h"
 #include "Types/AstralTypes.h"
@@ -14,3 +17,5 @@ namespace Astral::Maths
 	extern result_t Minus(Type::atype_t* val);
 	extern result_t Factorial(Type::atype_t* val);
 }
+
+#pragma warning(pop)

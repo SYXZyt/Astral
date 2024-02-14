@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include <vector>
 
 #include "MemoryBlock.h"
@@ -43,3 +46,5 @@ namespace Astral
 		~GarbageCollector();
 	};
 }
+
+#pragma warning(pop)

@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include <vector>
 
 #include "../Statement.h"
@@ -21,3 +24,5 @@ namespace Astral
 		~Block() override;
 	};
 }
+
+#pragma warning(pop)

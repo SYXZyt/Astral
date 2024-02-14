@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include <ostream>
 
 #include "../../Astral.h"
@@ -169,3 +172,5 @@ namespace Astral
 		return os;
 	}
 }
+
+#pragma warning(pop)

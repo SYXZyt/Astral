@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include <string>
 #include <string.h>
 
@@ -100,3 +103,5 @@ namespace Astral::Type
 		ref_t(MemoryBlock* block) : block(block) {}
 	};
 }
+
+#pragma warning(pop)

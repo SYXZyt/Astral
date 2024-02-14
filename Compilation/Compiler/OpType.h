@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include "../../Astral.h"
 
 typedef unsigned char uint8_t;
@@ -111,3 +114,5 @@ namespace Astral
 		}
 	}
 }
+
+#pragma warning(pop)
