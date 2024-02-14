@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include "Literal.h"
 #include "../ParseTree.h"
 #include "../Expression.h"
@@ -20,3 +23,5 @@ namespace Astral
 		~UnaryOp();
 	};
 }
+
+#pragma warning(pop)

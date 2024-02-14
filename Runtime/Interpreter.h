@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include <stack>
 #include <vector>
 #include <iostream>
@@ -81,3 +84,5 @@ namespace Astral
 		~Interpreter();
 	};
 }
+
+#pragma warning(pop)

@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include <vector>
 #include <string>
 #include <sstream>
@@ -73,3 +76,4 @@ namespace Astral
 		Compiler(const std::vector<ParseTree*>& tree) : tree(tree) {}
 	};
 }
+#pragma warning(pop)

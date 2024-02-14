@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include <vector>
 
 #include "../ParseTree.h"
@@ -22,3 +25,5 @@ namespace Astral
 		~Program() override;
 	};
 }
+
+#pragma warning(pop)

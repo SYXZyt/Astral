@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include <array>
 #include <string>
 #include <vector>
@@ -62,3 +65,5 @@ namespace Astral
 		Parser(const std::vector<Token>& tokens) : tokens(tokens), pointer(0), failed(false) {}
 	};
 }
+
+#pragma warning(pop)
