@@ -13,9 +13,10 @@ namespace Astral
 
 		static GarbageCollector* instance;
 
-		static constexpr unsigned int CullLimit = 1000; //In kb
 
 	public:
+		static unsigned int CullLimit; //In kb
+
 		static void FreeInstance()
 		{
 			delete instance;
@@ -31,6 +32,8 @@ namespace Astral
 		}
 
 		MemoryBlock* New();
+
+
 
 		void Cleanup();
 

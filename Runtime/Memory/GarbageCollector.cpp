@@ -7,6 +7,7 @@
 #endif
 
 Astral::GarbageCollector* Astral::GarbageCollector::instance = nullptr;
+unsigned int Astral::GarbageCollector::CullLimit = 1000; //In kb
 
 Astral::MemoryBlock* Astral::GarbageCollector::New()
 {
