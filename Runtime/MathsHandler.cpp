@@ -37,7 +37,7 @@ static Astral::result_t Power_Number_Number(Astral::Type::number_t* lhs, Astral:
 
 static Astral::result_t Modulo_Number_Number(Astral::Type::number_t* lhs, Astral::Type::number_t* rhs)
 {
-	float res = (int)lhs->Value() % (int)rhs->Value();
+	float res = (float)((int)lhs->Value() % (int)rhs->Value());
 
 	return Success(new Astral::Type::number_t(res));
 }
