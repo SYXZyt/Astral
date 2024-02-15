@@ -1,8 +1,4 @@
-let x = 0;
-
-if (!x)
-	print "X is 0";
-else if (x == 1)
-	print "x is 1";
-else
-	print "x is greater than 1";
+while (true)
+{
+	print "Hello";
+}

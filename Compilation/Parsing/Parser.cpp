@@ -119,12 +119,12 @@ Astral::Expression* Astral::Parser::ParseEquality()
 	Expression* expr = ParseComparison();
 	NULL_RET(expr);
 
-	TokenType types[2]
+	std::array<TokenType, 2> types
 	{
 		TokenType::EQUALS,
 		TokenType::NOT_EQUALS,
 	};
-	while (Match(types, 2))
+	while (Match(types.data(), types.size()))
 	{
 		Token op = Previous();
 		Expression* right = ParseComparison();
@@ -142,14 +142,14 @@ Astral::Expression* Astral::Parser::ParseComparison()
 	Expression* expr = ParseTerm();
 	NULL_RET(expr);
 
-	TokenType types[4]
+	std::array<TokenType, 4> types
 	{
 		TokenType::GREATER_THAN,
 		TokenType::GREATER_THAN_EQUAL,
 		TokenType::LESS_THAN,
 		TokenType::LESS_THAN_EQUAL,
 	};
-	while (Match(types, 4))
+	while (Match(types.data(), types.size()))
 	{
 		Token op = Previous();
 		Expression* right = ParseTerm();
@@ -167,12 +167,12 @@ Astral::Expression* Astral::Parser::ParseTerm()
 	Expression* expr = ParseFactor();
 	NULL_RET(expr);
 
-	TokenType types[2]
+	std::array<TokenType, 2> types
 	{
 		TokenType::PLUS,
 		TokenType::MINUS,
 	};
-	while (Match(types, 2))
+	while (Match(types.data(), types.size()))
 	{
 		Token op = Previous();
 		Expression* right = ParseFactor();
@@ -190,13 +190,13 @@ Astral::Expression* Astral::Parser::ParseFactor()
 	Expression* expr = ParsePower();
 	NULL_RET(expr);
 
-	TokenType types[3]
+	std::array<TokenType, 3> types
 	{
 		TokenType::DIVIDE,
 		TokenType::ASTERISK,
 		TokenType::MODULO,
 	};
-	while (Match(types, 3))
+	while (Match(types.data(), types.size()))
 	{
 		Token op = Previous();
 		Expression* right = ParsePower();
@@ -229,12 +229,12 @@ Astral::Expression* Astral::Parser::ParsePower()
 
 Astral::Expression* Astral::Parser::ParseUnary()
 {
-	TokenType types[2]
+	std::array<TokenType, 2> types
 	{
 		TokenType::NOT,
 		TokenType::MINUS,
 	};
-	if (Match(types, 2))
+	if (Match(types.data(), types.size()))
 	{
 		Token op = Previous();
 		Expression* expr = ParseUnary();

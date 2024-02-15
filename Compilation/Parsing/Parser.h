@@ -3,6 +3,7 @@
 #pragma warning(disable : 4251)
 
 #include <array>
+#include <array>
 #include <string>
 #include <vector>
 #include <iostream>
