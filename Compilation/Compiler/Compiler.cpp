@@ -313,6 +313,8 @@ void Astral::Compiler::GenerateStatement(const Statement* statement)
 		GenerateBlock(block);
 	else if (const IfStatement* ifStatement = dynamic_cast<const IfStatement*>(statement))
 		GenerateIf(ifStatement);
+	else if (const While* whileStatement = dynamic_cast<const While*>(statement))
+		GenerateWhile(whileStatement);
 	else
 		throw "oop";
 }
@@ -389,9 +391,7 @@ void Astral::Compiler::GenerateIf(const IfStatement* ifStatement)
 
 	rom.push_back(code);
 
-	BeginBlock();
-	GenerateStatement(ifStatement->IfBlock());
-	EndBlock();
+	GenerateStatementInsideBlock(ifStatement->IfBlock());
 
 	if (ifStatement->ElseBlock())
 	{
@@ -400,10 +400,44 @@ void Astral::Compiler::GenerateIf(const IfStatement* ifStatement)
 		skip.op = (uint8_t)OpType::SKIP_BLOCK;
 		rom.push_back(skip);
 
-		BeginBlock();
-		GenerateStatement(ifStatement->ElseBlock());
-		EndBlock();
+		GenerateStatementInsideBlock(ifStatement->ElseBlock());
 	}
+
+	GCPass();
+}
+
+void Astral::Compiler::GenerateWhile(const While* whileStatement)
+{
+	/*
+	How while works is by this
+
+	while_beg
+		loopcondition
+		while_cond (If false, goto while_end)
+
+		scope_beg
+			body
+		scope_end
+	while_end (Goto while_beg. Only while_cond or while_break will skip this)
+	gc
+
+	If we get a continue, we need to step forward until we reach the while_end, then we loop back to the while_beg. It needs to keep track of scope to nicely clean everything up
+	If we get a break, we need to step forward until while_end. Keep track of scope as well.
+	*/
+	Bytecode code;
+	code.lexeme = whileStatement->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::WHILE_BEG;
+	rom.push_back(code);
+
+	GenerateExpression(whileStatement->GetCondition());
+
+	code.op = (uint8_t)OpType::WHILE_COND;
+	rom.push_back(code);
+
+	GenerateStatementInsideBlock(whileStatement->GetBody());
+
+	code.op = (uint8_t)OpType::WHILE_END;
+	rom.push_back(code);
 
 	GCPass();
 }

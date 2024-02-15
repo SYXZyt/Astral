@@ -166,6 +166,7 @@
     <ClInclude Include="Runtime\Variables\Variable.h" />
     <ClInclude Include="Runtime\Variables\Variables.h" />
     <ClInclude Include="Types.h" />
+    <ClInclude Include="Compilation\Parsing\Statements\While.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
@@ -202,6 +203,7 @@
     <ClCompile Include="Runtime\Types\AstralTypes.cpp" />
     <ClCompile Include="Runtime\Variables\Variable.cpp" />
     <ClCompile Include="Runtime\Variables\Variables.cpp" />
+    <ClCompile Include="Compilation\Parsing\Statements\While.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

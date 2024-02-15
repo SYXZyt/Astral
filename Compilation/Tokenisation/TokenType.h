@@ -54,6 +54,8 @@ namespace Astral
 		IF,
 		ELSE,
 		WHILE,
+		BREAK,
+		CONTINUE,
 		RETURN,
 		PRINT,
 	};
@@ -156,6 +158,12 @@ namespace Astral
 				break;
 			case TokenType::WHILE:
 				os << "<WHILE>";
+				break;
+			case TokenType::CONTINUE:
+				os << "<CONTINUE>";
+				break;
+			case TokenType::BREAK:
+				os << "<BREAK>";
 				break;
 			case TokenType::RETURN:
 				os << "<RETURN>";

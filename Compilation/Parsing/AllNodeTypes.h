@@ -7,6 +7,7 @@
 #include "Expressions/IncrementExpression.h"
 #include "Expressions/DecrementExpression.h"
 
+#include "Statements/While.h"
 #include "Statements/Block.h"
 #include "Statements/Program.h"
 #include "Statements/IfStatement.h"

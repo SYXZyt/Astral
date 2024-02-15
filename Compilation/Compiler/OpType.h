@@ -49,6 +49,12 @@ namespace Astral
 
 		SCOPE_BEG,
 		SCOPE_END,
+
+		WHILE_BEG,
+		WHILE_END,
+		WHILE_COND,
+		WHILE_BREAK,
+		WHILE_CONTINUE,
 	};
 
 	inline ASTRAL const char* OpTypeToString(OpType type)
@@ -109,6 +115,16 @@ namespace Astral
 				return "IF_ELSE";
 			case OpType::SKIP_BLOCK:
 				return "SKIP_BLOCK";
+			case OpType::WHILE_BEG:
+				return "WHILE_BEG";
+			case OpType::WHILE_END:
+				return "WHILE_END";
+			case OpType::WHILE_BREAK:
+				return "WHILE_BREAK";
+			case OpType::WHILE_CONTINUE:
+				return "WHILE_CONT";
+			case OpType::WHILE_COND:
+				return "WHILE_COND";
 			default:
 				return "UNKNOWN";
 		}

@@ -66,6 +66,21 @@ namespace Astral
 		void GenerateAssign(const VariableAssignment* variable);
 		void GenerateBlock(const Block* block);
 		void GenerateIf(const IfStatement* ifStatement);
+		void GenerateWhile(const While* whileStatement);
+
+		inline void GenerateStatementInsideBlock(const Statement* statement)
+		{
+			bool isBlockAlready = dynamic_cast<const Block*>(statement);
+
+			//If this is already a block, we do not need to add one
+			if (!isBlockAlready)
+				BeginBlock();
+
+			GenerateStatement(statement);
+
+			if (!isBlockAlready)
+				EndBlock();
+		}
 
 	public:
 		inline bool Failed() const { return failed; }

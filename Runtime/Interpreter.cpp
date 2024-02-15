@@ -7,9 +7,31 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 	OpType op = (OpType)instruction.op;
 	switch (op)
 	{
+		case OpType::WHILE_BEG:
+			break;
+		case OpType::WHILE_END:
+			While_JumpToBegin();
+			break;
 		case OpType::GC:
 			GarbageCollector::Instance().Cleanup();
 			break;
+		case OpType::WHILE_COND:
+		{
+			Type::atype_t* result = Pop();
+			if (Type::number_t* num = dynamic_cast<Type::number_t*>(result))
+			{
+				if (!num->Value())
+					While_ExitLoop();
+			}
+			else
+			{
+				Error("Could not evaluate expression to a boolean value", instruction.lexeme);
+				failed = true;
+				return;
+			}
+
+			break;
+		}
 		case OpType::LIT_NUMBER:
 		{
 			float v = std::stof(instruction.lexeme.lexeme);

@@ -400,6 +400,9 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 	if (Match(TokenType::IF))
 		return ParseIfStatement();
 
+	if (Match(TokenType::WHILE))
+		return ParseWhileStatement();
+
 	if (Match(TokenType::INCREMENT))
 	{
 		if (Peek().GetType() == TokenType::IDEN)
@@ -629,6 +632,26 @@ Astral::Statement* Astral::Parser::ParseIfStatement()
 	}
 
 	return new IfStatement(_if, ifExpression, ifBlock, elseBlock);
+}
+
+Astral::Statement* Astral::Parser::ParseWhileStatement()
+{
+	Token _while = Previous();
+
+	//Ensure that we have the (
+	if (Peek().GetType() != TokenType::L_BRA)
+	{
+		Error("Expected '(' after while", Peek());
+		return nullptr;
+	}
+
+	Expression* loopCondition = ParseExpression();
+	NULL_RET(loopCondition);
+
+	Statement* body = ParseStatement();
+	NULL_RET(body);
+
+	return new While(_while, loopCondition, body);
 }
 
 void Astral::Parser::Parse()

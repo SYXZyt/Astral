@@ -46,6 +46,47 @@ namespace Astral
 			}
 		}
 
+		inline void While_JumpToBegin()
+		{
+			while (true)
+			{
+				Bytecode& instruction = rom[pc];
+
+				if (instruction.op == (uint8_t)OpType::WHILE_BEG)
+					break;
+
+				if (instruction.op == (uint8_t)OpType::SCOPE_BEG)
+					variables.RemoveScope();
+
+				if (instruction.op == (uint8_t)OpType::SCOPE_END)
+					variables.AddScope();
+
+				--pc;
+			}
+		}
+
+		inline void While_ExitLoop()
+		{
+			while (true)
+			{
+				Bytecode& instruction = rom[pc];
+
+				if (instruction.op == (uint8_t)OpType::WHILE_END)
+				{
+					++pc; //We don't want to execute the while end
+					break;
+				}
+
+				if (instruction.op == (uint8_t)OpType::SCOPE_BEG)
+					variables.AddScope();
+
+				if (instruction.op == (uint8_t)OpType::SCOPE_END)
+					variables.RemoveScope();
+
+				++pc;
+			}
+		}
+
 		inline Type::atype_t* Pop()
 		{
 			Type::atype_t* value = stack.top();
