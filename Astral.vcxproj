@@ -146,6 +146,9 @@
     <ClInclude Include="Compilation\Parsing\Statement.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Block.h" />
     <ClInclude Include="Compilation\Parsing\Expressions\Factorial.h" />
+    <ClInclude Include="Compilation\Parsing\Statements\Break.h" />
+    <ClInclude Include="Compilation\Parsing\Statements\Continue.h" />
+    <ClInclude Include="Compilation\Parsing\Statements\IfStatement.h" />
     <ClInclude Include="Compilation\Parsing\Statements\PrintStatement.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Program.h" />
     <ClInclude Include="Compilation\Parsing\Statements\VariableAssignment.h" />
@@ -165,6 +168,7 @@
     <ClInclude Include="Runtime\Variables\Variable.h" />
     <ClInclude Include="Runtime\Variables\Variables.h" />
     <ClInclude Include="Types.h" />
+    <ClInclude Include="Compilation\Parsing\Statements\While.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
@@ -187,6 +191,9 @@
     <ClCompile Include="Compilation\Parsing\Statement.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Block.cpp" />
     <ClCompile Include="Compilation\Parsing\Expressions\Factorial.cpp" />
+    <ClCompile Include="Compilation\Parsing\Statements\Break.cpp" />
+    <ClCompile Include="Compilation\Parsing\Statements\Continue.cpp" />
+    <ClCompile Include="Compilation\Parsing\Statements\IfStatement.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\PrintStatement.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Program.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\VariableAssignment.cpp" />
@@ -200,6 +207,7 @@
     <ClCompile Include="Runtime\Types\AstralTypes.cpp" />
     <ClCompile Include="Runtime\Variables\Variable.cpp" />
     <ClCompile Include="Runtime\Variables\Variables.cpp" />
+    <ClCompile Include="Compilation\Parsing\Statements\While.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

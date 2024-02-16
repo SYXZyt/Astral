@@ -7,6 +7,41 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 	OpType op = (OpType)instruction.op;
 	switch (op)
 	{
+		case OpType::WHILE_BEG:
+			break;
+		case OpType::WHILE_END:
+			While_JumpToBegin();
+			break;
+		case OpType::GC:
+			GarbageCollector::Instance().Cleanup();
+			break;
+		case OpType::WHILE_COND:
+		{
+			Type::atype_t* result = Pop();
+			if (Type::number_t* num = dynamic_cast<Type::number_t*>(result))
+			{
+				if (!num->Value())
+					While_ExitLoop();
+			}
+			else
+			{
+				Error("Could not evaluate expression to a boolean value", instruction.lexeme);
+				failed = true;
+				return;
+			}
+
+			break;
+		}
+		case OpType::WHILE_CONTINUE:
+		{
+			While_JumpToBegin();
+			break;
+		}
+		case OpType::WHILE_BREAK:
+		{
+			While_ExitLoop();
+			break;
+		}
 		case OpType::LIT_NUMBER:
 		{
 			float v = std::stof(instruction.lexeme.lexeme);
@@ -152,6 +187,36 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			else
 			{
 				Error("Type does not support factorial", instruction.lexeme);
+				failed = true;
+			}
+			break;
+		}
+		case OpType::AND:
+		{
+			Astral::Type::atype_t* lhs = Pop();
+			Astral::Type::atype_t* rhs = Pop();
+			result_t res = Boolean::And(lhs, rhs);
+
+			if (res.type == result_t::ResultType::R_OK)
+				Push(res.result);
+			else
+			{
+				Error("Invalid boolean operator types", instruction.lexeme);
+				failed = true;
+			}
+			break;
+		}
+		case OpType::OR:
+		{
+			Astral::Type::atype_t* lhs = Pop();
+			Astral::Type::atype_t* rhs = Pop();
+			result_t res = Boolean::Or(lhs, rhs);
+
+			if (res.type == result_t::ResultType::R_OK)
+				Push(res.result);
+			else
+			{
+				Error("Invalid boolean operator types", instruction.lexeme);
 				failed = true;
 			}
 			break;
@@ -364,7 +429,48 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			break;
 		case OpType::SCOPE_END:
 			variables.RemoveScope();
-			GarbageCollector::Instance().Cleanup();
+			break;
+		case OpType::IF:
+		{
+			Type::atype_t* result = Pop();
+			if (Type::number_t* num = dynamic_cast<Type::number_t*>(result))
+			{
+				//If the result is not true, skip the block
+				if (!num->Value())
+					SkipBlock();
+			}
+			else
+			{
+				Error("Could not evaluate expression to a boolean value", instruction.lexeme);
+				failed = true;
+				return;
+			}
+
+			break;
+		}
+		case OpType::IF_ELSE:
+		{
+			Type::atype_t* result = Pop();
+			if (Type::number_t* num = dynamic_cast<Type::number_t*>(result))
+			{
+				//If the result is not true, skip the block
+				if (!num->Value())
+				{
+					SkipBlock();
+					++pc; //Skip the skipblock instruction
+				}
+			}
+			else
+			{
+				Error("Could not evaluate expression to a boolean value", instruction.lexeme);
+				failed = true;
+				return;
+			}
+
+			break;
+		}
+		case OpType::SKIP_BLOCK:
+			SkipBlock();
 			break;
 		default:
 			throw "oop";

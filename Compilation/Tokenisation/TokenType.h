@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include <ostream>
 
 #include "../../Astral.h"
@@ -42,6 +45,9 @@ namespace Astral
 		PLUS_EQUALS,
 		MINUS_EQUALS,
 
+		AND,
+		OR,
+
 		//Keywords
 		_TRUE,
 		_FALSE,
@@ -51,6 +57,8 @@ namespace Astral
 		IF,
 		ELSE,
 		WHILE,
+		BREAK,
+		CONTINUE,
 		RETURN,
 		PRINT,
 	};
@@ -122,6 +130,12 @@ namespace Astral
 			case TokenType::GREATER_THAN_EQUAL:
 				os << "<GREATER THAN EQUALS>";
 				break;
+			case TokenType::OR:
+				os << "<OR>";
+				break;
+			case TokenType::AND:
+				os << "<AND>";
+				break;
 
 			case TokenType::ASSIGNMENT:
 				os << "<ASSIGNMENT>";
@@ -154,6 +168,12 @@ namespace Astral
 			case TokenType::WHILE:
 				os << "<WHILE>";
 				break;
+			case TokenType::CONTINUE:
+				os << "<CONTINUE>";
+				break;
+			case TokenType::BREAK:
+				os << "<BREAK>";
+				break;
 			case TokenType::RETURN:
 				os << "<RETURN>";
 				break;
@@ -169,3 +189,5 @@ namespace Astral
 		return os;
 	}
 }
+
+#pragma warning(pop)

@@ -13,7 +13,7 @@ bool Astral::Variables::DoesVariableExistInScope(const std::vector<Variable*>& s
 
 Astral::Variable* Astral::Variables::GetVariable(const char* name)
 {
-	for (int i = variables.size() - 1; i >= 0; --i)
+	for (int i = (int)variables.size() - 1; i >= 0; --i)
 	{
 		for (Variable* v : variables[i])
 		{
@@ -34,7 +34,7 @@ bool Astral::Variables::DoesVariableExist(const char* name)
 {
 	//Loop in reverse since we want to start with the highest
 	//scope which is at the end of the list
-	for (int i = variables.size() - 1; i >= 0; --i)
+	for (int i = (int)variables.size() - 1; i >= 0; --i)
 	{
 		if (DoesVariableExistInScope(variables[i], name))
 			return true;

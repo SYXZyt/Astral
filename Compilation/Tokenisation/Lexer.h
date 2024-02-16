@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include <string>
 #include <vector>
 #include <sstream>
@@ -49,3 +52,5 @@ namespace Astral
 		Lexer(const std::string& data, const std::string& fname);
 	};
 }
+
+#pragma warning(pop)

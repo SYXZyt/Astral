@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include <vector>
 
 #include "../Types/AstralTypes.h"
@@ -21,3 +24,5 @@ namespace Astral
 		~MemoryBlock() { delete data; }
 	};
 }
+
+#pragma warning(pop)

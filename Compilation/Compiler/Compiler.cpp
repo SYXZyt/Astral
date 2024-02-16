@@ -116,6 +116,12 @@ void Astral::Compiler::GenerateBinary(const BinaryOp* binaryOp)
 		case TokenType::LESS_THAN_EQUAL:
 			type = OpType::LESS_EQUALS;
 			break;
+		case TokenType::OR:
+			type = OpType::OR;
+			break;
+		case TokenType::AND:
+			type = OpType::AND;
+			break;
 		default:
 			throw "Oop";
 	}
@@ -311,6 +317,14 @@ void Astral::Compiler::GenerateStatement(const Statement* statement)
 		GenerateAssign(assign);
 	else if (const Block* block = dynamic_cast<const Block*>(statement))
 		GenerateBlock(block);
+	else if (const IfStatement* ifStatement = dynamic_cast<const IfStatement*>(statement))
+		GenerateIf(ifStatement);
+	else if (const While* whileStatement = dynamic_cast<const While*>(statement))
+		GenerateWhile(whileStatement);
+	else if (const Break* breakStatement = dynamic_cast<const Break*>(statement))
+		GenerateBreak(breakStatement);
+	else if (const Continue* continueStatement = dynamic_cast<const Continue*>(statement))
+		GenerateContinue(continueStatement);
 	else
 		throw "oop";
 }
@@ -371,6 +385,87 @@ void Astral::Compiler::GenerateBlock(const Block* block)
 	scopeEnd.lexeme = block->GetToken().GetLexeme();
 	scopeEnd.op = (uint8_t)OpType::SCOPE_END;
 	rom.push_back(scopeEnd);
+}
+
+void Astral::Compiler::GenerateIf(const IfStatement* ifStatement)
+{
+	GenerateExpression(ifStatement->IfExpression());
+
+	Bytecode code;
+	code.lexeme = ifStatement->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::IF;
+
+	//If we have an else block, we need a different operation as it needs to handle skipping the else block
+	if (ifStatement->ElseBlock())
+		code.op = (uint8_t)OpType::IF_ELSE;
+
+	rom.push_back(code);
+
+	GenerateStatementInsideBlock(ifStatement->IfBlock());
+
+	if (ifStatement->ElseBlock())
+	{
+		Bytecode skip;
+		skip.lexeme = ifStatement->GetToken().GetLexeme();
+		skip.op = (uint8_t)OpType::SKIP_BLOCK;
+		rom.push_back(skip);
+
+		GenerateStatementInsideBlock(ifStatement->ElseBlock());
+	}
+
+	GCPass();
+}
+
+void Astral::Compiler::GenerateWhile(const While* whileStatement)
+{
+	/*
+	How while works is by this
+
+	while_beg
+		loopcondition
+		while_cond (If false, goto while_end)
+
+		scope_beg
+			body
+		scope_end
+	while_end (Goto while_beg. Only while_cond or while_break will skip this)
+	gc
+
+	If we get a continue, we need to step forward until we reach the while_end, then we loop back to the while_beg. It needs to keep track of scope to nicely clean everything up
+	If we get a break, we need to step forward until while_end. Keep track of scope as well.
+	*/
+	Bytecode code;
+	code.lexeme = whileStatement->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::WHILE_BEG;
+	rom.push_back(code);
+
+	GenerateExpression(whileStatement->GetCondition());
+
+	code.op = (uint8_t)OpType::WHILE_COND;
+	rom.push_back(code);
+
+	GenerateStatementInsideBlock(whileStatement->GetBody());
+
+	code.op = (uint8_t)OpType::WHILE_END;
+	rom.push_back(code);
+
+	GCPass();
+}
+
+void Astral::Compiler::GenerateContinue(const Continue* _continue)
+{
+	Bytecode code;
+	code.lexeme = _continue->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::WHILE_CONTINUE;
+	rom.push_back(code);
+}
+
+void Astral::Compiler::GenerateBreak(const Break* _break)
+{
+	Bytecode code;
+	code.lexeme = _break->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::WHILE_BREAK;
+	rom.push_back(code);
 }
 
 void Astral::Compiler::GenerateBytecode()

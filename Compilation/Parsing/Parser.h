@@ -1,4 +1,8 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
+#include <array>
 #include <array>
 #include <string>
 #include <vector>
@@ -35,6 +39,7 @@ namespace Astral
 		bool Match(TokenType* types, unsigned int count);
 
 		Expression* ParseExpression();
+		Expression* ParseConditional();
 		Expression* ParseEquality();
 		Expression* ParseComparison();
 		Expression* ParseTerm();
@@ -50,6 +55,8 @@ namespace Astral
 		Statement* ParseLetStatement();
 		Statement* ParsePrintStatement();
 		Statement* ParseAssignment();
+		Statement* ParseIfStatement();
+		Statement* ParseWhileStatement();
 			
 	public:
 		inline bool HasFailed() const { return failed; }
@@ -61,3 +68,5 @@ namespace Astral
 		Parser(const std::vector<Token>& tokens) : tokens(tokens), pointer(0), failed(false) {}
 	};
 }
+
+#pragma warning(pop)

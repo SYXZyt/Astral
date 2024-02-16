@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include "../../Astral.h"
 
 typedef unsigned char uint8_t;
@@ -8,6 +11,8 @@ namespace Astral
 	enum class ASTRAL OpType : uint8_t
 	{
 		NOP,
+		GC,
+
 		LIT_NUMBER,
 		LIT_STRING,
 		VARIABLE,
@@ -21,6 +26,9 @@ namespace Astral
 		MOD,
 		NOT,
 		FACTORIAL,
+
+		OR,
+		AND,
 
 		EQUALITY,
 		NEQUALITY,
@@ -38,8 +46,18 @@ namespace Astral
 		UPDATE_VAR,
 		UPDATE_REF,
 
+		IF,
+		IF_ELSE,
+		SKIP_BLOCK,
+
 		SCOPE_BEG,
 		SCOPE_END,
+
+		WHILE_BEG,
+		WHILE_END,
+		WHILE_COND,
+		WHILE_BREAK,
+		WHILE_CONTINUE,
 	};
 
 	inline ASTRAL const char* OpTypeToString(OpType type)
@@ -48,6 +66,8 @@ namespace Astral
 		{
 			case OpType::NOP:
 				return "NOP";
+			case OpType::GC:
+				return "GC";
 			case OpType::LIT_NUMBER:
 				return "NUMBER";
 			case OpType::LIT_STRING:
@@ -72,6 +92,10 @@ namespace Astral
 				return "MOD";
 			case OpType::FACTORIAL:
 				return "FACTORIAL";
+			case OpType::OR:
+				return "OR";
+			case OpType::AND:
+				return "AND";
 			case OpType::EQUALITY:
 				return "EQU";
 			case OpType::NEQUALITY:
@@ -92,8 +116,26 @@ namespace Astral
 				return "SCOPE_BEG";
 			case OpType::SCOPE_END:
 				return "SCOPE_END";
+			case OpType::IF:
+				return "IF";
+			case OpType::IF_ELSE:
+				return "IF_ELSE";
+			case OpType::SKIP_BLOCK:
+				return "SKIP_BLOCK";
+			case OpType::WHILE_BEG:
+				return "WHILE_BEG";
+			case OpType::WHILE_END:
+				return "WHILE_END";
+			case OpType::WHILE_BREAK:
+				return "WHILE_BREAK";
+			case OpType::WHILE_CONTINUE:
+				return "WHILE_CONT";
+			case OpType::WHILE_COND:
+				return "WHILE_COND";
 			default:
 				return "UNKNOWN";
 		}
 	}
 }
+
+#pragma warning(pop)

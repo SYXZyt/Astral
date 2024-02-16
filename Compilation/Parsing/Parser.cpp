@@ -12,6 +12,7 @@ void Astral::Parser::Error(const char* message, const Token& token)
 {
 	Astral::Error(message, token);
 	Sync();
+	failed = true;
 }
 
 void Astral::Parser::Sync()
@@ -110,7 +111,30 @@ bool Astral::Parser::Match(TokenType* types, unsigned int count)
 
 Astral::Expression* Astral::Parser::ParseExpression()
 {
-	return ParseEquality();
+	return ParseConditional();
+}
+
+Astral::Expression* Astral::Parser::ParseConditional()
+{
+	Expression* expr = ParseEquality();
+	NULL_RET(expr);
+
+	std::array<TokenType, 2> types
+	{
+		TokenType::OR,
+		TokenType::AND,
+	};
+	while (Match(types.data(), types.size()))
+	{
+		Token op = Previous();
+		Expression* right = ParseEquality();
+		NULL_RET(right);
+
+		Expression* temp = expr;
+		expr = new BinaryOp(temp, op, right);
+	}
+
+	return expr;
 }
 
 Astral::Expression* Astral::Parser::ParseEquality()
@@ -118,12 +142,12 @@ Astral::Expression* Astral::Parser::ParseEquality()
 	Expression* expr = ParseComparison();
 	NULL_RET(expr);
 
-	TokenType types[2]
+	std::array<TokenType, 2> types
 	{
 		TokenType::EQUALS,
 		TokenType::NOT_EQUALS,
 	};
-	while (Match(types, 2))
+	while (Match(types.data(), types.size()))
 	{
 		Token op = Previous();
 		Expression* right = ParseComparison();
@@ -141,14 +165,14 @@ Astral::Expression* Astral::Parser::ParseComparison()
 	Expression* expr = ParseTerm();
 	NULL_RET(expr);
 
-	TokenType types[4]
+	std::array<TokenType, 4> types
 	{
 		TokenType::GREATER_THAN,
 		TokenType::GREATER_THAN_EQUAL,
 		TokenType::LESS_THAN,
 		TokenType::LESS_THAN_EQUAL,
 	};
-	while (Match(types, 4))
+	while (Match(types.data(), types.size()))
 	{
 		Token op = Previous();
 		Expression* right = ParseTerm();
@@ -166,12 +190,12 @@ Astral::Expression* Astral::Parser::ParseTerm()
 	Expression* expr = ParseFactor();
 	NULL_RET(expr);
 
-	TokenType types[2]
+	std::array<TokenType, 2> types
 	{
 		TokenType::PLUS,
 		TokenType::MINUS,
 	};
-	while (Match(types, 2))
+	while (Match(types.data(), types.size()))
 	{
 		Token op = Previous();
 		Expression* right = ParseFactor();
@@ -189,13 +213,13 @@ Astral::Expression* Astral::Parser::ParseFactor()
 	Expression* expr = ParsePower();
 	NULL_RET(expr);
 
-	TokenType types[3]
+	std::array<TokenType, 3> types
 	{
 		TokenType::DIVIDE,
 		TokenType::ASTERISK,
 		TokenType::MODULO,
 	};
-	while (Match(types, 3))
+	while (Match(types.data(), types.size()))
 	{
 		Token op = Previous();
 		Expression* right = ParsePower();
@@ -228,12 +252,12 @@ Astral::Expression* Astral::Parser::ParsePower()
 
 Astral::Expression* Astral::Parser::ParseUnary()
 {
-	TokenType types[2]
+	std::array<TokenType, 2> types
 	{
 		TokenType::NOT,
 		TokenType::MINUS,
 	};
-	if (Match(types, 2))
+	if (Match(types.data(), types.size()))
 	{
 		Token op = Previous();
 		Expression* expr = ParseUnary();
@@ -395,6 +419,30 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 
 	if (Match(TokenType::L_CURLY))
 		return ParseBlock();
+
+	if (Match(TokenType::IF))
+		return ParseIfStatement();
+
+	if (Match(TokenType::WHILE))
+		return ParseWhileStatement();
+
+	if (Match(TokenType::CONTINUE))
+	{
+		Continue* _continue = new Continue(Previous());
+
+		Consume(TokenType::SEMICOLON, "Expected ';'");
+
+		return _continue;
+	}
+
+	if (Match(TokenType::BREAK))
+	{
+		Break* _break = new Break(Previous());
+
+		Consume(TokenType::SEMICOLON, "Expected ';'");
+
+		return _break;
+	}
 
 	if (Match(TokenType::INCREMENT))
 	{
@@ -596,6 +644,55 @@ Astral::Statement* Astral::Parser::ParseAssignment()
 
 	Consume(TokenType::SEMICOLON, "Expected ';'");
 	return new VariableAssignment(name, expr);
+}
+
+Astral::Statement* Astral::Parser::ParseIfStatement()
+{
+	Token _if = Previous();
+	//Check that we have the (
+	if (Peek().GetType() != TokenType::L_BRA)
+	{
+		Error("Expected '(' after if", Peek());
+		return nullptr;
+	}
+
+	Expression* ifExpression = ParseExpression();
+	NULL_RET(ifExpression);
+
+	Statement* ifBlock = ParseStatement();
+	NULL_RET(ifBlock);
+
+	Statement* elseBlock = nullptr;
+
+	//Now check if we have an else branch. It is optional so do not throw if it is missing
+	if (Peek().GetType() == TokenType::ELSE)
+	{
+		Advance();
+		elseBlock = ParseStatement();
+		NULL_RET(elseBlock);
+	}
+
+	return new IfStatement(_if, ifExpression, ifBlock, elseBlock);
+}
+
+Astral::Statement* Astral::Parser::ParseWhileStatement()
+{
+	Token _while = Previous();
+
+	//Ensure that we have the (
+	if (Peek().GetType() != TokenType::L_BRA)
+	{
+		Error("Expected '(' after while", Peek());
+		return nullptr;
+	}
+
+	Expression* loopCondition = ParseExpression();
+	NULL_RET(loopCondition);
+
+	Statement* body = ParseStatement();
+	NULL_RET(body);
+
+	return new While(_while, loopCondition, body);
 }
 
 void Astral::Parser::Parse()
