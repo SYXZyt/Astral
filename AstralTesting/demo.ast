@@ -1,29 +1,4 @@
-let i = 0;
-
-while (i++ < 100)
+func MyFunc()
 {
-
-	if
-		(
-			i % 3 == 0 &&
-			i % 5 == 0
-		)
-	{
-		print "FizzBuzz";
-		continue;
-	}
-
-	if (i % 3 == 0)
-	{
-		print "Fizz";
-		continue;
-	}
-
-	if (i % 5 == 0)
-	{
-		print "Buzz";
-		continue;
-	}
-
-	print i;
+	return;
 }

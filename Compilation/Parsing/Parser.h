@@ -57,6 +57,8 @@ namespace Astral
 		Statement* ParseAssignment();
 		Statement* ParseIfStatement();
 		Statement* ParseWhileStatement();
+		Statement* ParseFunctionDefinition();
+		Statement* ParseParamList();
 			
 	public:
 		inline bool HasFailed() const { return failed; }

@@ -150,6 +150,7 @@
     <ClInclude Include="Compilation\Parsing\Statements\Break.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Continue.h" />
     <ClInclude Include="Compilation\Parsing\Statements\IfStatement.h" />
+    <ClInclude Include="Compilation\Parsing\Statements\ParamList.h" />
     <ClInclude Include="Compilation\Parsing\Statements\PrintStatement.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Program.h" />
     <ClInclude Include="Compilation\Parsing\Statements\VariableAssignment.h" />
@@ -196,6 +197,7 @@
     <ClCompile Include="Compilation\Parsing\Statements\Break.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Continue.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\IfStatement.cpp" />
+    <ClCompile Include="Compilation\Parsing\Statements\ParamList.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\PrintStatement.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Program.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\VariableAssignment.cpp" />
