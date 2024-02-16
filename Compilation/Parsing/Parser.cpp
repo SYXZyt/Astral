@@ -111,7 +111,30 @@ bool Astral::Parser::Match(TokenType* types, unsigned int count)
 
 Astral::Expression* Astral::Parser::ParseExpression()
 {
-	return ParseEquality();
+	return ParseConditional();
+}
+
+Astral::Expression* Astral::Parser::ParseConditional()
+{
+	Expression* expr = ParseEquality();
+	NULL_RET(expr);
+
+	std::array<TokenType, 2> types
+	{
+		TokenType::OR,
+		TokenType::AND,
+	};
+	while (Match(types.data(), types.size()))
+	{
+		Token op = Previous();
+		Expression* right = ParseEquality();
+		NULL_RET(right);
+
+		Expression* temp = expr;
+		expr = new BinaryOp(temp, op, right);
+	}
+
+	return expr;
 }
 
 Astral::Expression* Astral::Parser::ParseEquality()
@@ -119,12 +142,10 @@ Astral::Expression* Astral::Parser::ParseEquality()
 	Expression* expr = ParseComparison();
 	NULL_RET(expr);
 
-	std::array<TokenType, 4> types
+	std::array<TokenType, 2> types
 	{
 		TokenType::EQUALS,
 		TokenType::NOT_EQUALS,
-		TokenType::AND,
-		TokenType::OR,
 	};
 	while (Match(types.data(), types.size()))
 	{

@@ -39,6 +39,7 @@ namespace Astral
 		bool Match(TokenType* types, unsigned int count);
 
 		Expression* ParseExpression();
+		Expression* ParseConditional();
 		Expression* ParseEquality();
 		Expression* ParseComparison();
 		Expression* ParseTerm();

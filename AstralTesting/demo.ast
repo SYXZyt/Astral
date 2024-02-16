@@ -1,11 +1,29 @@
-let a = !true;
-let b = false;
+let i = 0;
 
-if (a || b)
-	print "A or B is true";
+while (i++ < 100)
+{
 
-if (a && b)
-	print "A and B are true";
+	if
+		(
+			i % 3 == 0 &&
+			i % 5 == 0
+		)
+	{
+		print "FizzBuzz";
+		continue;
+	}
 
-if (!(a && b))
-	print "A and B are false";
+	if (i % 3 == 0)
+	{
+		print "Fizz";
+		continue;
+	}
+
+	if (i % 5 == 0)
+	{
+		print "Buzz";
+		continue;
+	}
+
+	print i;
+}
