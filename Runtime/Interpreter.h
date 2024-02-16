@@ -87,6 +87,26 @@ namespace Astral
 			}
 		}
 
+		inline bool IsInWhileLoop()
+		{
+			int instr = pc-1;
+
+			while (true)
+			{
+				//Begin back tracking tokens until we find while_start or the start of the rom
+				//If we are at the start of the rom then we know we are not in a loop
+				//In the future, we need to treat the start of a function as a "sub-program"
+				//where the start of the function will return false
+				if (rom[instr].op == (uint8_t)OpType::WHILE_BEG)
+					return true;
+
+				if (instr == 0)
+					return false;
+
+				--instr;
+			}
+		}
+
 		inline Type::atype_t* Pop()
 		{
 			Type::atype_t* value = stack.top();

@@ -34,11 +34,25 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		}
 		case OpType::WHILE_CONTINUE:
 		{
+			if (!IsInWhileLoop())
+			{
+				Error("Continue can only be used inside of while loop", instruction.lexeme);
+				failed = true;
+				return;
+			}
+
 			While_JumpToBegin();
 			break;
 		}
 		case OpType::WHILE_BREAK:
 		{
+			if (!IsInWhileLoop())
+			{
+				Error("Break can only be used inside of while loop", instruction.lexeme);
+				failed = true;
+				return;
+			}
+
 			While_ExitLoop();
 			break;
 		}
