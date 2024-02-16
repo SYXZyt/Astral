@@ -191,6 +191,36 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			}
 			break;
 		}
+		case OpType::AND:
+		{
+			Astral::Type::atype_t* lhs = Pop();
+			Astral::Type::atype_t* rhs = Pop();
+			result_t res = Boolean::And(lhs, rhs);
+
+			if (res.type == result_t::ResultType::R_OK)
+				Push(res.result);
+			else
+			{
+				Error("Invalid boolean operator types", instruction.lexeme);
+				failed = true;
+			}
+			break;
+		}
+		case OpType::OR:
+		{
+			Astral::Type::atype_t* lhs = Pop();
+			Astral::Type::atype_t* rhs = Pop();
+			result_t res = Boolean::Or(lhs, rhs);
+
+			if (res.type == result_t::ResultType::R_OK)
+				Push(res.result);
+			else
+			{
+				Error("Invalid boolean operator types", instruction.lexeme);
+				failed = true;
+			}
+			break;
+		}
 		case OpType::EQUALITY:
 		{
 			Astral::Type::atype_t* rhs = Pop();

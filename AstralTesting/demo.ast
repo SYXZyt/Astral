@@ -1,21 +1,11 @@
-let i = 0;
+let a = !true;
+let b = false;
 
-while (i <= 100)
-{
-	++i;
+if (a || b)
+	print "A or B is true";
 
-	let output = "";
+if (a && b)
+	print "A and B are true";
 
-	if (i % 3 == 0)
-		output += "Fizz";
-	if (i % 5 == 0)
-		output += "Buzz";
-
-	if (output == "")
-		output = i;
-
-	if (i == 50)
-		break;
-
-	print output;
-}
+if (!(a && b))
+	print "A and B are false";

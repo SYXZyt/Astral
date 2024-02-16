@@ -116,6 +116,12 @@ void Astral::Compiler::GenerateBinary(const BinaryOp* binaryOp)
 		case TokenType::LESS_THAN_EQUAL:
 			type = OpType::LESS_EQUALS;
 			break;
+		case TokenType::OR:
+			type = OpType::OR;
+			break;
+		case TokenType::AND:
+			type = OpType::AND;
+			break;
 		default:
 			throw "Oop";
 	}

@@ -119,10 +119,12 @@ Astral::Expression* Astral::Parser::ParseEquality()
 	Expression* expr = ParseComparison();
 	NULL_RET(expr);
 
-	std::array<TokenType, 2> types
+	std::array<TokenType, 4> types
 	{
 		TokenType::EQUALS,
 		TokenType::NOT_EQUALS,
+		TokenType::AND,
+		TokenType::OR,
 	};
 	while (Match(types.data(), types.size()))
 	{

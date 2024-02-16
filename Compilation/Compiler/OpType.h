@@ -27,6 +27,9 @@ namespace Astral
 		NOT,
 		FACTORIAL,
 
+		OR,
+		AND,
+
 		EQUALITY,
 		NEQUALITY,
 
@@ -89,6 +92,10 @@ namespace Astral
 				return "MOD";
 			case OpType::FACTORIAL:
 				return "FACTORIAL";
+			case OpType::OR:
+				return "OR";
+			case OpType::AND:
+				return "AND";
 			case OpType::EQUALITY:
 				return "EQU";
 			case OpType::NEQUALITY:

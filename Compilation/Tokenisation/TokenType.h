@@ -45,6 +45,9 @@ namespace Astral
 		PLUS_EQUALS,
 		MINUS_EQUALS,
 
+		AND,
+		OR,
+
 		//Keywords
 		_TRUE,
 		_FALSE,
@@ -126,6 +129,12 @@ namespace Astral
 				break;
 			case TokenType::GREATER_THAN_EQUAL:
 				os << "<GREATER THAN EQUALS>";
+				break;
+			case TokenType::OR:
+				os << "<OR>";
+				break;
+			case TokenType::AND:
+				os << "<AND>";
 				break;
 
 			case TokenType::ASSIGNMENT:

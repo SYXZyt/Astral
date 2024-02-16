@@ -134,52 +134,52 @@ Astral::Token Astral::Lexer::GenerateString(char strChar)
 
 			switch (currentChar)
 			{
-				case 'n':
-					data += '\n';
-					break;
-				case 't':
-					data += '\t';
-					break;
-				case 'r':
-					data += '\r';
-					break;
-				case 'b':
-					data += '\b';
-					break;
-				case '\'':
-					data += '\'';
-					break;
-				case '\"':
-					data += '\"';
-					break;
-				case '\\':
-					data += '\\';
-					break;
-				case '0':
-					data += '\0';
-					break;
-				case '\0':
-				{
-					lex.lexeme = data;
-					Token token;
-					token.SetLexeme(lex);
-					Error("Unterminated string", token);
-					failed = true;
+			case 'n':
+				data += '\n';
+				break;
+			case 't':
+				data += '\t';
+				break;
+			case 'r':
+				data += '\r';
+				break;
+			case 'b':
+				data += '\b';
+				break;
+			case '\'':
+				data += '\'';
+				break;
+			case '\"':
+				data += '\"';
+				break;
+			case '\\':
+				data += '\\';
+				break;
+			case '0':
+				data += '\0';
+				break;
+			case '\0':
+			{
+				lex.lexeme = data;
+				Token token;
+				token.SetLexeme(lex);
+				Error("Unterminated string", token);
+				failed = true;
 
-					break;
-				}
-				default:
-				{
-					lex.positionInBuffer = bufferpos - 1;
-					lex.positionInLine = posOnLine - 1;
-					lex.lexeme = "\\" + currentChar;
-					Token token;
-					token.SetLexeme(lex);
-					Error("Unknown escape sequence", token);
-					failed = true;
+				break;
+			}
+			default:
+			{
+				lex.positionInBuffer = bufferpos - 1;
+				lex.positionInLine = posOnLine - 1;
+				lex.lexeme = "\\" + currentChar;
+				Token token;
+				token.SetLexeme(lex);
+				Error("Unknown escape sequence", token);
+				failed = true;
 
-					break;
-				}
+				break;
+			}
 			}
 
 			Advance();
@@ -500,9 +500,34 @@ void Astral::Lexer::Tokenise()
 		}
 		else if (currentChar == '&')
 		{
-			CHAR_TOKEN("&", TokenType::REFERENCE);
-			PUSH_TOKEN();
-			Advance();
+			if (Peek() == '&')
+			{
+				CHAR_TOKEN("&&", TokenType::AND);
+				PUSH_TOKEN();
+				Advance(2);
+			}
+			else
+			{
+				CHAR_TOKEN("&", TokenType::REFERENCE);
+				PUSH_TOKEN();
+				Advance();
+			}
+		}
+		else if (currentChar == '|')
+		{
+			if (Peek() == '|')
+			{
+				CHAR_TOKEN("||", TokenType::OR);
+				PUSH_TOKEN();
+				Advance(2);
+			}
+			else
+			{
+				CHAR_TOKEN(std::string(1, currentChar), TokenType::_EOF);
+				Astral::Error((std::string("Illegal character '") + currentChar + "' found").c_str(), token);
+				Advance();
+				failed = true;
+			}
 		}
 		else if (currentChar == '"')
 			tokens.push_back(GenerateString('"'));
