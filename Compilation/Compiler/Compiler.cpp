@@ -315,6 +315,10 @@ void Astral::Compiler::GenerateStatement(const Statement* statement)
 		GenerateIf(ifStatement);
 	else if (const While* whileStatement = dynamic_cast<const While*>(statement))
 		GenerateWhile(whileStatement);
+	else if (const Break* breakStatement = dynamic_cast<const Break*>(statement))
+		GenerateBreak(breakStatement);
+	else if (const Continue* continueStatement = dynamic_cast<const Continue*>(statement))
+		GenerateContinue(continueStatement);
 	else
 		throw "oop";
 }
@@ -440,6 +444,22 @@ void Astral::Compiler::GenerateWhile(const While* whileStatement)
 	rom.push_back(code);
 
 	GCPass();
+}
+
+void Astral::Compiler::GenerateContinue(const Continue* _continue)
+{
+	Bytecode code;
+	code.lexeme = _continue->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::WHILE_CONTINUE;
+	rom.push_back(code);
+}
+
+void Astral::Compiler::GenerateBreak(const Break* _break)
+{
+	Bytecode code;
+	code.lexeme = _break->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::WHILE_BREAK;
+	rom.push_back(code);
 }
 
 void Astral::Compiler::GenerateBytecode()

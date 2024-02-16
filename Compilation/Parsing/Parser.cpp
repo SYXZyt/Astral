@@ -403,6 +403,24 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 	if (Match(TokenType::WHILE))
 		return ParseWhileStatement();
 
+	if (Match(TokenType::CONTINUE))
+	{
+		Continue* _continue = new Continue(Previous());
+
+		Consume(TokenType::SEMICOLON, "Expected ';'");
+
+		return _continue;
+	}
+
+	if (Match(TokenType::BREAK))
+	{
+		Break* _break = new Break(Previous());
+
+		Consume(TokenType::SEMICOLON, "Expected ';'");
+
+		return _break;
+	}
+
 	if (Match(TokenType::INCREMENT))
 	{
 		if (Peek().GetType() == TokenType::IDEN)

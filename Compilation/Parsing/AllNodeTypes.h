@@ -14,3 +14,5 @@
 #include "Statements/PrintStatement.h"
 #include "Statements/VariableDefinition.h"
 #include "Statements/VariableAssignment.h"
+#include "Statements/Continue.h"
+#include "Statements/Break.h"

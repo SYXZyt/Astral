@@ -67,6 +67,8 @@ namespace Astral
 		void GenerateBlock(const Block* block);
 		void GenerateIf(const IfStatement* ifStatement);
 		void GenerateWhile(const While* whileStatement);
+		void GenerateContinue(const Continue* _continue);
+		void GenerateBreak(const Break* _break);
 
 		inline void GenerateStatementInsideBlock(const Statement* statement)
 		{

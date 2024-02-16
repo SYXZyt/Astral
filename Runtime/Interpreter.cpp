@@ -32,6 +32,16 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 
 			break;
 		}
+		case OpType::WHILE_CONTINUE:
+		{
+			While_JumpToBegin();
+			break;
+		}
+		case OpType::WHILE_BREAK:
+		{
+			While_ExitLoop();
+			break;
+		}
 		case OpType::LIT_NUMBER:
 		{
 			float v = std::stof(instruction.lexeme.lexeme);

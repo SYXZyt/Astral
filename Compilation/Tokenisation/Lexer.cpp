@@ -257,6 +257,10 @@ Astral::Token Astral::Lexer::GenerateIdentifier()
 		token.SetType(TokenType::RETURN);
 	else if (iden == "print")
 		token.SetType(TokenType::PRINT);
+	else if (iden == "continue")
+		token.SetType(TokenType::CONTINUE);
+	else if (iden == "break")
+		token.SetType(TokenType::BREAK);
 
 	return token;
 }

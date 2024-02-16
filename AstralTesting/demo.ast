@@ -12,7 +12,10 @@ while (i <= 100)
 		output += "Buzz";
 
 	if (output == "")
-		continue;
+		output = i;
+
+	if (i == 50)
+		break;
 
 	print output;
 }
