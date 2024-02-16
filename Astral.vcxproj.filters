@@ -135,6 +135,9 @@
     <ClInclude Include="Compilation\Parsing\Statements\Break.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="API.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
@@ -234,6 +237,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Compilation\Parsing\Statements\Break.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="API.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -129,6 +129,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="API.h" />
     <ClInclude Include="Astral.h" />
     <ClInclude Include="Compilation\Compiler\Bytecode.h" />
     <ClInclude Include="Compilation\Compiler\Compiler.h" />
@@ -177,6 +178,7 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="API.cpp" />
     <ClCompile Include="Astral.cpp" />
     <ClCompile Include="Compilation\Compiler\Compiler.cpp" />
     <ClCompile Include="Compilation\Parsing\Expression.cpp" />
