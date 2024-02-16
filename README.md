@@ -6,12 +6,13 @@ The language features a syntax which has mainly been inspired by JavaScript and 
 Astral and its runtime are still currently in development. Many of the features shown here may not be implemented yet.
 
 ## Data Types
-| Type   | Description                                                     |
-|--------|-----------------------------------------------------------------|
-| Number | 32-bit floating point number                                    |
-| String | Sequence of characters                                          |
-| Void   | Void is the lack of any data. Astral equivalent of null or None |
-| Object | Collection of types bonded together in a struct                 |
+| Type     | Description                                                     |
+|----------|-----------------------------------------------------------------|
+| Number   | 32-bit floating point number                                    |
+| String   | Sequence of characters                                          |
+| Void     | Void is the lack of any data. Astral equivalent of null or None |
+| Object   | Collection of types bonded together in a struct                 |
+| Function | Object which can be called as a function                        |
 
 ### Planned Future Types
 | Type  | Description                                                                             |
