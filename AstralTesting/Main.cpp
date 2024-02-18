@@ -7,6 +7,9 @@
 
 int main(int, char**)
 {
+	//Astral::SetGCLimit_Bytes(1024 * 1024);
+	Astral::SetGCLimit_Bytes(0);
+
 	Astral::API::rom program;
 	if (!Astral::API::CompileFile("demo.ast", program, false, true, true))
 		return 1;

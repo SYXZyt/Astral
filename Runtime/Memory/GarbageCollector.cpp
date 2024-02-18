@@ -54,8 +54,9 @@ void Astral::GarbageCollector::Cleanup()
 #endif
 #endif
 
-	//Estimate how many kbs are in use. Since different types have a differnt size, this is only a minimum, but it will be good enough
-	unsigned int size = (unsigned int)(danglingMemory.size() * sizeof(Type::atype_t)) / 1024;
+	//Since different types have a different size, this is only a minimum, but it will be good enough
+	unsigned int size = (unsigned int)(danglingMemory.size() * sizeof(Type::atype_t));
+
 	if (size >= CullLimit) //If we have too much memory, all of the data we can
 	{
 		for (int i = (int)danglingMemory.size() - 1; i >= 0; i--)

@@ -1,4 +1,7 @@
-func MyFunc()
+let i = 0;
+
+while (true)
 {
-	return;
+	++i;
+	//print i;
 }

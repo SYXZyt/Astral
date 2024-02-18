@@ -41,6 +41,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 				return;
 			}
 
+			--pc;
 			While_JumpToBegin();
 			break;
 		}
@@ -76,6 +77,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			Astral::Type::atype_t* rhs = Pop();
 			Astral::Type::atype_t* lhs = Pop();
 			result_t res = Maths::Addition(lhs, rhs);
+			GarbageCollector::Instance().RegisterDanglingPointer(res.result);
 
 			if (res.type == result_t::ResultType::R_OK)
 				Push(res.result);
@@ -97,6 +99,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			Astral::Type::atype_t* rhs = Pop();
 			Astral::Type::atype_t* lhs = Pop();
 			result_t res = Maths::Subtraction(lhs, rhs);
+			GarbageCollector::Instance().RegisterDanglingPointer(res.result);
 
 			if (res.type == result_t::ResultType::R_OK)
 				Push(res.result);
@@ -112,6 +115,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			Astral::Type::atype_t* rhs = Pop();
 			Astral::Type::atype_t* lhs = Pop();
 			result_t res = Maths::Multiplication(lhs, rhs);
+			GarbageCollector::Instance().RegisterDanglingPointer(res.result);
 
 			if (res.type == result_t::ResultType::R_OK)
 				Push(res.result);
@@ -127,6 +131,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			Astral::Type::atype_t* rhs = Pop();
 			Astral::Type::atype_t* lhs = Pop();
 			result_t res = Maths::Divide(lhs, rhs);
+			GarbageCollector::Instance().RegisterDanglingPointer(res.result);
 
 			if (res.type == result_t::ResultType::R_OK)
 				Push(res.result);
@@ -147,6 +152,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			Astral::Type::atype_t* rhs = Pop();
 			Astral::Type::atype_t* lhs = Pop();
 			result_t res = Maths::Power(lhs, rhs);
+			GarbageCollector::Instance().RegisterDanglingPointer(res.result);
 
 			if (res.type == result_t::ResultType::R_OK)
 				Push(res.result);
@@ -162,6 +168,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			Astral::Type::atype_t* rhs = Pop();
 			Astral::Type::atype_t* lhs = Pop();
 			result_t res = Maths::Modulo(lhs, rhs);
+			GarbageCollector::Instance().RegisterDanglingPointer(res.result);
 
 			if (res.type == result_t::ResultType::R_OK)
 				Push(res.result);
@@ -195,6 +202,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		{
 			Astral::Type::atype_t* val = Pop();
 			result_t res = Maths::Factorial(val);
+			GarbageCollector::Instance().RegisterDanglingPointer(res.result);
 
 			if (res.type == result_t::ResultType::R_OK)
 				Push(res.result);
@@ -210,6 +218,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			Astral::Type::atype_t* lhs = Pop();
 			Astral::Type::atype_t* rhs = Pop();
 			result_t res = Boolean::And(lhs, rhs);
+			GarbageCollector::Instance().RegisterDanglingPointer(res.result);
 
 			if (res.type == result_t::ResultType::R_OK)
 				Push(res.result);
@@ -225,6 +234,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			Astral::Type::atype_t* lhs = Pop();
 			Astral::Type::atype_t* rhs = Pop();
 			result_t res = Boolean::Or(lhs, rhs);
+			GarbageCollector::Instance().RegisterDanglingPointer(res.result);
 
 			if (res.type == result_t::ResultType::R_OK)
 				Push(res.result);
@@ -240,6 +250,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			Astral::Type::atype_t* rhs = Pop();
 			Astral::Type::atype_t* lhs = Pop();
 			result_t res = Boolean::Equality(lhs, rhs);
+			GarbageCollector::Instance().RegisterDanglingPointer(res.result);
 
 			if (res.type == result_t::ResultType::R_OK)
 				Push(res.result);
@@ -255,6 +266,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			Astral::Type::atype_t* rhs = Pop();
 			Astral::Type::atype_t* lhs = Pop();
 			result_t res = Boolean::Nequality(lhs, rhs);
+			GarbageCollector::Instance().RegisterDanglingPointer(res.result);
 
 			if (res.type == result_t::ResultType::R_OK)
 				Push(res.result);
@@ -270,6 +282,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			Astral::Type::atype_t* rhs = Pop();
 			Astral::Type::atype_t* lhs = Pop();
 			result_t res = Boolean::Greater(lhs, rhs);
+			GarbageCollector::Instance().RegisterDanglingPointer(res.result);
 
 			if (res.type == result_t::ResultType::R_OK)
 				Push(res.result);
@@ -285,6 +298,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			Astral::Type::atype_t* rhs = Pop();
 			Astral::Type::atype_t* lhs = Pop();
 			result_t res = Boolean::GreaterEquals(lhs, rhs);
+			GarbageCollector::Instance().RegisterDanglingPointer(res.result);
 
 			if (res.type == result_t::ResultType::R_OK)
 				Push(res.result);
@@ -300,6 +314,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			Astral::Type::atype_t* rhs = Pop();
 			Astral::Type::atype_t* lhs = Pop();
 			result_t res = Boolean::Less(lhs, rhs);
+			GarbageCollector::Instance().RegisterDanglingPointer(res.result);
 
 			if (res.type == result_t::ResultType::R_OK)
 				Push(res.result);
@@ -315,6 +330,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			Astral::Type::atype_t* rhs = Pop();
 			Astral::Type::atype_t* lhs = Pop();
 			result_t res = Boolean::LessEquals(lhs, rhs);
+			GarbageCollector::Instance().RegisterDanglingPointer(res.result);
 
 			if (res.type == result_t::ResultType::R_OK)
 				Push(res.result);
@@ -329,6 +345,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		{
 			Astral::Type::atype_t* val = Pop();
 			result_t res = Boolean::Not(val);
+			GarbageCollector::Instance().RegisterDanglingPointer(res.result);
 
 			if (res.type == result_t::ResultType::R_OK)
 				Push(res.result);
@@ -369,8 +386,9 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 				break;
 			}
 
-			Push(variables.GetValue(name.c_str())->Copy());
-
+			Type::atype_t* copy = variables.GetValue(name.c_str())->Copy();
+			GarbageCollector::Instance().RegisterDanglingPointer(copy);
+			Push(copy);
 			break;
 		}
 		case OpType::ASSIGN_VOID:
@@ -435,7 +453,9 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 				break;
 			}
 
-			Push(new Type::ref_t(variables.GetVariable(name.c_str())->Value()));
+			Type::ref_t* varRef = new Type::ref_t(variables.GetVariable(name.c_str())->Value());
+			GarbageCollector::Instance().RegisterDanglingPointer(varRef);
+			Push(varRef);
 			break;
 		}
 		case OpType::SCOPE_BEG:
@@ -493,9 +513,17 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 
 void Astral::Interpreter::Execute()
 {
+	time_t elapsed = time(NULL);
+
 	while (pc < rom.size())
 	{
 		ExecuteInstruction(rom[pc++]);
+
+		if (elapsed != time(NULL))
+		{
+			elapsed = time(NULL);
+			GarbageCollector::Instance().Cleanup();
+		}
 
 		if (failed)
 			break;

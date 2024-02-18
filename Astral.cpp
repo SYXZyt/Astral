@@ -5,12 +5,12 @@ bool Astral::UseCLIOutput = true;
 
 void Astral::SetGCLimit_Bytes(unsigned int byteThreshold)
 {
-	SetGCLimit_Kilobytes(byteThreshold / 1024);
+	Astral::GarbageCollector::CullLimit = byteThreshold;
 }
 
 void Astral::SetGCLimit_Kilobytes(unsigned int kbThreshold)
 {
-	Astral::GarbageCollector::CullLimit = kbThreshold;
+	SetGCLimit_Bytes(kbThreshold * 1024);
 }
 
 void Astral::SetGCLimit_Megabytes(unsigned int mbThreshold)
