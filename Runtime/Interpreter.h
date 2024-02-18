@@ -48,12 +48,23 @@ namespace Astral
 
 		inline void While_JumpToBegin()
 		{
+			int nest = 0;
+
 			while (true)
 			{
 				Bytecode& instruction = rom[pc];
 
 				if (instruction.op == (uint8_t)OpType::WHILE_BEG)
+				{
+					if (nest == 0)
+						break;
+
+					--nest;
 					break;
+				}
+
+				if (instruction.op == (uint8_t)OpType::WHILE_END)
+					++nest;
 
 				if (instruction.op == (uint8_t)OpType::SCOPE_BEG)
 					variables.RemoveScope();
@@ -90,6 +101,7 @@ namespace Astral
 		inline bool IsInWhileLoop()
 		{
 			int instr = pc-1;
+			int nest = 0;
 
 			while (true)
 			{
@@ -98,7 +110,15 @@ namespace Astral
 				//In the future, we need to treat the start of a function as a "sub-program"
 				//where the start of the function will return false
 				if (rom[instr].op == (uint8_t)OpType::WHILE_BEG)
-					return true;
+				{
+					if (nest == 0)
+						return true;
+
+					--nest;
+				}
+
+				if (rom[instr].op == (uint8_t)OpType::WHILE_END)
+					++nest;
 
 				if (instr == 0)
 					return false;

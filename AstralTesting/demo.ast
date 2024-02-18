@@ -1,7 +1,3 @@
-let i = 0;
+while (false){}
 
-while (true)
-{
-	++i;
-	//print i;
-}
+break;
