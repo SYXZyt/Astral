@@ -95,7 +95,7 @@ bool Astral::Parser::Match(TokenType type)
 	return Match(&type, 1); //Please work and don't cause problems
 }
 
-bool Astral::Parser::Match(TokenType* types, unsigned int count)
+bool Astral::Parser::Match(TokenType* types, size_t count)
 {
 	for (unsigned int i = 0; i < count; ++i)
 	{
@@ -358,6 +358,17 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 			return postfix;
 		}
 
+		//If the next token is a ( then we have a function call
+		else if (Peek().GetType() == TokenType::L_BRA)
+		{
+			Token funcName = Previous();
+			Advance();
+			CallParameters* params = (CallParameters*)ParseCallParams();
+			NULL_RET(params);
+
+			return new FunctionCall(funcName, params);
+		}
+
 		return value;
 	}
 
@@ -401,6 +412,47 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 	return nullptr;
 }
 
+Astral::Expression* Astral::Parser::ParseCallParams()
+{
+	Token tok = Previous();
+
+	std::vector<Expression*> parameters;
+
+	if (tok.GetType() != TokenType::L_BRA)
+	{
+		Error("", tok);
+		return nullptr;
+	}
+
+	//Do not parse params if the list is empty
+	if (Peek().GetType() != TokenType::R_BRA)
+	{
+		while (true)
+		{
+			Expression* expr = ParseExpression();
+			NULL_RET(expr);
+			parameters.push_back(expr);
+
+			//If the next token is a ) then we don't want to read the comma
+			if (Previous().GetType() == TokenType::R_BRA)
+				break;
+
+			if (Consume(TokenType::COMMA, "Expected ','").GetType() == TokenType::_EOF)
+				return nullptr;
+
+			if (Previous().GetType() == TokenType::_EOF)
+			{
+				Error("End of file unexpected", Previous());
+				return nullptr;
+			}
+		}
+	}
+
+	Consume(TokenType::R_BRA, "Expected ')'");
+
+	return new CallParameters(tok, parameters);
+}
+
 Astral::Statement* Astral::Parser::ParseStatement()
 {
 	return ParseDeclarations();
@@ -408,6 +460,12 @@ Astral::Statement* Astral::Parser::ParseStatement()
 
 Astral::Statement* Astral::Parser::ParseDeclarations()
 {
+	if (Match(TokenType::FUNC))
+		return ParseFunctionDefinition();
+
+	if (Match(TokenType::RETURN))
+		return ParseReturn();
+
 	if (Match(TokenType::PRINT))
 		return ParsePrintStatement();
 
@@ -415,7 +473,22 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 		return ParseLetStatement();
 
 	if (Match(TokenType::IDEN))
-		return ParseAssignment();
+	{
+		if (Peek().GetType() == TokenType::ASSIGNMENT)
+			return ParseAssignment();
+		else if (Peek().GetType() == TokenType::L_BRA)
+		{
+			Token func = Previous();
+			Advance();
+
+			CallParameters* params = (CallParameters*)ParseCallParams();
+			NULL_RET(params);
+
+			Consume(TokenType::SEMICOLON, "Expected ';'");
+
+			return new ExpressionStatement(new FunctionCall(func, params));
+		}
+	}
 
 	if (Match(TokenType::L_CURLY))
 		return ParseBlock();
@@ -693,6 +766,101 @@ Astral::Statement* Astral::Parser::ParseWhileStatement()
 	NULL_RET(body);
 
 	return new While(_while, loopCondition, body);
+}
+
+Astral::Statement* Astral::Parser::ParseFunctionDefinition()
+{
+	Token tok = Previous();
+	Token name = Consume(TokenType::IDEN, "Expected function name");
+	
+	//Check if the consume failed
+	if (name.GetType() == TokenType::_EOF)
+		return nullptr;
+
+	Advance();
+	ParamList* parameters = (ParamList*)ParseParamList();
+	NULL_RET(parameters);
+
+	if (Previous().GetType() != TokenType::L_CURLY)
+	{
+		Error("Function body must be a block", Previous());
+		return nullptr;
+	}
+
+	Block* body = (Block*)ParseBlock();
+	NULL_RET(body);
+
+	return new Function(tok, name, parameters, body);
+}
+
+Astral::Statement* Astral::Parser::ParseParamList()
+{
+	Token tok = Previous();
+
+	std::vector<Lexeme> parameters;
+
+	if (tok.GetType() != TokenType::L_BRA)
+	{
+		Error("", tok);
+		return nullptr;
+	}
+
+	//Do not parse params if the list is empty
+	if (Peek().GetType() != TokenType::R_BRA)
+	{
+		while (true)
+		{
+			Token varName = Previous();
+
+			//If we did not have an identifier then we have an issue
+			if (varName.GetType() != TokenType::IDEN)
+			{
+				Error("Expected parameter name", Previous());
+				return nullptr;
+			}
+
+			parameters.push_back(varName.GetLexeme());
+
+			//If the next token is a ) then we don't want to read the comma
+			if (Previous().GetType() == TokenType::R_BRA)
+				break;
+
+			if (Consume(TokenType::COMMA, "Expected ','").GetType() == TokenType::_EOF)
+				return nullptr;
+
+			if (Previous().GetType() == TokenType::_EOF)
+			{
+				Error("End of file unexpected", Previous());
+				return nullptr;
+			}
+		}
+	}
+
+	Consume(TokenType::R_BRA, "Expected ')'");
+	Advance();
+
+	return new ParamList(tok, parameters);
+}
+
+Astral::Statement* Astral::Parser::ParseReturn()
+{
+	Token tok = Previous();
+
+	//If the next token is not a semicolon then we need to get the return value
+	Expression* returnValue = nullptr;
+	if (Advance().GetType() != TokenType::SEMICOLON)
+	{
+		returnValue = ParseExpression();
+		NULL_RET(returnValue);
+	}
+
+	if (Previous().GetType() != TokenType::SEMICOLON)
+	{
+		Error("Expected ';'", Previous());
+		return nullptr;
+	}
+
+	return new Return(tok, returnValue);
 }
 
 void Astral::Parser::Parse()

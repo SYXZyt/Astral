@@ -1,3 +1,6 @@
-while (false){}
+func MyFunction()
+{
+	return;
+}
 
-break;
+MyFunction();

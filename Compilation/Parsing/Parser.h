@@ -36,7 +36,7 @@ namespace Astral
 
 		bool Check(TokenType type);
 		bool Match(TokenType type);
-		bool Match(TokenType* types, unsigned int count);
+		bool Match(TokenType* types, size_t count);
 
 		Expression* ParseExpression();
 		Expression* ParseConditional();
@@ -48,6 +48,7 @@ namespace Astral
 		Expression* ParseUnary();
 		Expression* ParsePrefix();
 		Expression* ParseLiteral();
+		Expression* ParseCallParams();
 
 		Statement* ParseStatement();
 		Statement* ParseDeclarations();
@@ -59,6 +60,7 @@ namespace Astral
 		Statement* ParseWhileStatement();
 		Statement* ParseFunctionDefinition();
 		Statement* ParseParamList();
+		Statement* ParseReturn();
 			
 	public:
 		inline bool HasFailed() const { return failed; }

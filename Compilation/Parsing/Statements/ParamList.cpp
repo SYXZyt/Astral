@@ -3,15 +3,9 @@
 void Astral::ParamList::Dump(int indent)
 {
 	std::cout << std::string(indent * 2, ' ') << "{ Param List }\n";
-	for (Statement* node : declarations)
+	for (Lexeme& name : declarations)
 	{
-		if (node)
-			node->Dump(indent + 1);
+		std::cout << std::string(indent * 2, ' ') << "{ ";
+		std::cout << name.lexeme << " }\n";
 	}
-}
-
-Astral::ParamList::~ParamList()
-{
-	for (Statement* node : declarations)
-		delete node;
 }

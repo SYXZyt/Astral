@@ -141,6 +141,21 @@
     <ClInclude Include="Compilation\Parsing\Statements\ParamList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Compilation\Parsing\Statements\Function.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilation\Parsing\Statements\Return.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilation\Parsing\Expressions\CallParameters.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilation\Parsing\Expressions\FunctionCall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilation\Parsing\Statements\ExpressionStatement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
@@ -246,6 +261,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Compilation\Parsing\Statements\ParamList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compilation\Parsing\Statements\Function.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compilation\Parsing\Statements\Return.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compilation\Parsing\Expressions\CallParameters.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compilation\Parsing\Expressions\FunctionCall.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compilation\Parsing\Statements\ExpressionStatement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

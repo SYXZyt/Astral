@@ -137,7 +137,9 @@
     <ClInclude Include="Compilation\Parsing\AllNodeTypes.h" />
     <ClInclude Include="Compilation\Parsing\Expression.h" />
     <ClInclude Include="Compilation\Parsing\Expressions\BinaryOp.h" />
+    <ClInclude Include="Compilation\Parsing\Expressions\CallParameters.h" />
     <ClInclude Include="Compilation\Parsing\Expressions\DecrementExpression.h" />
+    <ClInclude Include="Compilation\Parsing\Expressions\FunctionCall.h" />
     <ClInclude Include="Compilation\Parsing\Expressions\Grouping.h" />
     <ClInclude Include="Compilation\Parsing\Expressions\IncrementExpression.h" />
     <ClInclude Include="Compilation\Parsing\Expressions\Literal.h" />
@@ -149,10 +151,13 @@
     <ClInclude Include="Compilation\Parsing\Expressions\Factorial.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Break.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Continue.h" />
+    <ClInclude Include="Compilation\Parsing\Statements\ExpressionStatement.h" />
+    <ClInclude Include="Compilation\Parsing\Statements\Function.h" />
     <ClInclude Include="Compilation\Parsing\Statements\IfStatement.h" />
     <ClInclude Include="Compilation\Parsing\Statements\ParamList.h" />
     <ClInclude Include="Compilation\Parsing\Statements\PrintStatement.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Program.h" />
+    <ClInclude Include="Compilation\Parsing\Statements\Return.h" />
     <ClInclude Include="Compilation\Parsing\Statements\VariableAssignment.h" />
     <ClInclude Include="Compilation\Parsing\Statements\VariableDefinition.h" />
     <ClInclude Include="Compilation\Tokenisation\Lexeme.h" />
@@ -184,7 +189,9 @@
     <ClCompile Include="Compilation\Compiler\Compiler.cpp" />
     <ClCompile Include="Compilation\Parsing\Expression.cpp" />
     <ClCompile Include="Compilation\Parsing\Expressions\BinaryOp.cpp" />
+    <ClCompile Include="Compilation\Parsing\Expressions\CallParameters.cpp" />
     <ClCompile Include="Compilation\Parsing\Expressions\DecrementExpression.cpp" />
+    <ClCompile Include="Compilation\Parsing\Expressions\FunctionCall.cpp" />
     <ClCompile Include="Compilation\Parsing\Expressions\Grouping.cpp" />
     <ClCompile Include="Compilation\Parsing\Expressions\IncrementExpression.cpp" />
     <ClCompile Include="Compilation\Parsing\Expressions\Literal.cpp" />
@@ -196,10 +203,13 @@
     <ClCompile Include="Compilation\Parsing\Expressions\Factorial.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Break.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Continue.cpp" />
+    <ClCompile Include="Compilation\Parsing\Statements\ExpressionStatement.cpp" />
+    <ClCompile Include="Compilation\Parsing\Statements\Function.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\IfStatement.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\ParamList.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\PrintStatement.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Program.cpp" />
+    <ClCompile Include="Compilation\Parsing\Statements\Return.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\VariableAssignment.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\VariableDefinition.cpp" />
     <ClCompile Include="Compilation\Tokenisation\Lexer.cpp" />
