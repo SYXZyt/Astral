@@ -1,6 +1,4 @@
-func MyFunction()
+func X()
 {
-	return;
+	break;
 }
-
-MyFunction();

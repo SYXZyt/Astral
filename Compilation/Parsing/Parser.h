@@ -2,7 +2,7 @@
 #pragma warning(push)
 #pragma warning(disable : 4251)
 
-#include <array>
+#include <stack>
 #include <array>
 #include <string>
 #include <vector>
@@ -23,6 +23,8 @@ namespace Astral
 		int pointer;
 
 		bool failed;
+
+		std::stack<int> loopNest;
 
 		void Error(const char* message, const Token& token);
 		void Sync();

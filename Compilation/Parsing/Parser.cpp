@@ -502,6 +502,11 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 	if (Match(TokenType::CONTINUE))
 	{
 		Continue* _continue = new Continue(Previous());
+		if (loopNest.size() == 0 || loopNest.top() == 0)
+		{
+			Error("Continue can only be used inside of a loop", _continue->GetToken());
+			return nullptr;
+		}
 
 		Consume(TokenType::SEMICOLON, "Expected ';'");
 
@@ -511,6 +516,12 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 	if (Match(TokenType::BREAK))
 	{
 		Break* _break = new Break(Previous());
+
+		if (loopNest.size() == 0 || loopNest.top() == 0)
+		{
+			Error("Break can only be used inside of a loop", _break->GetToken());
+			return nullptr;
+		}
 
 		Consume(TokenType::SEMICOLON, "Expected ';'");
 
@@ -752,6 +763,8 @@ Astral::Statement* Astral::Parser::ParseWhileStatement()
 {
 	Token _while = Previous();
 
+	++loopNest.top();
+
 	//Ensure that we have the (
 	if (Peek().GetType() != TokenType::L_BRA)
 	{
@@ -765,11 +778,15 @@ Astral::Statement* Astral::Parser::ParseWhileStatement()
 	Statement* body = ParseStatement();
 	NULL_RET(body);
 
+	--loopNest.top();
+
 	return new While(_while, loopCondition, body);
 }
 
 Astral::Statement* Astral::Parser::ParseFunctionDefinition()
 {
+	loopNest.push(0);
+
 	Token tok = Previous();
 	Token name = Consume(TokenType::IDEN, "Expected function name");
 	
@@ -789,6 +806,8 @@ Astral::Statement* Astral::Parser::ParseFunctionDefinition()
 
 	Block* body = (Block*)ParseBlock();
 	NULL_RET(body);
+
+	loopNest.pop();
 
 	return new Function(tok, name, parameters, body);
 }
@@ -865,6 +884,8 @@ Astral::Statement* Astral::Parser::ParseReturn()
 
 void Astral::Parser::Parse()
 {
+	loopNest.push(0);
+
 	while (!IsEof())
 	{
 		Statement* stmt = ParseStatement();
@@ -879,4 +900,5 @@ void Astral::Parser::Parse()
 	program->SetStatements(tree);
 	tree.clear();
 	tree.push_back(program);
+
 }
