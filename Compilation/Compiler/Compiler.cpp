@@ -148,6 +148,8 @@ void Astral::Compiler::GenerateExpression(const Expression* expression)
 		GenerateIncrementExpression(increment);
 	else if (const DecrementExpression* decrement = dynamic_cast<const DecrementExpression*>(expression))
 		GenerateDecrementExpression(decrement);
+	else if (const FunctionCall* call = dynamic_cast<const FunctionCall*>(expression))
+		GenerateFunctionCall(call);
 	else
 	{
 		throw "oop";
@@ -305,6 +307,29 @@ void Astral::Compiler::GenerateDecrementExpression(const DecrementExpression* de
 	}
 }
 
+void Astral::Compiler::GenerateCallParameters(const CallParameters* params)
+{
+	for (Expression* expr : params->GetParameters())
+		GenerateExpression(expr);
+}
+
+void Astral::Compiler::GenerateFunctionCall(const FunctionCall* func)
+{
+	GenerateCallParameters(func->GetParameters());
+	//Add the param count to the stack
+	Bytecode code;
+	Token t = func->GetToken();
+	Lexeme lexeme = t.GetLexeme();
+	lexeme.lexeme = std::to_string(func->GetParameters()->GetParameters().size());
+	code.lexeme = lexeme;
+	code.op = (uint8_t)OpType::LIT_NUMBER;
+	rom.push_back(code);
+
+	code.lexeme = t.GetLexeme();
+	code.op = (uint8_t)OpType::CALL;
+	rom.push_back(code);
+}
+
 void Astral::Compiler::GenerateStatement(const Statement* statement)
 {
 	if (const Program* program = dynamic_cast<const Program*>(statement))
@@ -327,6 +352,10 @@ void Astral::Compiler::GenerateStatement(const Statement* statement)
 		GenerateContinue(continueStatement);
 	else if (const Function* function = dynamic_cast<const Function*>(statement))
 		GenerateFunctionDefinition(function);
+	else if (const Return* ret = dynamic_cast<const Return*>(statement))
+		GenerateReturn(ret);
+	else if (const ExpressionStatement* expr = dynamic_cast<const ExpressionStatement*>(statement))
+		GenerateExpressionStatement(expr);
 	else
 		throw "oop";
 }
@@ -473,7 +502,7 @@ void Astral::Compiler::GenerateBreak(const Break* _break)
 void Astral::Compiler::GenerateFunctionDefinition(const Function* func)
 {
 	const char* funcName = func->GetName().GetLexeme().lexeme.c_str();
-	size_t address = rom.GetRom().size();
+	size_t address = rom.GetRom().size() + 1; //Skip the func_beg
 	int paramCount = func->GetParamList()->GetDeclarations().size();
 	Type::func_t* funcData = new Type::func_t(address, paramCount);
 	Rom::FunctionDefinition def{ funcData, funcName };
@@ -513,6 +542,28 @@ void Astral::Compiler::GenerateFunctionParamList(const ParamList* params)
 		code.op = (uint8_t)OpType::ASSIGN;
 		rom.push_back(code);
 	} 
+}
+
+void Astral::Compiler::GenerateReturn(const Return* ret)
+{
+	//If we do not have a return value, we need to return void
+	Bytecode code;
+	code.lexeme = ret->GetToken().GetLexeme();
+	if (ret->GetReturnValue())
+		GenerateExpression(ret->GetReturnValue());
+	else
+	{
+		code.op = (uint8_t)OpType::LIT_VOID;
+		rom.push_back(code);
+	}
+
+	code.op = (uint8_t)OpType::FUNC_RET;
+	rom.push_back(code);
+}
+
+void Astral::Compiler::GenerateExpressionStatement(const ExpressionStatement* expr)
+{
+	GenerateExpression(expr->GetExpression());
 }
 
 void Astral::Compiler::GenerateBytecode()

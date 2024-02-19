@@ -57,6 +57,13 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			While_ExitLoop();
 			break;
 		}
+		case OpType::LIT_VOID:
+		{
+			Type::void_t* null = new Type::void_t();
+			GarbageCollector::Instance().RegisterDanglingPointer(null);
+			Push(null);
+			break;
+		}
 		case OpType::LIT_NUMBER:
 		{
 			float v = std::stof(instruction.lexeme.lexeme);
@@ -506,8 +513,63 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 		case OpType::SKIP_BLOCK:
 			SkipBlock();
 			break;
+		case OpType::FUNC_BEG:
+			SkipFunction();
+			break;
+		case OpType::FUNC_END:
+			//Take the top stack value and add it to the return value
+			SetReturnValue(Pop());
+			Return();
+			break;
+		case OpType::FUNC_RET:
+			//Take the top stack value and add it to the return value
+			SetReturnValue(Pop());
+			Return();
+			break;
+		case OpType::CALL:
+		{
+			std::string funcName = instruction.lexeme.lexeme;
+
+			if (!variables.DoesVariableExist(funcName.c_str()))
+			{
+				Error("Function does not exist", instruction.lexeme);
+				failed = true;
+				break;
+			}
+
+			Type::atype_t* var = variables.GetValue(funcName.c_str());
+			Type::func_t* func = dynamic_cast<Type::func_t*>(var);
+			if (!func)
+			{
+				Error("Variable was not a callable type", instruction.lexeme);
+				failed = true;
+				break;
+			}
+
+			int providedCount = ((Type::number_t*)Pop())->Value();
+			if (providedCount != func->ParamCount())
+			{
+				Error("Incorrect number of parameters", instruction.lexeme);
+				failed = true;
+				break;
+			}
+
+			callstack.push(pc);
+			pc = func->Address();
+
+			break;
+		}
 		default:
 			throw "oop";
+	}
+}
+
+void Astral::Interpreter::PreloadFunctions()
+{
+	for (auto& func : _rom.GetFunction())
+	{
+		variables.AddVariable(func.name);
+		variables.UpdateValue(func.name, func.func);
 	}
 }
 

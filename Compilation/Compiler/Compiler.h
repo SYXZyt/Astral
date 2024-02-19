@@ -58,6 +58,8 @@ namespace Astral
 		void GenerateFactorial(const Factorial* factorial);
 		void GenerateIncrementExpression(const IncrementExpression* increment);
 		void GenerateDecrementExpression(const DecrementExpression* decrement);
+		void GenerateCallParameters(const CallParameters* params);
+		void GenerateFunctionCall(const FunctionCall* func);
 
 		void GenerateStatement(const Statement* statement);
 		void GenerateProgram(const Program* program);
@@ -71,7 +73,8 @@ namespace Astral
 		void GenerateBreak(const Break* _break);
 		void GenerateFunctionDefinition(const Function* func);
 		void GenerateFunctionParamList(const ParamList* params);
-		//void GenerateReturn(const)
+		void GenerateReturn(const Return* ret);
+		void GenerateExpressionStatement(const ExpressionStatement* expr);
 
 		inline void GenerateStatementInsideBlock(const Statement* statement)
 		{

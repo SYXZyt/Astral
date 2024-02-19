@@ -867,17 +867,13 @@ Astral::Statement* Astral::Parser::ParseReturn()
 
 	//If the next token is not a semicolon then we need to get the return value
 	Expression* returnValue = nullptr;
-	if (Advance().GetType() != TokenType::SEMICOLON)
+	if (Previous().GetType() != TokenType::SEMICOLON)
 	{
 		returnValue = ParseExpression();
 		NULL_RET(returnValue);
 	}
 
-	if (Previous().GetType() != TokenType::SEMICOLON)
-	{
-		Error("Expected ';'", Previous());
-		return nullptr;
-	}
+	Consume(TokenType::SEMICOLON, "Expected ';'");
 
 	return new Return(tok, returnValue);
 }

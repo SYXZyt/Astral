@@ -54,7 +54,9 @@ namespace Astral
 		SCOPE_BEG,
 		SCOPE_END,
 
+		CALL,
 		FUNC_BEG,
+		FUNC_RET,
 		FUNC_END,
 
 		WHILE_BEG,
@@ -122,10 +124,14 @@ namespace Astral
 				return "SCOPE_BEG";
 			case OpType::SCOPE_END:
 				return "SCOPE_END";
+			case OpType::CALL:
+				return "CALL";
 			case OpType::FUNC_BEG:
 				return "FUNC_BEG";
 			case OpType::FUNC_END:
 				return "FUNC_END";
+			case OpType::FUNC_RET:
+				return "FUNC_RET";
 			case OpType::IF:
 				return "IF";
 			case OpType::IF_ELSE:

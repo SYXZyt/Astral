@@ -1,7 +1,6 @@
 func X()
 {
-	print "Hello =D";
-	//return;
+	return "Hello";
 }
 
-//X();
+print X();

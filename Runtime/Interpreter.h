@@ -47,6 +47,14 @@ namespace Astral
 			}
 		}
 
+		inline void SkipFunction()
+		{
+			while (rom[pc].op != (uint8_t)OpType::FUNC_END)
+				++pc;
+
+			++pc; //Skip the func end
+		}
+
 		inline void While_JumpToBegin()
 		{
 			int nest = 0;
@@ -146,6 +154,34 @@ namespace Astral
 
 		std::stack<Type::atype_t*> stack;
 
+		std::stack<int> callstack;
+
+		Type::atype_t* returnValue = nullptr;
+
+		inline Type::atype_t* GetReturnValue()
+		{
+			returnValue->isOnStack = false;
+			Type::atype_t* v = returnValue;
+			returnValue = nullptr;
+			return v;
+		}
+
+		inline void SetReturnValue(Type::atype_t* value)
+		{
+			value->isOnStack = true; //Protect it from gc
+			if (returnValue)
+				GetReturnValue();
+
+			returnValue = value;
+		}
+
+		inline void Return()
+		{
+			int i = callstack.top();
+			callstack.pop();
+			pc = i;
+		}
+
 		std::vector<Bytecode> rom;
 		Rom _rom;
 		int pc;
@@ -153,6 +189,8 @@ namespace Astral
 		bool failed;
 
 		void ExecuteInstruction(Bytecode& instruction);
+
+		void PreloadFunctions();
 
 	public:
 		void Execute();
@@ -162,6 +200,7 @@ namespace Astral
 		Interpreter(const Rom& rom) : rom(rom.GetRom()), _rom(rom), pc(0), failed(false)
 		{
 			instance = this;
+			PreloadFunctions();
 		}
 
 		~Interpreter();
