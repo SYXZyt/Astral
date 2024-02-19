@@ -134,6 +134,7 @@
     <ClInclude Include="Compilation\Compiler\Bytecode.h" />
     <ClInclude Include="Compilation\Compiler\Compiler.h" />
     <ClInclude Include="Compilation\Compiler\OpType.h" />
+    <ClInclude Include="Compilation\Compiler\Rom.h" />
     <ClInclude Include="Compilation\Parsing\AllNodeTypes.h" />
     <ClInclude Include="Compilation\Parsing\Expression.h" />
     <ClInclude Include="Compilation\Parsing\Expressions\BinaryOp.h" />

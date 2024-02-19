@@ -6,6 +6,7 @@
 #include <sstream>
 #include <iomanip>
 
+#include "OpType.h"
 #include "../../Astral.h"
 #include "../Tokenisation/Lexeme.h"
 

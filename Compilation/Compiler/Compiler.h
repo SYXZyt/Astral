@@ -7,7 +7,7 @@
 #include <sstream>
 
 #include "OpType.h"
-#include "Bytecode.h"
+#include "Rom.h"
 #include "../../ErrorManager.h"
 #include "../Parsing/ParseTree.h"
 
@@ -18,7 +18,7 @@ namespace Astral
 	class ASTRAL Compiler final
 	{
 	private:
-		std::vector<Bytecode> rom;
+		Rom rom;
 		std::vector<Bytecode> buffer;
 
 		std::vector<ParseTree*> tree;
@@ -87,7 +87,7 @@ namespace Astral
 	public:
 		inline bool Failed() const { return failed; }
 		
-		const std::vector<Bytecode>& GetRom() const { return rom; }
+		const Rom& GetRom() const { return rom; }
 
 		void GenerateBytecode();
 		Compiler(const std::vector<ParseTree*>& tree) : tree(tree) {}

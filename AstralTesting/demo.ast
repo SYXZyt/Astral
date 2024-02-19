@@ -1,4 +1,6 @@
 func X()
 {
-	break;
+	return;
 }
+
+X();

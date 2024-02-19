@@ -102,6 +102,21 @@ namespace Astral::Type
 
 		ref_t(MemoryBlock* block) : block(block) {}
 	};
+
+	class ASTRAL func_t final : public atype_t
+	{
+	private:
+		int paramCount;
+		size_t address;
+
+	public:
+		inline int ParamCount() const { return paramCount; }
+		inline size_t Address() const { return address; }
+
+		atype_t* Copy() final override { return new func_t(address, paramCount); }
+
+		func_t(size_t address, int paramCount) : address(address), paramCount(paramCount) {}
+	};
 }
 
 #pragma warning(pop)

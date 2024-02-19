@@ -13,6 +13,7 @@
 #include "Types/AstralTypes.h"
 #include "Variables/Variables.h"
 #include "Memory/GarbageCollector.h"
+#include "../Compilation/Compiler/Rom.h"
 #include "../Compilation/Compiler/OpType.h"
 #include "../Compilation/Compiler/Bytecode.h"
 
@@ -146,6 +147,7 @@ namespace Astral
 		std::stack<Type::atype_t*> stack;
 
 		std::vector<Bytecode> rom;
+		Rom _rom;
 		int pc;
 
 		bool failed;
@@ -157,7 +159,7 @@ namespace Astral
 
 		inline bool Failed() const { return failed; }
 
-		Interpreter(const std::vector<Bytecode>& rom) : rom(rom), pc(0), failed(false) 
+		Interpreter(const Rom& rom) : rom(rom.GetRom()), _rom(rom), pc(0), failed(false)
 		{
 			instance = this;
 		}

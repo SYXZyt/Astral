@@ -8,10 +8,8 @@ inline std::string ReadFile(const char* fname)
 	return ss.str();
 }
 
-bool Astral::API::CompileFile(const char* fname, rom& generatedRom, bool dumpLexer, bool dumpParser, bool dumpRom)
+bool Astral::API::CompileFile(const char* fname, Rom& generatedRom, bool dumpLexer, bool dumpParser, bool dumpRom)
 {
-	generatedRom = std::vector<Bytecode>();
-
 	std::string data = ReadFile(fname);
 
 	Lexer lexer(data, fname);
@@ -52,7 +50,7 @@ bool Astral::API::CompileFile(const char* fname, rom& generatedRom, bool dumpLex
 
 	if (dumpRom)
 	{
-		for (const Astral::Bytecode& code : generatedRom)
+		for (const Astral::Bytecode& code : generatedRom.GetRom())
 			std::cout << code << '\n';
 
 		std::cout << '\n';
@@ -61,7 +59,7 @@ bool Astral::API::CompileFile(const char* fname, rom& generatedRom, bool dumpLex
 	return true;
 }
 
-void Astral::API::ExecuteScript(const rom& rom)
+void Astral::API::ExecuteScript(const Rom& rom)
 {
 	Interpreter interpreter(rom);
 	interpreter.Execute();
