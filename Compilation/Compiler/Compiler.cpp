@@ -325,6 +325,8 @@ void Astral::Compiler::GenerateStatement(const Statement* statement)
 		GenerateBreak(breakStatement);
 	else if (const Continue* continueStatement = dynamic_cast<const Continue*>(statement))
 		GenerateContinue(continueStatement);
+	else if (const Function* function = dynamic_cast<const Function*>(statement))
+		GenerateFunctionDefinition(function);
 	else
 		throw "oop";
 }
@@ -466,6 +468,51 @@ void Astral::Compiler::GenerateBreak(const Break* _break)
 	code.lexeme = _break->GetToken().GetLexeme();
 	code.op = (uint8_t)OpType::WHILE_BREAK;
 	rom.push_back(code);
+}
+
+void Astral::Compiler::GenerateFunctionDefinition(const Function* func)
+{
+	const char* funcName = func->GetName().GetLexeme().lexeme.c_str();
+	size_t address = rom.GetRom().size();
+	int paramCount = func->GetParamList()->GetDeclarations().size();
+	Type::func_t* funcData = new Type::func_t(address, paramCount);
+	Rom::FunctionDefinition def{ funcData, funcName };
+
+	if (rom.DoesFunctionExist(funcName))
+	{
+		Error("Function redefinition", func->GetToken());
+		failed = true;
+		return;
+	}
+	rom.AddFunction(def);
+
+	Bytecode code;
+	code.lexeme = func->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::FUNC_BEG;
+	rom.push_back(code);
+
+	GenerateFunctionParamList(func->GetParamList());
+	GenerateBlock(func->GetBody());
+
+	//In case the user hasn't added a return, force a return void;
+	code.lexeme = func->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::LIT_VOID;
+	rom.push_back(code);
+	code.op = (uint8_t)OpType::FUNC_END;
+	rom.push_back(code);
+}
+
+void Astral::Compiler::GenerateFunctionParamList(const ParamList* params)
+{
+	//All we need to do is to do a variable assign since the values will be on the stack
+	//We need to do them in reverse order because of the stack
+	for (int i = params->GetDeclarations().size() - 1; i >= 0; i--)
+	{
+		Bytecode code;
+		code.lexeme = params->GetDeclarations()[i];
+		code.op = (uint8_t)OpType::ASSIGN;
+		rom.push_back(code);
+	} 
 }
 
 void Astral::Compiler::GenerateBytecode()

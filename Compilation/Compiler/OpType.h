@@ -17,6 +17,7 @@ namespace Astral
 		LIT_STRING,
 		VARIABLE,
 		VARIABLE_REF,
+		LIT_VOID,
 		ADD,
 		SUB,
 		MUL,
@@ -53,6 +54,9 @@ namespace Astral
 		SCOPE_BEG,
 		SCOPE_END,
 
+		FUNC_BEG,
+		FUNC_END,
+
 		WHILE_BEG,
 		WHILE_END,
 		WHILE_COND,
@@ -76,6 +80,8 @@ namespace Astral
 				return "VAR";
 			case OpType::VARIABLE_REF:
 				return "VAR_REF";
+			case OpType::LIT_VOID:
+				return "VOID";
 			case OpType::ADD:
 				return "ADD";
 			case OpType::SUB:
@@ -116,6 +122,10 @@ namespace Astral
 				return "SCOPE_BEG";
 			case OpType::SCOPE_END:
 				return "SCOPE_END";
+			case OpType::FUNC_BEG:
+				return "FUNC_BEG";
+			case OpType::FUNC_END:
+				return "FUNC_END";
 			case OpType::IF:
 				return "IF";
 			case OpType::IF_ELSE:

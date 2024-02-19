@@ -69,6 +69,9 @@ namespace Astral
 		void GenerateWhile(const While* whileStatement);
 		void GenerateContinue(const Continue* _continue);
 		void GenerateBreak(const Break* _break);
+		void GenerateFunctionDefinition(const Function* func);
+		void GenerateFunctionParamList(const ParamList* params);
+		//void GenerateReturn(const)
 
 		inline void GenerateStatementInsideBlock(const Statement* statement)
 		{
