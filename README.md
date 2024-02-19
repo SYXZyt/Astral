@@ -33,6 +33,9 @@ else
 ```
 and Astral will allow this as if the object has been defined as a struct, it will return true, otherwise Void which will return false.
 
+## Garbage Collection
+Astral features a garbage collector which means that the programmer does not have to care about allocating or deallocating memory. The runtime will handle all of it. When a variable has gone out of scope and there are no more handles (variables which are a reference to another variable) the garbage collector will flag that memory block for deallocation. Due to how the garbage collector functions, you may notice spikes in the memory usage. The garbage collector will only free memory when a certain threshold has been met and these spikes and drops can be seen. The rate and threshold that the GC uses is customisable for each script so more memory heavy scripts can have a more aggressive GC.
+
 ## Syntax
 Astral follows a simple syntax. A program will be made up of global variable definitions, structure definitions and functions.
 Global variables are variables which can be access anywhere within the program, regardless of scope.
