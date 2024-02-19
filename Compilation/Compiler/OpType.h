@@ -12,6 +12,7 @@ namespace Astral
 	{
 		NOP,
 		GC,
+		POP,
 
 		LIT_NUMBER,
 		LIT_STRING,
@@ -74,6 +75,8 @@ namespace Astral
 				return "NOP";
 			case OpType::GC:
 				return "GC";
+			case OpType::POP:
+				return "POP";
 			case OpType::LIT_NUMBER:
 				return "NUMBER";
 			case OpType::LIT_STRING:

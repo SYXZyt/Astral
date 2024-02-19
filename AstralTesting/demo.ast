@@ -1,6 +1,6 @@
-func X()
+func MyFunction(message)
 {
-	return "Hello";
+	print message;
 }
 
-print X();
+MyFunction("Hello, World!");

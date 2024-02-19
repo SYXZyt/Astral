@@ -7,6 +7,9 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 	OpType op = (OpType)instruction.op;
 	switch (op)
 	{
+		case OpType::POP:
+			Pop();
+			break;
 		case OpType::WHILE_BEG:
 			break;
 		case OpType::WHILE_END:
@@ -518,12 +521,14 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			break;
 		case OpType::FUNC_END:
 			//Take the top stack value and add it to the return value
-			SetReturnValue(Pop());
+			//SetReturnValue(Pop());
 			Return();
 			break;
 		case OpType::FUNC_RET:
 			//Take the top stack value and add it to the return value
-			SetReturnValue(Pop());
+			//SetReturnValue(Pop());
+			--pc;
+			Func_CleanStackFrame();
 			Return();
 			break;
 		case OpType::CALL:

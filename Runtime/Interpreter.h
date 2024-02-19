@@ -136,6 +136,19 @@ namespace Astral
 			}
 		}
 
+		inline void Func_CleanStackFrame()
+		{
+			while (rom[pc].op != (uint8_t)OpType::FUNC_BEG)
+			{
+				if (rom[pc].op == (uint8_t)OpType::SCOPE_END)
+					variables.AddScope();
+				else if (rom[pc].op == (uint8_t)OpType::SCOPE_BEG)
+					variables.RemoveScope();
+
+				--pc;
+			}
+		}
+
 		inline Type::atype_t* Pop()
 		{
 			Type::atype_t* value = stack.top();

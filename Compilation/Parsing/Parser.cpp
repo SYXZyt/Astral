@@ -867,7 +867,7 @@ Astral::Statement* Astral::Parser::ParseReturn()
 
 	//If the next token is not a semicolon then we need to get the return value
 	Expression* returnValue = nullptr;
-	if (Previous().GetType() != TokenType::SEMICOLON)
+	if (Peek().GetType() != TokenType::SEMICOLON)
 	{
 		returnValue = ParseExpression();
 		NULL_RET(returnValue);

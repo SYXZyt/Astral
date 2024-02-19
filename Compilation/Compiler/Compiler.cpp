@@ -563,7 +563,16 @@ void Astral::Compiler::GenerateReturn(const Return* ret)
 
 void Astral::Compiler::GenerateExpressionStatement(const ExpressionStatement* expr)
 {
-	GenerateExpression(expr->GetExpression());
+	const Expression* ex = expr->GetExpression();
+	GenerateExpression(ex);
+
+	if (dynamic_cast<const FunctionCall*>(ex))
+	{
+		Bytecode code;
+		code.lexeme = ex->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::POP;
+		rom.push_back(code);
+	}
 }
 
 void Astral::Compiler::GenerateBytecode()
