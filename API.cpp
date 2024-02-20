@@ -59,8 +59,18 @@ bool Astral::API::CompileFile(const char* fname, Rom& generatedRom, bool dumpLex
 	return true;
 }
 
+void Astral::API::RunInterpreter(Interpreter& interpreter)
+{
+	interpreter.Execute();
+}
+
+Astral::Interpreter Astral::API::CreateInterpreter(const Rom& rom)
+{
+	return Interpreter(rom);
+}
+
 void Astral::API::ExecuteScript(const Rom& rom)
 {
-	Interpreter interpreter(rom);
-	interpreter.Execute();
+	Interpreter interpreter = CreateInterpreter(rom);
+	RunInterpreter(interpreter);
 }

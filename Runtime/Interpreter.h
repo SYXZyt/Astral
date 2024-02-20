@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include "../Astral.h"
+#include "BindFunction.h"
 #include "MathsHandler.h"
 #include "BooleanHandler.h"
 #include "../ErrorManager.h"
@@ -107,35 +108,6 @@ namespace Astral
 			}
 		}
 
-		inline bool IsInWhileLoop()
-		{
-			int instr = pc-1;
-			int nest = 0;
-
-			while (true)
-			{
-				//Begin back tracking tokens until we find while_start or the start of the rom
-				//If we are at the start of the rom then we know we are not in a loop
-				//In the future, we need to treat the start of a function as a "sub-program"
-				//where the start of the function will return false
-				if (rom[instr].op == (uint8_t)OpType::WHILE_BEG)
-				{
-					if (nest == 0)
-						return true;
-
-					--nest;
-				}
-
-				if (rom[instr].op == (uint8_t)OpType::WHILE_END)
-					++nest;
-
-				if (instr == 0)
-					return false;
-
-				--instr;
-			}
-		}
-
 		inline void Func_CleanStackFrame()
 		{
 			while (rom[pc].op != (uint8_t)OpType::FUNC_BEG)
@@ -206,6 +178,8 @@ namespace Astral
 		void PreloadFunctions();
 
 	public:
+		void Bind_Function(BindFunction& func);
+
 		void Execute();
 
 		inline bool Failed() const { return failed; }

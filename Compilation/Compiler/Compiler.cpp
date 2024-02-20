@@ -503,7 +503,7 @@ void Astral::Compiler::GenerateFunctionDefinition(const Function* func)
 {
 	const char* funcName = func->GetName().GetLexeme().lexeme.c_str();
 	size_t address = rom.GetRom().size() + 1; //Skip the func_beg
-	int paramCount = func->GetParamList()->GetDeclarations().size();
+	int paramCount = (int)func->GetParamList()->GetDeclarations().size();
 	Type::func_t* funcData = new Type::func_t(address, paramCount);
 	Rom::FunctionDefinition def{ funcData, funcName };
 
@@ -539,7 +539,7 @@ void Astral::Compiler::GenerateFunctionParamList(const ParamList* params)
 {
 	//All we need to do is to do a variable assign since the values will be on the stack
 	//We need to do them in reverse order because of the stack
-	for (int i = params->GetDeclarations().size() - 1; i >= 0; i--)
+	for (int i = (int)params->GetDeclarations().size() - 1; i >= 0; i--)
 	{
 		Bytecode code;
 		code.lexeme = params->GetDeclarations()[i];

@@ -49,6 +49,13 @@ void Astral::Variables::AddVariable(const char* vname)
 	variables[variables.size() - 1].push_back(v);
 }
 
+Astral::Variable* Astral::Variables::CreateVariableInGlobalScope(const char* vname)
+{
+	Variable* v = new Variable(vname);
+	variables[0].push_back(v);
+	return v;
+}
+
 void Astral::Variables::UpdateValue(const char* vname, Type::atype_t* value)
 {
 	GetVariable(vname)->SetValue(value);

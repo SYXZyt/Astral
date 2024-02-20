@@ -13,11 +13,14 @@
 #include "Compilation/Compiler/Compiler.h"
 
 #include "Runtime/Interpreter.h"
+#include "Runtime/BindFunction.h"
 
 namespace Astral::API
 {
 	typedef std::vector<ParseTree*> ast;
 
 	ASTRAL bool CompileFile(const char* fname, Rom& generatedRom, bool dumpLexer = false, bool dumpParser = false, bool dumpRom = false);
+	ASTRAL void RunInterpreter(Interpreter& interpreter);
+	ASTRAL Interpreter CreateInterpreter(const Rom& rom);
 	ASTRAL void ExecuteScript(const Rom& rom);
 }

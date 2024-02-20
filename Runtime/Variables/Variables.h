@@ -23,6 +23,7 @@ namespace Astral
 		bool DoesVariableExistInHighestScope(const char* name);
 		bool DoesVariableExist(const char* name);
 		void AddVariable(const char* vname);
+		Variable* CreateVariableInGlobalScope(const char* vname);
 		void UpdateValue(const char* vname, Type::atype_t* value);
 		void UpdateRef(const char* vname, MemoryBlock* value);
 		Type::atype_t* GetValue(const char* vname);

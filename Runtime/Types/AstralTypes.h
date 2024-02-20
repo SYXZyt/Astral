@@ -6,6 +6,7 @@
 #include <string.h>
 
 #include "../../Astral.h"
+#include "../BindFunction.h"
 
 namespace Astral { struct MemoryBlock; }
 
@@ -116,6 +117,19 @@ namespace Astral::Type
 		atype_t* Copy() final override { return new func_t(address, paramCount); }
 
 		func_t(size_t address, int paramCount) : address(address), paramCount(paramCount) {}
+	};
+
+	class ASTRAL externfunc_t final : public atype_t
+	{
+	private:
+		BindFunction func;
+
+	public:
+		inline BindFunction& GetFunction() { return func; }
+
+		atype_t* Copy() final override { return new externfunc_t(func); }
+
+		externfunc_t(const BindFunction& func) : func(func) {}
 	};
 }
 

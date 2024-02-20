@@ -159,6 +159,9 @@
     <ClInclude Include="Compilation\Compiler\Rom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Runtime\BindFunction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
@@ -279,6 +282,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Compilation\Parsing\Statements\ExpressionStatement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Runtime\BindFunction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

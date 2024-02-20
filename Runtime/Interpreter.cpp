@@ -376,7 +376,9 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			else if (Type::string_t* string_t = dynamic_cast<Type::string_t*>(val))
 				std::cout << string_t->Value() << '\n';
 			else if (Type::func_t* func = dynamic_cast<Type::func_t*>(val))
-				std::cout << "<ASTRAL-FUNCTION>";
+				std::cout << "<ASTRAL-FUNCTION>\n";
+			else if (Type::externfunc_t* extrn = dynamic_cast<Type::externfunc_t*>(val))
+				std::cout << "<EXTERN-FUNCTION>\n";
 			else if (Type::void_t* void_t = dynamic_cast<Type::void_t*>(val))
 			{
 				Error("void reference", instruction.lexeme);
@@ -546,7 +548,8 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 
 			Type::atype_t* var = variables.GetValue(funcName.c_str());
 			Type::func_t* func = dynamic_cast<Type::func_t*>(var);
-			if (!func)
+			Type::externfunc_t* externfunc = dynamic_cast<Type::externfunc_t*>(var);
+			if (!func && !externfunc)
 			{
 				Error("Variable was not a callable type", instruction.lexeme);
 				failed = true;
@@ -562,16 +565,46 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 				break;
 			}
 
-			int providedCount = ((Type::number_t*)Pop())->Value();
-			if (providedCount != func->ParamCount())
+			int providedCount = (int)((Type::number_t*)Pop())->Value();
+
+			if (func)
 			{
-				Error("Incorrect number of parameters", instruction.lexeme);
-				failed = true;
-				break;
+				if (providedCount != func->ParamCount())
+				{
+					Error("Incorrect number of parameters", instruction.lexeme);
+					failed = true;
+					break;
+				}
+
+				callstack.push(pc);
+				pc = (int)func->Address();
 			}
 
-			callstack.push(pc);
-			pc = func->Address();
+			if (externfunc)
+			{
+				if (providedCount != externfunc->GetFunction().ParamCount())
+				{
+					Error("Incorrect number of parameters", instruction.lexeme);
+					failed = true;
+					break;
+				}
+
+				std::vector<Type::atype_t*> parameters;
+				for (int i = 0; i < providedCount; ++i)
+					parameters.push_back(Pop());
+
+				//Due to the stack our parameters are backwards so we need to fix that
+				std::reverse(parameters.begin(), parameters.end());
+
+				Type::atype_t* returnValue = externfunc->GetFunction().Call(parameters);
+
+				//If we returned null, we need to convert that to void
+				if (!returnValue)
+					returnValue = new Type::void_t();
+
+				GarbageCollector::Instance().RegisterDanglingPointer(returnValue);
+				Push(returnValue);
+			}
 
 			break;
 		}
@@ -587,6 +620,13 @@ void Astral::Interpreter::PreloadFunctions()
 		variables.AddVariable(func.name);
 		variables.UpdateValue(func.name, func.func);
 	}
+}
+
+void Astral::Interpreter::Bind_Function(BindFunction& func)
+{
+	Variable* funcVar = variables.CreateVariableInGlobalScope(func.Name());
+	Type::externfunc_t* f = new Type::externfunc_t(func);
+	funcVar->SetValue(f);
 }
 
 void Astral::Interpreter::Execute()
