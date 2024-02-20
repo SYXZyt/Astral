@@ -3,4 +3,9 @@ func MyFunction(message)
 	print message;
 }
 
-MyFunction("Hello, World!");
+let void;
+
+let Func = MyFunction;
+MyFunction = void;
+
+Func(Func);

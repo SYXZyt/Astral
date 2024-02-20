@@ -434,7 +434,7 @@ Astral::Expression* Astral::Parser::ParseCallParams()
 			parameters.push_back(expr);
 
 			//If the next token is a ) then we don't want to read the comma
-			if (Previous().GetType() == TokenType::R_BRA)
+			if (Peek().GetType() == TokenType::R_BRA)
 				break;
 
 			if (Consume(TokenType::COMMA, "Expected ','").GetType() == TokenType::_EOF)
@@ -827,6 +827,8 @@ Astral::Statement* Astral::Parser::ParseParamList()
 	//Do not parse params if the list is empty
 	if (Peek().GetType() != TokenType::R_BRA)
 	{
+		Advance();
+
 		while (true)
 		{
 			Token varName = Previous();
@@ -841,8 +843,10 @@ Astral::Statement* Astral::Parser::ParseParamList()
 			parameters.push_back(varName.GetLexeme());
 
 			//If the next token is a ) then we don't want to read the comma
-			if (Previous().GetType() == TokenType::R_BRA)
+			if (Peek().GetType() == TokenType::R_BRA)
+			{
 				break;
+			}
 
 			if (Consume(TokenType::COMMA, "Expected ','").GetType() == TokenType::_EOF)
 				return nullptr;

@@ -375,6 +375,8 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 				std::cout << number_t->Value() << '\n';
 			else if (Type::string_t* string_t = dynamic_cast<Type::string_t*>(val))
 				std::cout << string_t->Value() << '\n';
+			else if (Type::func_t* func = dynamic_cast<Type::func_t*>(val))
+				std::cout << "<ASTRAL-FUNCTION>";
 			else if (Type::void_t* void_t = dynamic_cast<Type::void_t*>(val))
 			{
 				Error("void reference", instruction.lexeme);
