@@ -16,7 +16,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			While_JumpToBegin();
 			break;
 		case OpType::GC:
-			GarbageCollector::Instance().Cleanup();
+			//GarbageCollector::Instance().Cleanup();
 			break;
 		case OpType::WHILE_COND:
 		{
@@ -549,6 +549,15 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			if (!func)
 			{
 				Error("Variable was not a callable type", instruction.lexeme);
+				failed = true;
+				break;
+			}
+
+			//Check for stack overflow
+			//Astral spec limits to 4k calls
+			if (callstack.size() >= 4096)
+			{
+				Error("Stack overflow", instruction.lexeme);
 				failed = true;
 				break;
 			}

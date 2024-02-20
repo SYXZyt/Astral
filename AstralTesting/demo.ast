@@ -1,11 +1,9 @@
-func MyFunction(message)
+func Factorial(num)
 {
-	print message;
+	if (num == 0 || num == 1)
+		return 1;
+
+	return num * Factorial(num - 1);
 }
 
-let void;
-
-let Func = MyFunction;
-MyFunction = void;
-
-Func(Func);
+print Factorial(100000);

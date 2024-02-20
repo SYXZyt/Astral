@@ -510,7 +510,7 @@ void Astral::Compiler::GenerateFunctionDefinition(const Function* func)
 	if (rom.DoesFunctionExist(funcName))
 	{
 		Error("Function redefinition", func->GetToken());
-		failed = true;
+		failed = true; 
 		return;
 	}
 	rom.AddFunction(def);
@@ -519,12 +519,16 @@ void Astral::Compiler::GenerateFunctionDefinition(const Function* func)
 	code.lexeme = func->GetToken().GetLexeme();
 	code.op = (uint8_t)OpType::FUNC_BEG;
 	rom.push_back(code);
+	code.op = (uint8_t)OpType::SCOPE_BEG;
+	rom.push_back(code);
 
 	GenerateFunctionParamList(func->GetParamList());
 	GenerateBlock(func->GetBody());
 
 	//In case the user hasn't added a return, force a return void;
 	code.lexeme = func->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::SCOPE_END;
+	rom.push_back(code);
 	code.op = (uint8_t)OpType::LIT_VOID;
 	rom.push_back(code);
 	code.op = (uint8_t)OpType::FUNC_END;

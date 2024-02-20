@@ -7,7 +7,6 @@
 
 int main(int, char**)
 {
-	//Astral::SetGCLimit_Bytes(1024 * 1024);
 	Astral::SetGCLimit_Bytes(0);
 
 	Astral::Rom program;
