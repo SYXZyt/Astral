@@ -90,9 +90,6 @@
     <ClInclude Include="Compilation\Compiler\OpType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Compilation\Parsing\Statements\PrintStatement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Compilation\Parsing\Statements\VariableDefinition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -162,6 +159,9 @@
     <ClInclude Include="Runtime\BindFunction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Runtime\BuiltInFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
@@ -213,9 +213,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Compilation\Compiler\Compiler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Compilation\Parsing\Statements\PrintStatement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Runtime\Types\AstralTypes.cpp">
@@ -285,6 +282,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Runtime\BindFunction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Runtime\BuiltInFunctions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

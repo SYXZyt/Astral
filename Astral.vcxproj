@@ -156,7 +156,6 @@
     <ClInclude Include="Compilation\Parsing\Statements\Function.h" />
     <ClInclude Include="Compilation\Parsing\Statements\IfStatement.h" />
     <ClInclude Include="Compilation\Parsing\Statements\ParamList.h" />
-    <ClInclude Include="Compilation\Parsing\Statements\PrintStatement.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Program.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Return.h" />
     <ClInclude Include="Compilation\Parsing\Statements\VariableAssignment.h" />
@@ -168,6 +167,7 @@
     <ClInclude Include="ErrorManager.h" />
     <ClInclude Include="Runtime\BindFunction.h" />
     <ClInclude Include="Runtime\BooleanHandler.h" />
+    <ClInclude Include="Runtime\BuiltInFunctions.h" />
     <ClInclude Include="Runtime\Interpreter.h" />
     <ClInclude Include="Runtime\MathsHandler.h" />
     <ClInclude Include="Runtime\Memory\GarbageCollector.h" />
@@ -209,7 +209,6 @@
     <ClCompile Include="Compilation\Parsing\Statements\Function.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\IfStatement.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\ParamList.cpp" />
-    <ClCompile Include="Compilation\Parsing\Statements\PrintStatement.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Program.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Return.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\VariableAssignment.cpp" />
@@ -217,6 +216,7 @@
     <ClCompile Include="Compilation\Tokenisation\Lexer.cpp" />
     <ClCompile Include="Runtime\BindFunction.cpp" />
     <ClCompile Include="Runtime\BooleanHandler.cpp" />
+    <ClCompile Include="Runtime\BuiltInFunctions.cpp" />
     <ClCompile Include="Runtime\Interpreter.cpp" />
     <ClCompile Include="Runtime\MathsHandler.cpp" />
     <ClCompile Include="Runtime\Memory\GarbageCollector.cpp" />

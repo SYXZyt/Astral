@@ -14,6 +14,7 @@
 
 #include "Runtime/Interpreter.h"
 #include "Runtime/BindFunction.h"
+#include "Runtime/BuiltInFunctions.h"
 
 namespace Astral::API
 {

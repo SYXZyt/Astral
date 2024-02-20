@@ -366,30 +366,6 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 			}
 			break;
 		}
-		case OpType::PRINT:
-		{
-			Astral::Type::atype_t* val = Pop();
-
-			//If we do not know the type we are printing, just print the address
-			if (Type::number_t* number_t = dynamic_cast<Type::number_t*>(val))
-				std::cout << number_t->Value() << '\n';
-			else if (Type::string_t* string_t = dynamic_cast<Type::string_t*>(val))
-				std::cout << string_t->Value() << '\n';
-			else if (Type::func_t* func = dynamic_cast<Type::func_t*>(val))
-				std::cout << "<ASTRAL-FUNCTION>\n";
-			else if (Type::externfunc_t* extrn = dynamic_cast<Type::externfunc_t*>(val))
-				std::cout << "<EXTERN-FUNCTION>\n";
-			else if (Type::void_t* void_t = dynamic_cast<Type::void_t*>(val))
-			{
-				Error("void reference", instruction.lexeme);
-				failed = true;
-				break;
-			}
-			else
-				std::cout << '$' << val << '\n';
-
-			break;
-		}
 		case OpType::VARIABLE:
 		{
 			std::string name = instruction.lexeme.lexeme;
@@ -596,7 +572,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 				//Due to the stack our parameters are backwards so we need to fix that
 				std::reverse(parameters.begin(), parameters.end());
 
-				Type::atype_t* returnValue = externfunc->GetFunction().Call(parameters);
+				Type::atype_t* returnValue = externfunc->GetFunction().Call(parameters, *this, instruction.lexeme);
 
 				//If we returned null, we need to convert that to void
 				if (!returnValue)

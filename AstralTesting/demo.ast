@@ -1,1 +1,2 @@
-Hello();
+Print("Hello, ");
+Println("World!");

@@ -63,7 +63,6 @@ namespace Astral
 
 		void GenerateStatement(const Statement* statement);
 		void GenerateProgram(const Program* program);
-		void GeneratePrint(const PrintStatement* printStatement);
 		void GenerateLet(const VariableDefinition* variable);
 		void GenerateAssign(const VariableAssignment* variable);
 		void GenerateBlock(const Block* block);

@@ -42,7 +42,6 @@ namespace Astral
 		LESS_EQUALS,
 
 		//Statements
-		PRINT,
 		ASSIGN_VOID,
 		ASSIGN,
 		UPDATE_VAR,
@@ -113,8 +112,6 @@ namespace Astral
 				return "NEQ";
 			case OpType::NOT:
 				return "NOT";
-			case OpType::PRINT:
-				return "PRINT";
 			case OpType::ASSIGN:
 				return "ASSIGN";
 			case OpType::ASSIGN_VOID:

@@ -466,9 +466,6 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 	if (Match(TokenType::RETURN))
 		return ParseReturn();
 
-	if (Match(TokenType::PRINT))
-		return ParsePrintStatement();
-
 	if (Match(TokenType::LET))
 		return ParseLetStatement();
 
@@ -487,6 +484,10 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 			Consume(TokenType::SEMICOLON, "Expected ';'");
 
 			return new ExpressionStatement(new FunctionCall(func, params));
+		}
+		else
+		{
+			Error("Expected statement", Previous());
 		}
 	}
 
@@ -640,17 +641,6 @@ Astral::Statement* Astral::Parser::ParseLetStatement()
 
 	Consume(TokenType::SEMICOLON, "Expected ';'");
 	return new VariableDefinition(let, name, expr);
-}
-
-Astral::Statement* Astral::Parser::ParsePrintStatement()
-{
-	Token token = pointer == 0 ? tokens[0] : Previous();
-
-	Expression* expr = ParseExpression();
-	NULL_RET(expr);
-
-	Consume(TokenType::SEMICOLON, "Expected ';'");
-	return new PrintStatement(token, expr);
 }
 
 Astral::Statement* Astral::Parser::ParseAssignment()

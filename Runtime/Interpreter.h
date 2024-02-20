@@ -182,6 +182,7 @@ namespace Astral
 
 		void Execute();
 
+		inline void Fail() { failed = true; }
 		inline bool Failed() const { return failed; }
 
 		Interpreter(const Rom& rom) : rom(rom.GetRom()), _rom(rom), pc(0), failed(false)
