@@ -182,6 +182,9 @@ namespace Astral
 
 		void Execute();
 
+		void CallFunction(const char* funcName);
+		void CallFunction(const char* funcName, const std::vector<Type::atype_t*>& params);
+
 		inline void Fail() { failed = true; }
 		inline bool Failed() const { return failed; }
 

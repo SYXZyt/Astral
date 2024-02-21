@@ -1,2 +1,4 @@
-Print("Hello, ");
-Println("World!");
+func Main()
+{
+	Println("Main Function");
+}

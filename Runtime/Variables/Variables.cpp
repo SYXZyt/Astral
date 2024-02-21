@@ -25,6 +25,17 @@ Astral::Variable* Astral::Variables::GetVariable(const char* name)
 	return nullptr;
 }
 
+Astral::Variable* Astral::Variables::GetVariableInGlobalScope(const char* name)
+{
+	for (Variable* v : variables[0])
+	{
+		if (strcmp(v->Name(), name) == 0)
+			return v;
+	}
+
+	return nullptr;
+}
+
 bool Astral::Variables::DoesVariableExistInHighestScope(const char* name)
 {
 	return DoesVariableExistInScope(variables[variables.size() - 1], name);

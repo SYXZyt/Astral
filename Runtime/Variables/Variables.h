@@ -19,6 +19,7 @@ namespace Astral
 
 	public:
 		Variable* GetVariable(const char* name);
+		Variable* GetVariableInGlobalScope(const char* name);
 
 		bool DoesVariableExistInHighestScope(const char* name);
 		bool DoesVariableExist(const char* name);

@@ -17,7 +17,7 @@ int main(int, char**)
 	
 	Astral::BindBuiltInFunctionsToInterpreter(interpreter);
 
-	Astral::API::RunInterpreter(interpreter);
+	interpreter.CallFunction("Main");
 
 	return 0;
 }

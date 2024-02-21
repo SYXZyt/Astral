@@ -624,6 +624,32 @@ void Astral::Interpreter::Execute()
 	}
 }
 
+void Astral::Interpreter::CallFunction(const char* funcName)
+{
+	std::vector<Type::atype_t*> params;
+	CallFunction(funcName, params);
+}
+
+void Astral::Interpreter::CallFunction(const char* funcName, const std::vector<Type::atype_t*>& params)
+{
+	Variable* var = variables.GetVariableInGlobalScope(funcName);
+	if (Type::func_t* func = dynamic_cast<Type::func_t*>(var->Value()->data))
+	{
+		for (Type::atype_t* param : params)
+			Push(param->Copy());
+
+		Push(new Type::number_t((float)params.size()));
+		callstack.push(pc);
+		pc = func->Address();
+
+		Execute();
+	}
+	else if (Type::externfunc_t* native = dynamic_cast<Type::externfunc_t*>(var->Value()->data))
+	{
+		native->GetFunction().Call(params, *this, rom[0].lexeme);
+	}
+}
+
 Astral::Interpreter::~Interpreter()
 {
 	//GC will clear up our stack
