@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include "Types/AstralTypes.h"
 
 namespace Astral
@@ -11,9 +14,12 @@ namespace Astral
 			R_FAIL,
 			R_DIV_BY_ZERO,
 			R_INVALID_TYPES,
+			R_VOID_REFERENCE,
 		};
 
 		ResultType type;
 		Type::atype_t* result;
 	};
 }
+
+#pragma warning(pop)

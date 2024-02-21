@@ -1,8 +1,12 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include <string>
 #include <string.h>
 
 #include "../../Astral.h"
+#include "../BindFunction.h"
 
 namespace Astral { struct MemoryBlock; }
 
@@ -99,4 +103,34 @@ namespace Astral::Type
 
 		ref_t(MemoryBlock* block) : block(block) {}
 	};
+
+	class ASTRAL func_t final : public atype_t
+	{
+	private:
+		int paramCount;
+		size_t address;
+
+	public:
+		inline int ParamCount() const { return paramCount; }
+		inline size_t Address() const { return address; }
+
+		atype_t* Copy() final override { return new func_t(address, paramCount); }
+
+		func_t(size_t address, int paramCount) : address(address), paramCount(paramCount) {}
+	};
+
+	class ASTRAL externfunc_t final : public atype_t
+	{
+	private:
+		BindFunction func;
+
+	public:
+		inline BindFunction& GetFunction() { return func; }
+
+		atype_t* Copy() final override { return new externfunc_t(func); }
+
+		externfunc_t(const BindFunction& func) : func(func) {}
+	};
 }
+
+#pragma warning(pop)

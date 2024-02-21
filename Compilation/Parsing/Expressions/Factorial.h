@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include <vector>
 
 #include "../Expression.h"
@@ -19,3 +22,5 @@ namespace Astral
 		~Factorial() override;
 	};
 }
+
+#pragma warning(pop)

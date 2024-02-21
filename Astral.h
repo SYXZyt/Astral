@@ -8,4 +8,8 @@
 namespace Astral
 {
 	ASTRAL extern bool UseCLIOutput;
+
+	ASTRAL extern void SetGCLimit_Bytes(unsigned int byteThreshold);
+	ASTRAL extern void SetGCLimit_Kilobytes(unsigned int kbThreshold);
+	ASTRAL extern void SetGCLimit_Megabytes(unsigned int mbThreshold);
 }

@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include <ostream>
 
 #include "../../Astral.h"
@@ -26,6 +29,9 @@ namespace Astral
 		MODULO,
 		REFERENCE,
 
+		INCREMENT,
+		DECREMENT,
+
 		NOT,
 		LESS_THAN,
 		GREATER_THAN,
@@ -39,6 +45,9 @@ namespace Astral
 		PLUS_EQUALS,
 		MINUS_EQUALS,
 
+		AND,
+		OR,
+
 		//Keywords
 		_TRUE,
 		_FALSE,
@@ -48,8 +57,9 @@ namespace Astral
 		IF,
 		ELSE,
 		WHILE,
+		BREAK,
+		CONTINUE,
 		RETURN,
-		PRINT,
 	};
 
 	ASTRAL inline std::ostream& operator<<(std::ostream& os, const TokenType& t)
@@ -119,6 +129,12 @@ namespace Astral
 			case TokenType::GREATER_THAN_EQUAL:
 				os << "<GREATER THAN EQUALS>";
 				break;
+			case TokenType::OR:
+				os << "<OR>";
+				break;
+			case TokenType::AND:
+				os << "<AND>";
+				break;
 
 			case TokenType::ASSIGNMENT:
 				os << "<ASSIGNMENT>";
@@ -151,11 +167,14 @@ namespace Astral
 			case TokenType::WHILE:
 				os << "<WHILE>";
 				break;
+			case TokenType::CONTINUE:
+				os << "<CONTINUE>";
+				break;
+			case TokenType::BREAK:
+				os << "<BREAK>";
+				break;
 			case TokenType::RETURN:
 				os << "<RETURN>";
-				break;
-			case TokenType::PRINT:
-				os << "<PRINT>";
 				break;
 
 			default:
@@ -166,3 +185,5 @@ namespace Astral
 		return os;
 	}
 }
+
+#pragma warning(pop)

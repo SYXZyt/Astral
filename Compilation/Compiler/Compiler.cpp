@@ -116,6 +116,12 @@ void Astral::Compiler::GenerateBinary(const BinaryOp* binaryOp)
 		case TokenType::LESS_THAN_EQUAL:
 			type = OpType::LESS_EQUALS;
 			break;
+		case TokenType::OR:
+			type = OpType::OR;
+			break;
+		case TokenType::AND:
+			type = OpType::AND;
+			break;
 		default:
 			throw "Oop";
 	}
@@ -138,6 +144,12 @@ void Astral::Compiler::GenerateExpression(const Expression* expression)
 		GenerateUnary(unary);
 	else if (const Factorial* factorial = dynamic_cast<const Factorial*>(expression))
 		GenerateFactorial(factorial);
+	else if (const IncrementExpression* increment = dynamic_cast<const IncrementExpression*>(expression))
+		GenerateIncrementExpression(increment);
+	else if (const DecrementExpression* decrement = dynamic_cast<const DecrementExpression*>(expression))
+		GenerateDecrementExpression(decrement);
+	else if (const FunctionCall* call = dynamic_cast<const FunctionCall*>(expression))
+		GenerateFunctionCall(call);
 	else
 	{
 		throw "oop";
@@ -169,18 +181,179 @@ void Astral::Compiler::GenerateFactorial(const Factorial* factorial)
 	rom.push_back(code);
 }
 
+void Astral::Compiler::GenerateIncrementExpression(const IncrementExpression* increment)
+{
+	//If it is prefix (++x) we need to increment first, otherwise postfix (x++) we need to increment after
+	if (increment->IsPrefix())
+	{
+		if (
+			dynamic_cast<const IncrementExpression*>(increment->GetExpression()) ||
+			dynamic_cast<const DecrementExpression*>(increment->GetExpression())
+			)
+		{
+			Error("Cannot nest increment operator", increment->GetExpression()->GetToken());
+			failed = true;
+			return;
+		}
+
+		Lexeme lexeme = increment->GetToken().GetLexeme();
+		lexeme.lexeme = "1";
+
+		Bytecode code;
+		code.lexeme = increment->GetExpression()->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::VARIABLE;
+		rom.push_back(code);
+
+		code.lexeme = lexeme;
+		code.op = (uint8_t)OpType::LIT_NUMBER;
+
+		rom.push_back(code);
+
+		code.op = (uint8_t)OpType::ADD;
+		rom.push_back(code);
+
+		code.lexeme = increment->GetExpression()->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::UPDATE_VAR;
+		rom.push_back(code);
+
+		GenerateExpression(increment->GetExpression());
+	}
+	else
+	{
+		GenerateExpression(increment->GetExpression());
+
+		Bytecode code;
+		code.lexeme = increment->GetExpression()->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::VARIABLE;
+
+		rom.push_back(code);
+
+		Lexeme lexeme = increment->GetToken().GetLexeme();
+		lexeme.lexeme = "1";
+
+		code.lexeme = lexeme;
+		code.op = (uint8_t)OpType::LIT_NUMBER;
+		rom.push_back(code);
+
+		code.op = (uint8_t)OpType::ADD;
+		rom.push_back(code);
+
+		code.lexeme = increment->GetExpression()->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::UPDATE_VAR;
+		rom.push_back(code);
+	}
+}
+
+void Astral::Compiler::GenerateDecrementExpression(const DecrementExpression* decrement)
+{
+	//If it is prefix (--x) we need to decrement first, otherwise postfix (x--) we need to decrement after
+	if (decrement->IsPrefix())
+	{
+		if (
+			dynamic_cast<const IncrementExpression*>(decrement->GetExpression()) ||
+			dynamic_cast<const DecrementExpression*>(decrement->GetExpression())
+			)
+		{
+			Error("Cannot nest decrement operator", decrement->GetExpression()->GetToken());
+			failed = true;
+			return;
+		}
+
+		Lexeme lexeme = decrement->GetToken().GetLexeme();
+		lexeme.lexeme = "1";
+
+		Bytecode code;
+		code.lexeme = decrement->GetExpression()->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::VARIABLE;
+		rom.push_back(code);
+
+		code.lexeme = lexeme;
+		code.op = (uint8_t)OpType::LIT_NUMBER;
+
+		rom.push_back(code);
+
+		code.op = (uint8_t)OpType::SUB;
+		rom.push_back(code);
+
+		code.lexeme = decrement->GetExpression()->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::UPDATE_VAR;
+		rom.push_back(code);
+
+		GenerateExpression(decrement->GetExpression());
+	}
+	else
+	{
+		GenerateExpression(decrement->GetExpression());
+
+		Bytecode code;
+		code.lexeme = decrement->GetExpression()->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::VARIABLE;
+
+		rom.push_back(code);
+
+		Lexeme lexeme = decrement->GetToken().GetLexeme();
+		lexeme.lexeme = "1";
+
+		code.lexeme = lexeme;
+		code.op = (uint8_t)OpType::LIT_NUMBER;
+		rom.push_back(code);
+
+		code.op = (uint8_t)OpType::SUB;
+		rom.push_back(code);
+
+		code.lexeme = decrement->GetExpression()->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::UPDATE_VAR;
+		rom.push_back(code);
+	}
+}
+
+void Astral::Compiler::GenerateCallParameters(const CallParameters* params)
+{
+	for (Expression* expr : params->GetParameters())
+		GenerateExpression(expr);
+}
+
+void Astral::Compiler::GenerateFunctionCall(const FunctionCall* func)
+{
+	GenerateCallParameters(func->GetParameters());
+	//Add the param count to the stack
+	Bytecode code;
+	Token t = func->GetToken();
+	Lexeme lexeme = t.GetLexeme();
+	lexeme.lexeme = std::to_string(func->GetParameters()->GetParameters().size());
+	code.lexeme = lexeme;
+	code.op = (uint8_t)OpType::LIT_NUMBER;
+	rom.push_back(code);
+
+	code.lexeme = t.GetLexeme();
+	code.op = (uint8_t)OpType::CALL;
+	rom.push_back(code);
+}
+
 void Astral::Compiler::GenerateStatement(const Statement* statement)
 {
 	if (const Program* program = dynamic_cast<const Program*>(statement))
 		GenerateProgram(program);
-	else if (const PrintStatement* print = dynamic_cast<const PrintStatement*>(statement))
-		GeneratePrint(print);
 	else if (const VariableDefinition* var = dynamic_cast<const VariableDefinition*>(statement))
 		GenerateLet(var);
 	else if (const VariableAssignment* assign = dynamic_cast<const VariableAssignment*>(statement))
 		GenerateAssign(assign);
 	else if (const Block* block = dynamic_cast<const Block*>(statement))
 		GenerateBlock(block);
+	else if (const IfStatement* ifStatement = dynamic_cast<const IfStatement*>(statement))
+		GenerateIf(ifStatement);
+	else if (const While* whileStatement = dynamic_cast<const While*>(statement))
+		GenerateWhile(whileStatement);
+	else if (const Break* breakStatement = dynamic_cast<const Break*>(statement))
+		GenerateBreak(breakStatement);
+	else if (const Continue* continueStatement = dynamic_cast<const Continue*>(statement))
+		GenerateContinue(continueStatement);
+	else if (const Function* function = dynamic_cast<const Function*>(statement))
+		GenerateFunctionDefinition(function);
+	else if (const Return* ret = dynamic_cast<const Return*>(statement))
+		GenerateReturn(ret);
+	else if (const ExpressionStatement* expr = dynamic_cast<const ExpressionStatement*>(statement))
+		GenerateExpressionStatement(expr);
 	else
 		throw "oop";
 }
@@ -189,16 +362,6 @@ void Astral::Compiler::GenerateProgram(const Program* program)
 {
 	for (ParseTree* node : program->Statements())
 		GenerateNode(node);
-}
-
-void Astral::Compiler::GeneratePrint(const PrintStatement* printStatement)
-{
-	GenerateExpression(printStatement->Expr());
-
-	Bytecode code;
-	code.lexeme = printStatement->GetToken().GetLexeme();
-	code.op = (uint8_t)OpType::PRINT;
-	rom.push_back(code);
 }
 
 void Astral::Compiler::GenerateLet(const VariableDefinition* variable)
@@ -241,6 +404,167 @@ void Astral::Compiler::GenerateBlock(const Block* block)
 	scopeEnd.lexeme = block->GetToken().GetLexeme();
 	scopeEnd.op = (uint8_t)OpType::SCOPE_END;
 	rom.push_back(scopeEnd);
+}
+
+void Astral::Compiler::GenerateIf(const IfStatement* ifStatement)
+{
+	GenerateExpression(ifStatement->IfExpression());
+
+	Bytecode code;
+	code.lexeme = ifStatement->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::IF;
+
+	//If we have an else block, we need a different operation as it needs to handle skipping the else block
+	if (ifStatement->ElseBlock())
+		code.op = (uint8_t)OpType::IF_ELSE;
+
+	rom.push_back(code);
+
+	GenerateStatementInsideBlock(ifStatement->IfBlock());
+
+	if (ifStatement->ElseBlock())
+	{
+		Bytecode skip;
+		skip.lexeme = ifStatement->GetToken().GetLexeme();
+		skip.op = (uint8_t)OpType::SKIP_BLOCK;
+		rom.push_back(skip);
+
+		GenerateStatementInsideBlock(ifStatement->ElseBlock());
+	}
+
+	GCPass();
+}
+
+void Astral::Compiler::GenerateWhile(const While* whileStatement)
+{
+	/*
+	How while works is by this
+
+	while_beg
+		loopcondition
+		while_cond (If false, goto while_end)
+
+		scope_beg
+			body
+		scope_end
+	while_end (Goto while_beg. Only while_cond or while_break will skip this)
+	gc
+
+	If we get a continue, we need to step forward until we reach the while_end, then we loop back to the while_beg. It needs to keep track of scope to nicely clean everything up
+	If we get a break, we need to step forward until while_end. Keep track of scope as well.
+	*/
+	Bytecode code;
+	code.lexeme = whileStatement->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::WHILE_BEG;
+	rom.push_back(code);
+
+	GenerateExpression(whileStatement->GetCondition());
+
+	code.op = (uint8_t)OpType::WHILE_COND;
+	rom.push_back(code);
+
+	GenerateStatementInsideBlock(whileStatement->GetBody());
+
+	code.op = (uint8_t)OpType::WHILE_END;
+	rom.push_back(code);
+
+	GCPass();
+}
+
+void Astral::Compiler::GenerateContinue(const Continue* _continue)
+{
+	Bytecode code;
+	code.lexeme = _continue->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::WHILE_CONTINUE;
+	rom.push_back(code);
+}
+
+void Astral::Compiler::GenerateBreak(const Break* _break)
+{
+	Bytecode code;
+	code.lexeme = _break->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::WHILE_BREAK;
+	rom.push_back(code);
+}
+
+void Astral::Compiler::GenerateFunctionDefinition(const Function* func)
+{
+	const char* funcName = func->GetName().GetLexeme().lexeme.c_str();
+	size_t address = rom.GetRom().size() + 1; //Skip the func_beg
+	int paramCount = (int)func->GetParamList()->GetDeclarations().size();
+	Type::func_t* funcData = new Type::func_t(address, paramCount);
+	Rom::FunctionDefinition def{ funcData, funcName };
+
+	if (rom.DoesFunctionExist(funcName))
+	{
+		Error("Function redefinition", func->GetToken());
+		failed = true; 
+		return;
+	}
+	rom.AddFunction(def);
+
+	Bytecode code;
+	code.lexeme = func->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::FUNC_BEG;
+	rom.push_back(code);
+	code.op = (uint8_t)OpType::SCOPE_BEG;
+	rom.push_back(code);
+
+	GenerateFunctionParamList(func->GetParamList());
+	GenerateBlock(func->GetBody());
+
+	//In case the user hasn't added a return, force a return void;
+	code.lexeme = func->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::SCOPE_END;
+	rom.push_back(code);
+	code.op = (uint8_t)OpType::LIT_VOID;
+	rom.push_back(code);
+	code.op = (uint8_t)OpType::FUNC_END;
+	rom.push_back(code);
+}
+
+void Astral::Compiler::GenerateFunctionParamList(const ParamList* params)
+{
+	//All we need to do is to do a variable assign since the values will be on the stack
+	//We need to do them in reverse order because of the stack
+	for (int i = (int)params->GetDeclarations().size() - 1; i >= 0; i--)
+	{
+		Bytecode code;
+		code.lexeme = params->GetDeclarations()[i];
+		code.op = (uint8_t)OpType::ASSIGN;
+		rom.push_back(code);
+	} 
+}
+
+void Astral::Compiler::GenerateReturn(const Return* ret)
+{
+	//If we do not have a return value, we need to return void
+	Bytecode code;
+	code.lexeme = ret->GetToken().GetLexeme();
+	if (ret->GetReturnValue())
+		GenerateExpression(ret->GetReturnValue());
+	else
+	{
+		code.op = (uint8_t)OpType::LIT_VOID;
+		rom.push_back(code);
+	}
+
+	code.op = (uint8_t)OpType::FUNC_RET;
+	rom.push_back(code);
+}
+
+void Astral::Compiler::GenerateExpressionStatement(const ExpressionStatement* expr)
+{
+	const Expression* ex = expr->GetExpression();
+	GenerateExpression(ex);
+
+	if (dynamic_cast<const FunctionCall*>(ex))
+	{
+		Bytecode code;
+		code.lexeme = ex->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::POP;
+		rom.push_back(code);
+	}
 }
 
 void Astral::Compiler::GenerateBytecode()

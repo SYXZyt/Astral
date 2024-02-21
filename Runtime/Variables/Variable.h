@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include "../../Astral.h"
 #include "../Types/AstralTypes.h"
 #include "../Memory/GarbageCollector.h"
@@ -23,3 +26,5 @@ namespace Astral
 		~Variable();
 	};
 }
+
+#pragma warning(pop)

@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include "ParseTree.h"
 
 namespace Astral
@@ -11,3 +14,5 @@ namespace Astral
 		Expression(const Token& token) : ParseTree(token) {}
 	};
 }
+
+#pragma warning(pop)

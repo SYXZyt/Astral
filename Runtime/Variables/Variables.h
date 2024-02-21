@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
 #include <vector>
 
 #include "Variable.h"
@@ -16,10 +19,12 @@ namespace Astral
 
 	public:
 		Variable* GetVariable(const char* name);
+		Variable* GetVariableInGlobalScope(const char* name);
 
 		bool DoesVariableExistInHighestScope(const char* name);
 		bool DoesVariableExist(const char* name);
 		void AddVariable(const char* vname);
+		Variable* CreateVariableInGlobalScope(const char* vname);
 		void UpdateValue(const char* vname, Type::atype_t* value);
 		void UpdateRef(const char* vname, MemoryBlock* value);
 		Type::atype_t* GetValue(const char* vname);
@@ -30,3 +35,5 @@ namespace Astral
 		Variables();
 	};
 }
+
+#pragma warning(pop)

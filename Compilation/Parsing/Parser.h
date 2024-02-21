@@ -1,4 +1,8 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4251)
+
+#include <stack>
 #include <array>
 #include <string>
 #include <vector>
@@ -20,6 +24,9 @@ namespace Astral
 
 		bool failed;
 
+		std::stack<int> loopNest;
+
+		void Error(const char* message, const Token& token);
 		void Sync();
 		Token Peek();
 		Token Peek(int lookahead);
@@ -31,23 +38,30 @@ namespace Astral
 
 		bool Check(TokenType type);
 		bool Match(TokenType type);
-		bool Match(TokenType* types, unsigned int count);
+		bool Match(TokenType* types, size_t count);
 
 		Expression* ParseExpression();
+		Expression* ParseConditional();
 		Expression* ParseEquality();
 		Expression* ParseComparison();
 		Expression* ParseTerm();
 		Expression* ParseFactor();
 		Expression* ParsePower();
 		Expression* ParseUnary();
+		Expression* ParsePrefix();
 		Expression* ParseLiteral();
+		Expression* ParseCallParams();
 
 		Statement* ParseStatement();
 		Statement* ParseDeclarations();
 		Statement* ParseBlock();
 		Statement* ParseLetStatement();
-		Statement* ParsePrintStatement();
 		Statement* ParseAssignment();
+		Statement* ParseIfStatement();
+		Statement* ParseWhileStatement();
+		Statement* ParseFunctionDefinition();
+		Statement* ParseParamList();
+		Statement* ParseReturn();
 			
 	public:
 		inline bool HasFailed() const { return failed; }
@@ -59,3 +73,5 @@ namespace Astral
 		Parser(const std::vector<Token>& tokens) : tokens(tokens), pointer(0), failed(false) {}
 	};
 }
+
+#pragma warning(pop)
