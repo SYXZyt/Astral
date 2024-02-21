@@ -1,4 +1,4 @@
-func Main()
+func Main(a)
 {
-	Println("Main Function");
+	Println(a);
 }

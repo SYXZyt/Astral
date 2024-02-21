@@ -42,7 +42,7 @@ namespace Astral::Type
 	{
 		//This class a little more complicated since we have to handle c-strings as we cannot export std::string
 	private:
-		char* value;
+		char* value = nullptr;
 
 		inline void FreeValue()
 		{

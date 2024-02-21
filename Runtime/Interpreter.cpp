@@ -632,21 +632,42 @@ void Astral::Interpreter::CallFunction(const char* funcName)
 
 void Astral::Interpreter::CallFunction(const char* funcName, const std::vector<Type::atype_t*>& params)
 {
-	Variable* var = variables.GetVariableInGlobalScope(funcName);
-	if (Type::func_t* func = dynamic_cast<Type::func_t*>(var->Value()->data))
+	if (Variable* var = variables.GetVariableInGlobalScope(funcName))
 	{
-		for (Type::atype_t* param : params)
-			Push(param->Copy());
+		if (Type::func_t* func = dynamic_cast<Type::func_t*>(var->Value()->data))
+		{
+			if (func->ParamCount() != params.size())
+			{
+				Error("Param count does not match function signature");
+				return;
+			}
 
-		Push(new Type::number_t((float)params.size()));
-		callstack.push(pc);
-		pc = func->Address();
+			for (Type::atype_t* param : params)
+				Push(param->Copy());
 
-		Execute();
+			callstack.push(pc);
+			pc = (int)func->Address();
+
+			Execute();
+		}
+		else if (Type::externfunc_t* native = dynamic_cast<Type::externfunc_t*>(var->Value()->data))
+		{
+			if (native->GetFunction().ParamCount() != params.size())
+			{
+				Error("Param count does not match function signature");
+				return;
+			}
+
+			native->GetFunction().Call(params, *this, rom[0].lexeme);
+		}
+		else
+		{
+			Error("Tried to call a non-callable type");
+		}
 	}
-	else if (Type::externfunc_t* native = dynamic_cast<Type::externfunc_t*>(var->Value()->data))
+	else
 	{
-		native->GetFunction().Call(params, *this, rom[0].lexeme);
+		Error("Tried to call a non-existent Astral function");
 	}
 }
 

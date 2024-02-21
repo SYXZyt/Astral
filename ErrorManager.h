@@ -10,6 +10,14 @@
 
 namespace Astral
 {
+	inline void Error(const char* const message)
+	{
+		if (UseCLIOutput)
+			std::cerr << message << "\n\n";
+		else
+			MessageBoxA(nullptr, message, "Astral encountered an error", MB_OK);
+	}
+
 	inline void Error(const char* const message, const Astral::Lexeme& lexeme)
 	{
 		std::string msg = message;

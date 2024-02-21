@@ -17,7 +17,9 @@ int main(int, char**)
 	
 	Astral::BindBuiltInFunctionsToInterpreter(interpreter);
 
-	interpreter.CallFunction("Main");
+	std::vector<Astral::Type::atype_t*> params;
+	params.push_back(new Astral::Type::string_t("Hey there =D"));
+	interpreter.CallFunction("Main", params);
 
 	return 0;
 }
