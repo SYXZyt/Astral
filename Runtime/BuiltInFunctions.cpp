@@ -50,6 +50,79 @@ Astral::Type::atype_t* Astral::StringLength(const std::vector<Type::atype_t*>& p
 	}
 }
 
+Astral::Type::atype_t* Astral::StringRead(const std::vector<Type::atype_t*>& params, Interpreter& vm, const Lexeme& caller)
+{
+	//Validate input types
+	Type::string_t* str = dynamic_cast<Type::string_t*>(params[0]);
+	Type::number_t* index = dynamic_cast<Type::number_t*>(params[1]);
+	if (!str)
+	{
+		Error("Expected string", caller);
+		vm.Fail();
+		return nullptr;
+	}
+	if (!index)
+	{
+		Error("Expected numeric index", caller);
+		vm.Fail();
+		return nullptr;
+	}
+
+	int i = (int)index->Value();
+	int len = (int)strlen(str->Value());
+	if (i >= len)
+	{
+		Error("Index was out of range", caller);
+		vm.Fail();
+		return nullptr;
+	}
+
+	std::string v = std::string(1, str->Value()[i]);
+	return new Type::string_t(v);
+}
+
+Astral::Type::atype_t* Astral::StringWrite(const std::vector<Type::atype_t*>& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::string_t* str = dynamic_cast<Type::string_t*>(params[0]);
+	Type::number_t* index = dynamic_cast<Type::number_t*>(params[1]);
+	Type::string_t* val = dynamic_cast<Type::string_t*>(params[2]); ///@todo Change to char type when implemented. For now ensure 1 length string
+
+	Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]);
+	if (ref)
+		str = dynamic_cast<Type::string_t*>(ref->GetBlock()->data);
+
+	if (!str)
+	{
+		Error("Expected string", caller);
+		vm.Fail();
+		return nullptr;
+	}
+	if (!index)
+	{
+		Error("Expected numeric index", caller);
+		vm.Fail();
+		return nullptr;
+	}
+	if (!val || strlen(val->Value()) != 1)
+	{
+		Error("Expected 1-length string");
+		vm.Fail();
+		return nullptr;
+	}
+
+	int i = (int)index->Value();
+	int len = (int)strlen(str->Value());
+	if (i >= len)
+	{
+		Error("Index was out of range", caller);
+		vm.Fail();
+		return nullptr;
+	}
+
+	str->EditableValue()[i] = val->Value()[0];
+	return nullptr;
+}
+
 void Astral::BindBuiltInFunctionsToInterpreter(Interpreter& interpreter)
 {
 	BindFunction __print("print", 1, PrintFunction);
@@ -63,4 +136,10 @@ void Astral::BindBuiltInFunctionsToInterpreter(Interpreter& interpreter)
 
 	BindFunction __strlen("string_length", 1, StringLength);
 	__strlen.Bind(interpreter);
+
+	BindFunction __strread("string_read", 2, StringRead);
+	__strread.Bind(interpreter);
+
+	BindFunction __strwrite("string_write", 3, StringWrite);
+	__strwrite.Bind(interpreter);
 }

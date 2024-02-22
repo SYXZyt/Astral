@@ -54,6 +54,7 @@ namespace Astral::Type
 
 	public:
 		inline const char* Value() const { return value; }
+		inline char* EditableValue() { return value; }
 
 		inline void SetValue(const char* value)
 		{

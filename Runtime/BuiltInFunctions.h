@@ -15,6 +15,8 @@ namespace Astral
 	extern Type::atype_t* CreateVoid(const std::vector<Type::atype_t*>& params, Interpreter& vm, const Lexeme& caller);
 
 	extern Type::atype_t* StringLength(const std::vector<Type::atype_t*>& params, Interpreter& vm, const Lexeme& caller);
+	extern Type::atype_t* StringRead(const std::vector<Type::atype_t*>& params, Interpreter& vm, const Lexeme& caller);
+	extern Type::atype_t* StringWrite(const std::vector<Type::atype_t*>& params, Interpreter& vm, const Lexeme& caller);
 
 	extern ASTRAL void BindBuiltInFunctionsToInterpreter(Interpreter& interpreter);
 }
