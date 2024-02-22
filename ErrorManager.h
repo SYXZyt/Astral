@@ -10,6 +10,25 @@
 
 namespace Astral
 {
+	inline int StringLengthConvertTabToSpace(const char* message, int stop = -1, int spaceCount = 2)
+	{
+		int count = 0;
+		int len = strlen(message);
+
+		for (int i = 0; i < len; ++i)
+		{
+			if (i >= stop && stop > -1)
+				break;
+
+			if (message[i] == '\t')
+				count += spaceCount;
+			else
+				++count;
+		}
+
+		return count;
+	}
+
 	inline void Error(const char* const message)
 	{
 		if (UseCLIOutput)
@@ -26,7 +45,7 @@ namespace Astral
 		ss << std::setw(4) << lexeme.line + 1;
 		msg += ss.str() + "| " + lexeme.lineData + '\n';
 
-		msg += std::string(lexeme.positionInLine + 6, ' ');
+		msg += std::string(StringLengthConvertTabToSpace(lexeme.lineData.c_str(), lexeme.positionInLine) + 6, ' ');
 		msg += std::string(lexeme.lexeme.size(), '^');
 
 		msg += "\n\n";
