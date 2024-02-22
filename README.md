@@ -49,7 +49,7 @@ Additionally, the language has not function overloading, although this is planne
 ```
 func Main()
 {
-	Println("Hello, World!");
+	println("Hello, World!");
 }
 ```
 ### FizzBuzz
@@ -77,6 +77,33 @@ func Main()
 	}
 }
 ```
+
+### Value v References
+By default, Astral will pass all parameter by value unless otherwise specified. Passing by value will mean that the local variables in a function will be copies of the original data.
+If the function should change the original data then a reference should be used. A reference is a link to another variable so that if one instance is changed, then all instances are changed.
+References are mark with the `&` operator.
+```
+let x = 0;
+let y = &x; //Y is now linked to x. Changing x OR y will change the data.
+println(x);
+y = 10;
+println(x); //X now stores 10 even though we changed y
+```
+
+Some built-in functions may give you an error if you pass by value. An example of this is `string_write`. This function will write a character to a string at a given index. Since this function is expected to change the underlying data, a reference should be used.
+```
+func main(a)
+{
+	let name = "Astral";
+
+	string_write(name, 0, "O"); //Will throw a warning since it is modifying a copy
+	println(name); //Prints 'Astral'
+
+	string_write(&name, 0, "O");
+	println(name); //Prints 'Ostral'
+}
+```
+
 ### Aurora Interoperability
 Aurora is the game engine I am currently working on. Thanks to the binding system implemented in the Astral runtime, Astral can easily have support added to different programs.
 This is a sample script for Aurora which will make a light flash on and off each second
