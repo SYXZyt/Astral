@@ -471,7 +471,7 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 
 	if (Match(TokenType::IDEN))
 	{
-		if (Peek().GetType() == TokenType::ASSIGNMENT)
+		if (Peek().GetType() == TokenType::ASSIGNMENT || Peek().GetType() == TokenType::PLUS_EQUALS || Peek().GetType() == TokenType::MINUS_EQUALS)
 			return ParseAssignment();
 		else if (Peek().GetType() == TokenType::L_BRA)
 		{
