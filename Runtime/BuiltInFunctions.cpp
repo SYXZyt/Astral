@@ -84,6 +84,11 @@ Astral::Type::atype_t* Astral::StringRead(const std::vector<Type::atype_t*>& par
 Astral::Type::atype_t* Astral::StringWrite(const std::vector<Type::atype_t*>& params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::string_t* str = dynamic_cast<Type::string_t*>(params[0]);
+
+	//If we have a string copy, we should warn the programmer
+	if (str)
+		Warning("String was passed by value. No changes will be made", caller);
+
 	Type::number_t* index = dynamic_cast<Type::number_t*>(params[1]);
 	Type::string_t* val = dynamic_cast<Type::string_t*>(params[2]); ///@todo Change to char type when implemented. For now ensure 1 length string
 
