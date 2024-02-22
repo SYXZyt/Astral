@@ -32,11 +32,35 @@ Astral::Type::atype_t* Astral::PrintlnFunction(const std::vector<Type::atype_t*>
     return ret;
 }
 
+Astral::Type::atype_t* Astral::CreateVoid(const std::vector<Type::atype_t*>& params, Interpreter& vm, const Lexeme& caller)
+{
+	return new Type::void_t();
+}
+
+Astral::Type::atype_t* Astral::StringLength(const std::vector<Type::atype_t*>& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::string_t* str;
+	if (str = dynamic_cast<Type::string_t*>(params[0]))
+		return new Type::number_t((float)strlen(str->Value()));
+	else
+	{
+		Error("Expected a string to be passed", caller);
+		vm.Fail();
+		return nullptr;
+	}
+}
+
 void Astral::BindBuiltInFunctionsToInterpreter(Interpreter& interpreter)
 {
-	BindFunction __print("Print", 1, PrintFunction);
+	BindFunction __print("print", 1, PrintFunction);
 	__print.Bind(interpreter);
 
-	BindFunction __println("Println", 1, PrintlnFunction);
+	BindFunction __println("println", 1, PrintlnFunction);
 	__println.Bind(interpreter);
+
+	BindFunction __void("void", 0, CreateVoid);
+	__void.Bind(interpreter);
+
+	BindFunction __strlen("string_length", 1, StringLength);
+	__strlen.Bind(interpreter);
 }

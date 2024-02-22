@@ -19,7 +19,7 @@ int main(int, char**)
 
 	std::vector<Astral::Type::atype_t*> params;
 	params.push_back(new Astral::Type::string_t("Hey there =D"));
-	interpreter.CallFunction("Main", params);
+	interpreter.CallFunction("main", params);
 
 	return 0;
 }

@@ -1,6 +1,4 @@
-func Main(a)
+func main(a)
 {
-	let x = 0;
-	x -= 10;
-	Println(x);
+	println(string_length("AB"));
 }

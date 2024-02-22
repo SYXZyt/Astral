@@ -13,7 +13,7 @@ namespace Astral
 	inline int StringLengthConvertTabToSpace(const char* message, int stop = -1, int spaceCount = 2)
 	{
 		int count = 0;
-		int len = strlen(message);
+		int len = (int)strlen(message);
 
 		for (int i = 0; i < len; ++i)
 		{
