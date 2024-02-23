@@ -1,8 +1,4 @@
 func main(a)
 {
-	println("What is your name?");
-	let name = input();
-
-	print("You entered ");
-	println(name);
+	println(println);
 }
