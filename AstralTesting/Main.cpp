@@ -6,7 +6,7 @@
 #include <API.h>
 
 int main(int, char**)
-{
+{	
 	Astral::SetGCLimit_Bytes(0);
 
 	Astral::Rom program;

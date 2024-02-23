@@ -4,48 +4,48 @@ void Astral::Compiler::GenerateLiteral(const Literal* literal)
 {
 	switch (literal->type)
 	{
-		case Literal::LiteralType::NUMBER:
-		{
-			Bytecode code;
-			code.lexeme = literal->GetToken().GetLexeme();
-			code.op = (uint8_t)OpType::LIT_NUMBER;
-			rom.push_back(code);
-			break;
-		}
-		case Literal::LiteralType::BOOLEAN:
-		{
-			Bytecode code;
-			code.op = (uint8_t)OpType::LIT_NUMBER;
-			code.lexeme.lexeme = *(bool*)literal->data ? "1" : "0";
-			rom.push_back(code);
-			break;
-		}
-		case Literal::LiteralType::STRING:
-		{
-			Bytecode code;
-			code.lexeme = literal->GetToken().GetLexeme();
-			code.op = (uint8_t)OpType::LIT_STRING;
-			rom.push_back(code);
-			break;
-		}
-		case Literal::LiteralType::IDENTIFER:
-		{
-			Bytecode code;
-			code.lexeme = literal->GetToken().GetLexeme();
-			code.op = (uint8_t)OpType::VARIABLE;
-			rom.push_back(code);
-			break;
-		}
-		case Literal::LiteralType::REFERENCE:
-		{
-			Bytecode code;
-			code.lexeme = literal->GetToken().GetLexeme();
-			code.op = (uint8_t)OpType::VARIABLE_REF;
-			rom.push_back(code);
-			break;
-		}
-		default:
-			throw "oop";
+	case Literal::LiteralType::NUMBER:
+	{
+		Bytecode code;
+		code.lexeme = literal->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::LIT_NUMBER;
+		rom.push_back(code);
+		break;
+	}
+	case Literal::LiteralType::BOOLEAN:
+	{
+		Bytecode code;
+		code.op = (uint8_t)OpType::LIT_NUMBER;
+		code.lexeme.lexeme = *(bool*)literal->data ? "1" : "0";
+		rom.push_back(code);
+		break;
+	}
+	case Literal::LiteralType::STRING:
+	{
+		Bytecode code;
+		code.lexeme = literal->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::LIT_STRING;
+		rom.push_back(code);
+		break;
+	}
+	case Literal::LiteralType::IDENTIFER:
+	{
+		Bytecode code;
+		code.lexeme = literal->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::VARIABLE;
+		rom.push_back(code);
+		break;
+	}
+	case Literal::LiteralType::REFERENCE:
+	{
+		Bytecode code;
+		code.lexeme = literal->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::VARIABLE_REF;
+		rom.push_back(code);
+		break;
+	}
+	default:
+		throw "oop";
 	}
 }
 
@@ -56,14 +56,14 @@ void Astral::Compiler::GenerateUnary(const UnaryOp* unaryOp)
 	OpType type;
 	switch (unaryOp->GetToken().GetType())
 	{
-		case TokenType::MINUS:
-			type = OpType::UNARY_MINUS;
-			break;
-		case TokenType::NOT:
-			type = OpType::NOT;
-			break;
-		default:
-			throw "Oop";
+	case TokenType::MINUS:
+		type = OpType::UNARY_MINUS;
+		break;
+	case TokenType::NOT:
+		type = OpType::NOT;
+		break;
+	default:
+		throw "Oop";
 	}
 
 	Bytecode code;
@@ -80,50 +80,50 @@ void Astral::Compiler::GenerateBinary(const BinaryOp* binaryOp)
 	OpType type;
 	switch (binaryOp->GetToken().GetType())
 	{
-		case TokenType::PLUS:
-			type = OpType::ADD;
-			break;
-		case TokenType::MINUS:
-			type = OpType::SUB;
-			break;
-		case TokenType::ASTERISK:
-			type = OpType::MUL;
-			break;
-		case TokenType::DIVIDE:
-			type = OpType::DIV;
-			break;
-		case TokenType::HAT:
-			type = OpType::POW;
-			break;
-		case TokenType::MODULO:
-			type = OpType::MOD;
-			break;
-		case TokenType::EQUALS:
-			type = OpType::EQUALITY;
-			break;
-		case TokenType::NOT_EQUALS:
-			type = OpType::NEQUALITY;
-			break;
-		case TokenType::GREATER_THAN:
-			type = OpType::GREATER;
-			break;
-		case TokenType::GREATER_THAN_EQUAL:
-			type = OpType::GREATER_EQUALS;
-			break;
-		case TokenType::LESS_THAN:
-			type = OpType::LESS;
-			break;
-		case TokenType::LESS_THAN_EQUAL:
-			type = OpType::LESS_EQUALS;
-			break;
-		case TokenType::OR:
-			type = OpType::OR;
-			break;
-		case TokenType::AND:
-			type = OpType::AND;
-			break;
-		default:
-			throw "Oop";
+	case TokenType::PLUS:
+		type = OpType::ADD;
+		break;
+	case TokenType::MINUS:
+		type = OpType::SUB;
+		break;
+	case TokenType::ASTERISK:
+		type = OpType::MUL;
+		break;
+	case TokenType::DIVIDE:
+		type = OpType::DIV;
+		break;
+	case TokenType::HAT:
+		type = OpType::POW;
+		break;
+	case TokenType::MODULO:
+		type = OpType::MOD;
+		break;
+	case TokenType::EQUALS:
+		type = OpType::EQUALITY;
+		break;
+	case TokenType::NOT_EQUALS:
+		type = OpType::NEQUALITY;
+		break;
+	case TokenType::GREATER_THAN:
+		type = OpType::GREATER;
+		break;
+	case TokenType::GREATER_THAN_EQUAL:
+		type = OpType::GREATER_EQUALS;
+		break;
+	case TokenType::LESS_THAN:
+		type = OpType::LESS;
+		break;
+	case TokenType::LESS_THAN_EQUAL:
+		type = OpType::LESS_EQUALS;
+		break;
+	case TokenType::OR:
+		type = OpType::OR;
+		break;
+	case TokenType::AND:
+		type = OpType::AND;
+		break;
+	default:
+		throw "Oop";
 	}
 
 	Bytecode code;
@@ -354,6 +354,8 @@ void Astral::Compiler::GenerateStatement(const Statement* statement)
 		GenerateReturn(ret);
 	else if (const ExpressionStatement* expr = dynamic_cast<const ExpressionStatement*>(statement))
 		GenerateExpressionStatement(expr);
+	else if (const Using* library = dynamic_cast<const Using*>(statement))
+		GenerateUsing(library);
 	else
 		throw "oop";
 }
@@ -498,7 +500,7 @@ void Astral::Compiler::GenerateFunctionDefinition(const Function* func)
 	if (rom.DoesFunctionExist(funcName))
 	{
 		Error("Function redefinition", func->GetToken());
-		failed = true; 
+		failed = true;
 		return;
 	}
 	rom.AddFunction(def);
@@ -533,7 +535,7 @@ void Astral::Compiler::GenerateFunctionParamList(const ParamList* params)
 		code.lexeme = params->GetDeclarations()[i];
 		code.op = (uint8_t)OpType::ASSIGN;
 		rom.push_back(code);
-	} 
+	}
 }
 
 void Astral::Compiler::GenerateReturn(const Return* ret)
@@ -565,6 +567,11 @@ void Astral::Compiler::GenerateExpressionStatement(const ExpressionStatement* ex
 		code.op = (uint8_t)OpType::POP;
 		rom.push_back(code);
 	}
+}
+
+void Astral::Compiler::GenerateUsing(const Using* library)
+{
+	rom.AddUsing(library->GetLibraryName().GetLexeme().lexeme);
 }
 
 void Astral::Compiler::GenerateBytecode()

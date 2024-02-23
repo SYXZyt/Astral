@@ -158,6 +158,7 @@
     <ClInclude Include="Compilation\Parsing\Statements\ParamList.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Program.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Return.h" />
+    <ClInclude Include="Compilation\Parsing\Statements\Using.h" />
     <ClInclude Include="Compilation\Parsing\Statements\VariableAssignment.h" />
     <ClInclude Include="Compilation\Parsing\Statements\VariableDefinition.h" />
     <ClInclude Include="Compilation\Tokenisation\Lexeme.h" />
@@ -211,6 +212,7 @@
     <ClCompile Include="Compilation\Parsing\Statements\ParamList.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Program.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Return.cpp" />
+    <ClCompile Include="Compilation\Parsing\Statements\Using.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\VariableAssignment.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\VariableDefinition.cpp" />
     <ClCompile Include="Compilation\Tokenisation\Lexer.cpp" />

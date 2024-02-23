@@ -74,6 +74,7 @@ namespace Astral
 		void GenerateFunctionParamList(const ParamList* params);
 		void GenerateReturn(const Return* ret);
 		void GenerateExpressionStatement(const ExpressionStatement* expr);
+		void GenerateUsing(const Using* library);
 
 		inline void GenerateStatementInsideBlock(const Statement* statement)
 		{
@@ -91,7 +92,7 @@ namespace Astral
 
 	public:
 		inline bool Failed() const { return failed; }
-		
+
 		const Rom& GetRom() const { return rom; }
 
 		void GenerateBytecode();

@@ -1,3 +1,5 @@
+using Astral.IO;
+
 func main(a)
 {
 	println(println);
