@@ -455,14 +455,6 @@ Astral::Expression* Astral::Parser::ParseCallParams()
 
 Astral::Statement* Astral::Parser::ParseStatement()
 {
-	return ParseDeclarations();
-}
-
-Astral::Statement* Astral::Parser::ParseDeclarations()
-{
-	if (Match(TokenType::FUNC))
-		return ParseFunctionDefinition();
-
 	if (Match(TokenType::RETURN))
 		return ParseReturn();
 
@@ -601,6 +593,19 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 	Error("Expected statement", PeekOrLast());
 	failed = true;
 	return nullptr;
+}
+
+Astral::Statement* Astral::Parser::ParseDeclarations()
+{
+	if (Match(TokenType::FUNC))
+		return ParseFunctionDefinition();
+	else
+	{
+		Error("Expected declaration", Peek());
+		Sync();
+		failed = true;
+		return nullptr;
+	}
 }
 
 Astral::Statement* Astral::Parser::ParseBlock()
@@ -878,7 +883,7 @@ void Astral::Parser::Parse()
 
 	while (!IsEof())
 	{
-		Statement* stmt = ParseStatement();
+		Statement* stmt = ParseDeclarations();
 		if (stmt)
 			tree.push_back(stmt);
 	}

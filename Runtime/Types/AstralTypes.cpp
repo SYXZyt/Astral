@@ -26,3 +26,8 @@ Astral::MemoryBlock* Astral::Type::ref_t::GetBlock()
 {
 	return block;
 }
+
+std::string Astral::Type::ref_t::ToString() const
+{
+	return block->data->ToString();
+}

@@ -18,6 +18,7 @@ namespace Astral::Type
 		bool isOnStack = false; //Used in GC to determine whether this is OK to delete or not
 
 		virtual atype_t* Copy() { return new atype_t(); }
+		virtual std::string ToString() const { return "<ASTRAL-UNKNOWN-TYPE>"; }
 
 		virtual ~atype_t() {}
 	};
@@ -32,6 +33,7 @@ namespace Astral::Type
 		inline void SetValue(float value) { this->value = value; }
 
 		atype_t* Copy() final override { return new number_t(value); }
+		std::string ToString() const final override { return std::to_string(value); }
 
 		number_t() : value(0.0f), atype_t() {}
 		number_t(float v) : value(v), atype_t() {}
@@ -77,8 +79,13 @@ namespace Astral::Type
 			strcpy_s(value, len, this->value);
 			value[len - 1] = '\0';
 
-			return new string_t(value);
+			string_t* copy = new string_t(value);
+
+			delete[] value;
+			return copy;
 		}
+
+		std::string ToString() const final override { return value; }
 
 		string_t();
 		string_t(const char* value);
@@ -90,6 +97,7 @@ namespace Astral::Type
 	{
 	public:
 		atype_t* Copy() final override { return new void_t(); }
+		std::string ToString() const final override { return "<ASTRAL-VOID>"; }
 	};
 
 	class ASTRAL ref_t final : public atype_t
@@ -101,6 +109,7 @@ namespace Astral::Type
 		MemoryBlock* GetBlock();
 
 		atype_t* Copy() final override { return new ref_t(block); }
+		std::string ToString() const final override;
 
 		ref_t(MemoryBlock* block) : block(block) {}
 	};
@@ -116,6 +125,7 @@ namespace Astral::Type
 		inline size_t Address() const { return address; }
 
 		atype_t* Copy() final override { return new func_t(address, paramCount); }
+		std::string ToString() const final override { return "<ASTRAL-FUNC>"; }
 
 		func_t(size_t address, int paramCount) : address(address), paramCount(paramCount) {}
 	};
@@ -129,6 +139,7 @@ namespace Astral::Type
 		inline BindFunction& GetFunction() { return func; }
 
 		atype_t* Copy() final override { return new externfunc_t(func); }
+		std::string ToString() const final override { return "<ASTRAL-EXTERN-FUNC>"; }
 
 		externfunc_t(const BindFunction& func) : func(func) {}
 	};
