@@ -77,7 +77,10 @@ namespace Astral::Type
 			strcpy_s(value, len, this->value);
 			value[len - 1] = '\0';
 
-			return new string_t(value);
+			string_t* copy = new string_t(value);
+
+			delete[] value;
+			return copy;
 		}
 
 		string_t();

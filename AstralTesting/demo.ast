@@ -1,11 +1,13 @@
 func main(a)
 {
 	let name = "Astral";
-	println(string_read(name, 1));
 
-	string_write(name, 0, "O");
-	println(name);
+	while (true)
+	{
+		//string_write(name, 0, "O");
+		println(name);
 
-	string_write(&name, 0, "O");
-	println(name);
+		//string_write(&name, 0, "O");
+		//println(name);
+	}
 }
