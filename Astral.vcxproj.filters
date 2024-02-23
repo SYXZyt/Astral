@@ -123,6 +123,7 @@
     <None Include=".gitignore" />
     <None Include="cpp.hint" />
     <None Include="README.md" />
+    <None Include="Documentation\lib.md" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Astral.cpp">
