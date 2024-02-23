@@ -13,6 +13,8 @@ namespace Astral
 
 	namespace Type { class atype_t; }
 
+	typedef const std::vector<Type::atype_t*>& FuncParams;
+
 	class ASTRAL BindFunction
 	{
 	private:

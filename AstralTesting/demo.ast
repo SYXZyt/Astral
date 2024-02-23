@@ -1,23 +1,8 @@
 func main(a)
 {
-	let name = "Astral";
+	println("What is your name?");
+	let name = input();
 
-	println(StringReverse(name));
-}
-
-func StringReverse(str)
-{
-	let len = string_length(str);
-	let i = len - 1;
-
-	let res = "";
-
-	while (i >= 0)
-	{
-		res += string_read(str, i);
-
-		--i;
-	}
-
-	return res;
+	print("You entered ");
+	println(name);
 }
