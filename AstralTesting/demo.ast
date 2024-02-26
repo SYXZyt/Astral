@@ -1,7 +1,7 @@
-using astral;
 using astral.io;
+using astral.math;
 
 func main()
 {
-	println(get_type("Hey"));
+	println("Hello,\nWorld!");
 }
