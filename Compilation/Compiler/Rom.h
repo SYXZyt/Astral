@@ -21,13 +21,13 @@ namespace Astral
 
 	private:
 		std::vector<Bytecode> rom;
-		std::vector<std::string> usings;
+		std::vector<Lexeme> usings;
 		std::vector<FunctionDefinition> func;
 
 	public:
 		inline const std::vector<Bytecode>& GetRom() const { return rom; }
 		inline const std::vector<FunctionDefinition>& GetFunction() const { return func; }
-		inline const std::vector<std::string>& GetUsings() const { return usings; }
+		inline const std::vector<Lexeme>& GetUsings() const { return usings; }
 
 		inline void push_back(const Bytecode& instr) { rom.push_back(instr); }
 
@@ -40,10 +40,15 @@ namespace Astral
 			return false;
 		}
 
-		inline void AddUsing(const std::string& libName)
+		inline void AddUsing(const Lexeme& libName)
 		{
-			if (!std::count(usings.begin(), usings.end(), libName))
-				usings.push_back(libName);
+			for (const Lexeme& lex : usings)
+			{
+				if (lex.lexeme == libName.lexeme)
+					return;
+			}
+
+			usings.push_back(libName);
 		}
 
 		inline void AddFunction(const FunctionDefinition& function) { func.push_back(function); }

@@ -169,7 +169,9 @@
     <ClInclude Include="Runtime\BindFunction.h" />
     <ClInclude Include="Runtime\BooleanHandler.h" />
     <ClInclude Include="Runtime\BuiltInFunctions.h" />
+    <ClInclude Include="Runtime\BuiltInLibraries.h" />
     <ClInclude Include="Runtime\Interpreter.h" />
+    <ClInclude Include="Runtime\Library.h" />
     <ClInclude Include="Runtime\MathsHandler.h" />
     <ClInclude Include="Runtime\Memory\GarbageCollector.h" />
     <ClInclude Include="Runtime\Memory\MemoryBlock.h" />
@@ -220,7 +222,9 @@
     <ClCompile Include="Runtime\BindFunction.cpp" />
     <ClCompile Include="Runtime\BooleanHandler.cpp" />
     <ClCompile Include="Runtime\BuiltInFunctions.cpp" />
+    <ClCompile Include="Runtime\BuiltInLibraries.cpp" />
     <ClCompile Include="Runtime\Interpreter.cpp" />
+    <ClCompile Include="Runtime\Library.cpp" />
     <ClCompile Include="Runtime\MathsHandler.cpp" />
     <ClCompile Include="Runtime\Memory\GarbageCollector.cpp" />
     <ClCompile Include="Runtime\Memory\MemoryBlock.cpp" />

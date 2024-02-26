@@ -1,5 +1,7 @@
 #include "API.h"
 
+#include "Runtime/BuiltInLibraries.h"
+
 inline std::string ReadFile(const char* fname)
 {
 	std::ifstream in("demo.ast");
@@ -73,4 +75,14 @@ void Astral::API::ExecuteScript(const Rom& rom)
 {
 	Interpreter interpreter = CreateInterpreter(rom);
 	RunInterpreter(interpreter);
+}
+
+void Astral::API::LoadDefaultLibraries()
+{
+	Astral::LoadLibraries();
+}
+
+void Astral::API::MainCall(Interpreter& interpreter)
+{
+	interpreter.CallFunction("main");
 }

@@ -1,6 +1,7 @@
-using Astral.IO;
+using astral;
+using astral.io;
 
-func main(a)
+func main()
 {
-	println(println);
+	println(get_type("Hey"));
 }

@@ -571,7 +571,7 @@ void Astral::Compiler::GenerateExpressionStatement(const ExpressionStatement* ex
 
 void Astral::Compiler::GenerateUsing(const Using* library)
 {
-	rom.AddUsing(library->GetLibraryName().GetLexeme().lexeme);
+	rom.AddUsing(library->GetLibraryName().GetLexeme());
 }
 
 void Astral::Compiler::GenerateBytecode()

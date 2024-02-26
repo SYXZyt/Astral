@@ -24,4 +24,6 @@ namespace Astral::API
 	ASTRAL void RunInterpreter(Interpreter& interpreter);
 	ASTRAL Interpreter CreateInterpreter(const Rom& rom);
 	ASTRAL void ExecuteScript(const Rom& rom);
+	ASTRAL void LoadDefaultLibraries();
+	ASTRAL void MainCall(Interpreter& interpreter);
 }

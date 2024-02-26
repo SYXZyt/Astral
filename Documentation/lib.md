@@ -3,6 +3,7 @@
 ### Functions
 | Name     | Params | Returns  | Description                      |
 | -------- |------- | -------- | -------------------------------- |
+| void     | None   | `void`   | Returns a void type              |
 | get_type | Value  | `string` | Returns the type name of a value |
 
 ## astral.io

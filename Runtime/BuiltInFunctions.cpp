@@ -2,7 +2,7 @@
 
 #include "Types/AstralTypes.h"
 
-Astral::Type::atype_t* Astral::PrintFunction(FuncParams params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::IO::PrintFunction(FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	//If we do not know the type we are printing, just print the address
 	if (Type::void_t* void_t = dynamic_cast<Type::void_t*>(params[0]))
@@ -17,19 +17,14 @@ Astral::Type::atype_t* Astral::PrintFunction(FuncParams params, Interpreter& vm,
     return nullptr;
 }
 
-Astral::Type::atype_t* Astral::PrintlnFunction(FuncParams params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::IO::PrintlnFunction(FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
     Type::atype_t* ret = PrintFunction(params, vm, caller);
     std::cout << '\n';
     return ret;
 }
 
-Astral::Type::atype_t* Astral::CreateVoid(FuncParams params, Interpreter& vm, const Lexeme& caller)
-{
-	return new Type::void_t();
-}
-
-Astral::Type::atype_t* Astral::StringLength(FuncParams params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::String::StringLength(FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::string_t* str;
 	if (str = dynamic_cast<Type::string_t*>(params[0]))
@@ -42,7 +37,7 @@ Astral::Type::atype_t* Astral::StringLength(FuncParams params, Interpreter& vm, 
 	}
 }
 
-Astral::Type::atype_t* Astral::StringRead(FuncParams params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::String::StringRead(FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	//Validate input types
 	Type::string_t* str = dynamic_cast<Type::string_t*>(params[0]);
@@ -73,7 +68,7 @@ Astral::Type::atype_t* Astral::StringRead(FuncParams params, Interpreter& vm, co
 	return new Type::string_t(v);
 }
 
-Astral::Type::atype_t* Astral::StringWrite(FuncParams params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::String::StringWrite(FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::string_t* str = dynamic_cast<Type::string_t*>(params[0]);
 
@@ -120,33 +115,19 @@ Astral::Type::atype_t* Astral::StringWrite(FuncParams params, Interpreter& vm, c
 	return nullptr;
 }
 
-Astral::Type::atype_t* Astral::Input(FuncParams params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::IO::Input(FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	std::string str;
 	std::getline(std::cin, str);
 	return new Type::string_t(str);
 }
 
-void Astral::BindBuiltInFunctionsToInterpreter(Interpreter& interpreter)
+Astral::Type::atype_t* Astral::Functions::Astral::GetType(FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
-	BindFunction __print("print", 1, PrintFunction);
-	__print.Bind(interpreter);
+	return new Type::string_t(params[0]->Type().c_str());
+}
 
-	BindFunction __println("println", 1, PrintlnFunction);
-	__println.Bind(interpreter);
-
-	BindFunction __void("void", 0, CreateVoid);
-	__void.Bind(interpreter);
-
-	BindFunction __strlen("string_length", 1, StringLength);
-	__strlen.Bind(interpreter);
-
-	BindFunction __strread("string_read", 2, StringRead);
-	__strread.Bind(interpreter);
-
-	BindFunction __strwrite("string_write", 3, StringWrite);
-	__strwrite.Bind(interpreter);
-
-	BindFunction __input("input", 0, Input);
-	__input.Bind(interpreter);
+Astral::Type::atype_t* Astral::Functions::Astral::CreateVoid(FuncParams params, Interpreter& vm, const Lexeme& caller)
+{
+	return new Type::void_t();
 }
