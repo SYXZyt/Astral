@@ -184,6 +184,7 @@
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
     <None Include="cpp.hint" />
+    <None Include="Documentation\lib.md" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>

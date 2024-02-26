@@ -6,12 +6,13 @@ The language features a syntax which has mainly been inspired by JavaScript and 
 Astral and its runtime are still currently in development. Many of the features shown here may not be implemented yet.
 
 ## Data Types
-| Type   | Description                                                     |
-|--------|-----------------------------------------------------------------|
-| Number | 32-bit floating point number                                    |
-| String | Sequence of characters                                          |
-| Void   | Void is the lack of any data. Astral equivalent of null or None |
-| Object | Collection of types bonded together in a struct                 |
+| Type     | Description                                                     |
+|----------|-----------------------------------------------------------------|
+| Number   | 32-bit floating point number                                    |
+| String   | Sequence of characters                                          |
+| Void     | Void is the lack of any data. Astral equivalent of null or None |
+| Object   | Collection of types bonded together in a struct                 |
+| Function | Object which can be called as a function                        |
 
 ### Planned Future Types
 | Type  | Description                                                                             |
@@ -32,6 +33,9 @@ else
 ```
 and Astral will allow this as if the object has been defined as a struct, it will return true, otherwise Void which will return false.
 
+## Garbage Collection
+Astral features a garbage collector which means that the programmer does not have to care about allocating or deallocating memory. The runtime will handle all of it. When a variable has gone out of scope and there are no more handles (variables which are a reference to another variable) the garbage collector will flag that memory block for deallocation. Due to how the garbage collector functions, you may notice spikes in the memory usage. The garbage collector will only free memory when a certain threshold has been met and these spikes and drops can be seen. The rate and threshold that the GC uses is customisable for each script so more memory heavy scripts can have a more aggressive GC.
+
 ## Syntax
 Astral follows a simple syntax. A program will be made up of global variable definitions, structure definitions and functions.
 Global variables are variables which can be access anywhere within the program, regardless of scope.
@@ -45,7 +49,7 @@ Additionally, the language has not function overloading, although this is planne
 ```
 func Main()
 {
-	Println("Hello, World!");
+	println("Hello, World!");
 }
 ```
 ### FizzBuzz
@@ -73,6 +77,33 @@ func Main()
 	}
 }
 ```
+
+### Value v References
+By default, Astral will pass all parameter by value unless otherwise specified. Passing by value will mean that the local variables in a function will be copies of the original data.
+If the function should change the original data then a reference should be used. A reference is a link to another variable so that if one instance is changed, then all instances are changed.
+References are mark with the `&` operator.
+```
+let x = 0;
+let y = &x; //Y is now linked to x. Changing x OR y will change the data.
+println(x);
+y = 10;
+println(x); //X now stores 10 even though we changed y
+```
+
+Some built-in functions may give you an error if you pass by value. An example of this is `string_write`. This function will write a character to a string at a given index. Since this function is expected to change the underlying data, a reference should be used.
+```
+func main(a)
+{
+	let name = "Astral";
+
+	string_write(name, 0, "O"); //Will throw a warning since it is modifying a copy
+	println(name); //Prints 'Astral'
+
+	string_write(&name, 0, "O");
+	println(name); //Prints 'Ostral'
+}
+```
+
 ### Aurora Interoperability
 Aurora is the game engine I am currently working on. Thanks to the binding system implemented in the Astral runtime, Astral can easily have support added to different programs.
 This is a sample script for Aurora which will make a light flash on and off each second
