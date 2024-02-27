@@ -152,6 +152,7 @@
     <ClInclude Include="Compilation\Parsing\Expressions\Factorial.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Break.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Continue.h" />
+    <ClInclude Include="Compilation\Parsing\Statements\Empty.h" />
     <ClInclude Include="Compilation\Parsing\Statements\ExpressionStatement.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Function.h" />
     <ClInclude Include="Compilation\Parsing\Statements\IfStatement.h" />
@@ -209,6 +210,7 @@
     <ClCompile Include="Compilation\Parsing\Expressions\Factorial.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Break.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Continue.cpp" />
+    <ClCompile Include="Compilation\Parsing\Statements\Empty.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\ExpressionStatement.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Function.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\IfStatement.cpp" />

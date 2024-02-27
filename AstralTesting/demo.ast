@@ -1,7 +1,11 @@
 using astral.io;
-using astral.math;
 
 func main()
 {
-	println("Hello,\nWorld!");
+	let i = 0;
+	while (true)
+	{
+		title(i);
+		++i;
+	}
 }

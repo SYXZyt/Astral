@@ -587,7 +587,7 @@ Astral::Statement* Astral::Parser::ParseStatement()
 
 	if (Match(TokenType::SEMICOLON))
 	{
-		return nullptr;
+		return new Empty(Previous());
 	}
 
 	Error("Expected statement", PeekOrLast());

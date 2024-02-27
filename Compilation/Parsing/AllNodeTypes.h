@@ -22,3 +22,4 @@
 #include "Statements/ParamList.h"
 #include "Statements/Function.h"
 #include "Statements/Using.h"
+#include "Statements/Empty.h"

@@ -136,6 +136,39 @@ Astral::Type::atype_t* Astral::Functions::Astral::IO::Input(FuncParams params, I
 	return new Type::string_t(str);
 }
 
+Astral::Type::atype_t* Astral::Functions::Astral::IO::Clear(FuncParams param, Interpreter& vm, const Lexeme& caller)
+{
+#ifdef _WIN32
+	///@see https://stackoverflow.com/questions/5866529/how-do-we-clear-the-console-in-assembly/5866648#5866648
+	COORD tl{ 0, 0 };
+	CONSOLE_SCREEN_BUFFER_INFO s;
+	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+	GetConsoleScreenBufferInfo(console, &s);
+	DWORD cells = s.dwSize.X * s.dwSize.Y;
+	DWORD written;
+	FillConsoleOutputCharacterW(console, L' ', cells, tl, &written);
+	FillConsoleOutputAttribute(console, s.wAttributes, cells, tl, &written);
+	SetConsoleCursorPosition(console, tl);
+#else
+	Error("Clear is currently only supported on Windows", caller);
+	vm.Fail();
+#endif
+
+	return nullptr;
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::IO::Title(FuncParams param, Interpreter& vm, const Lexeme& caller)
+{
+#ifdef _WIN32
+	SetConsoleTitleA(param[0]->ToString().c_str());
+#else
+	Error("Title is currently only supported on Windows", caller);
+	vm.Fail();
+#endif
+
+	return nullptr;
+}
+
 Astral::Type::atype_t* Astral::Functions::Astral::GetType(FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	return new Type::string_t(params[0]->Type().c_str());

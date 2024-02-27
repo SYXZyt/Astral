@@ -356,6 +356,7 @@ void Astral::Compiler::GenerateStatement(const Statement* statement)
 		GenerateExpressionStatement(expr);
 	else if (const Using* library = dynamic_cast<const Using*>(statement))
 		GenerateUsing(library);
+	else if (dynamic_cast<const Empty*>(statement)) {}
 	else
 		throw "oop";
 }

@@ -21,10 +21,14 @@ void Astral::LoadLibraries()
 	BindFunction __print("print", 1, Functions::Astral::IO::PrintFunction);
 	BindFunction __println("println", 1, Functions::Astral::IO::PrintlnFunction);
 	BindFunction __input("input", 1, Functions::Astral::IO::Input);
+	BindFunction __clear("clear", 0, Functions::Astral::IO::Clear);
+	BindFunction __title("title", 1, Functions::Astral::IO::Title);
 
 	astral_io.AddFunction(__print);
 	astral_io.AddFunction(__println);
 	astral_io.AddFunction(__input);
+	astral_io.AddFunction(__clear);
+	astral_io.AddFunction(__title);
 
 	libraries.push_back(astral_io);
 

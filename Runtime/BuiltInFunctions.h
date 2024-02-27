@@ -5,6 +5,10 @@
 #include "Interpreter.h"
 #include "../Compilation/Tokenisation/Lexeme.h"
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 namespace Astral
 {
 	namespace Type { class Type::atype_t; }
@@ -21,6 +25,8 @@ namespace Astral
 				extern Type::atype_t* PrintFunction(FuncParams params, Interpreter& vm, const Lexeme& caller);
 				extern Type::atype_t* PrintlnFunction(FuncParams params, Interpreter& vm, const Lexeme& caller);
 				extern Type::atype_t* Input(FuncParams params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Clear(FuncParams param, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Title(FuncParams param, Interpreter& vm, const Lexeme& caller);
 			}
 
 			namespace String
