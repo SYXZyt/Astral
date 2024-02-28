@@ -8,9 +8,11 @@ void Astral::LoadLibraries()
 	
 	BindFunction __type("get_type", 1, Functions::Astral::GetType);
 	BindFunction __void("void", 0, Functions::Astral::CreateVoid);
+	BindFunction __stof("to_number", 1, Functions::Astral::ToNumber);
 
 	astral.AddFunction(__type);
 	astral.AddFunction(__void);
+	astral.AddFunction(__stof);
 
 	libraries.push_back(astral);
 
@@ -39,10 +41,14 @@ void Astral::LoadLibraries()
 	BindFunction __strlen("string_length", 1, Functions::Astral::String::StringLength);
 	BindFunction __strread("string_read", 2, Functions::Astral::String::StringRead);
 	BindFunction __strwrite("string_write", 3, Functions::Astral::String::StringWrite);
+	BindFunction __numToBin("binary_from_num", 1, Functions::Astral::String::BinaryFromNumber);
+	BindFunction __numToBinW("binary_from_num_w", 2, Functions::Astral::String::BinaryFromNumberW);
 
 	astral_string.AddFunction(__strlen);
 	astral_string.AddFunction(__strread);
 	astral_string.AddFunction(__strwrite);
+	astral_string.AddFunction(__numToBin);
+	astral_string.AddFunction(__numToBinW);
 
 	libraries.push_back(astral_string);
 
@@ -70,6 +76,12 @@ void Astral::LoadLibraries()
 	BindFunction __sign("sign", 1, Functions::Astral::Math::Sign);
 	BindFunction __rad("rad", 1, Functions::Astral::Math::Rad);
 	BindFunction __deg("deg", 1, Functions::Astral::Math::Deg);
+	BindFunction __and("and", 2, Functions::Astral::Math::And);
+	BindFunction __xor("xor", 2, Functions::Astral::Math::Xor);
+	BindFunction __or("or", 2, Functions::Astral::Math::Or);
+	BindFunction __not("not", 1, Functions::Astral::Math::Not);
+	BindFunction __lsr("shift_l", 2, Functions::Astral::Math::LeftShift);
+	BindFunction __rsr("shift_r", 2, Functions::Astral::Math::RightShift);
 
 	astral_math.AddFunction(__sin);
 	astral_math.AddFunction(__cos);
@@ -91,6 +103,12 @@ void Astral::LoadLibraries()
 	astral_math.AddFunction(__sign);
 	astral_math.AddFunction(__rad);
 	astral_math.AddFunction(__deg);
+	astral_math.AddFunction(__and);
+	astral_math.AddFunction(__or);
+	astral_math.AddFunction(__xor);
+	astral_math.AddFunction(__not);
+	astral_math.AddFunction(__lsr);
+	astral_math.AddFunction(__rsr);
 
 	libraries.push_back(astral_math);
 }

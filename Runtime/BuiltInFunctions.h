@@ -2,6 +2,8 @@
 #pragma warning(push)
 #pragma warning(disable : 4251)
 
+#include <bitset>
+
 #include "Interpreter.h"
 #include "../Compilation/Tokenisation/Lexeme.h"
 
@@ -19,6 +21,7 @@ namespace Astral
 		{
 			extern Type::atype_t* GetType(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
 			extern Type::atype_t* CreateVoid(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+			extern Type::atype_t* ToNumber(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
 
 			namespace IO
 			{
@@ -34,6 +37,8 @@ namespace Astral
 				extern Type::atype_t* StringLength(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
 				extern Type::atype_t* StringRead(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
 				extern Type::atype_t* StringWrite(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* BinaryFromNumber(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* BinaryFromNumberW(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
 			}
 
 			namespace Math
@@ -58,6 +63,12 @@ namespace Astral
 				extern Type::atype_t* Sign(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
 				extern Type::atype_t* Rad(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
 				extern Type::atype_t* Deg(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* And(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Or(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Xor(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Not(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* LeftShift(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* RightShift(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
 			}
 		}
 	}

@@ -6,17 +6,18 @@ The language features a syntax which has mainly been inspired by JavaScript and 
 Astral and its runtime are still currently in development. Many of the features shown here may not be implemented yet.
 
 ## Data Types
-| Type     | Description                                                     |
-|----------|-----------------------------------------------------------------|
-| Number   | 32-bit floating point number                                    |
-| String   | Sequence of characters                                          |
-| Void     | Void is the lack of any data. Astral equivalent of null or None |
-| Object   | Collection of types bonded together in a struct                 |
-| Function | Object which can be called as a function                        |
+| Type            | Description                                                     |
+| --------------- | --------------------------------------------------------------- |
+| Number          | 32-bit floating point number                                    |
+| String          | Sequence of characters                                          |
+| Void            | Void is the lack of any data. Astral equivalent of null or None |
+| Object          | Collection of types bonded together in a struct                 |
+| Function        | Object which can be called as a function                        |
+| Extern Function | Object which can be called as an external function (Native C++) |
 
 ### Planned Future Types
 | Type  | Description                                                                             |
-|-------|-----------------------------------------------------------------------------------------|
+| ----- | --------------------------------------------------------------------------------------- |
 | Array | Dynamically sized list of data                                                          |
 | Char  | Single character. Will be used when reading or writing to a string at a specified index |
 
@@ -43,6 +44,96 @@ Global variables are variables which can be access anywhere within the program, 
 Global variables will be defined by using the `global` keyword. By default, they will store void. They should be initalised in the main method or before use.
 Functions can be defined using the `func` keyword. Following the dynamic typing of Astral functions do not have any explicit return type.
 Additionally, the language has not function overloading, although this is planned in the future.
+
+One problem that is important to note with Astral, is that all conditions in an if statement are ran.
+Take this for example
+```
+let obj = create();
+if (obj && obj.member)
+	...
+```
+
+This code is fine, until obj is void. You might think it will be ok since we are checking if the object exists, but Astral will run both expressions before calculating the `&&`.
+If the object is void then this code will result in a void reference.
+The solution would be this.
+```
+let obj = create();
+if (obj)
+{
+	if (obj.member)
+		...
+}
+```
+
+## Bitwise
+Astral does not have any bitwise operators, however, the maths library contains functions which can perform these operations.
+```
+using astral.io;
+using astral.math;
+using astral.string;
+
+let a = 11;  //1011
+let b = 10; //1010
+
+println("a");
+println(binary_from_num_w(a, 4));
+
+println("b");
+println(binary_from_num_w(b, 4));
+
+println("a & b");
+println(binary_from_num_w(and(a, b), 4));
+
+println("a | b");
+println(binary_from_num_w(or(a, b), 4));
+
+println("a ^ b");
+println(binary_from_num_w(xor(a, b), 4));
+
+println("~a");
+println(binary_from_num_w(not(a), 4));
+
+println("~b");
+println(binary_from_num_w(not(b), 4));
+
+println("a << 1");
+println(binary_from_num_w(shift_l(a, 1), 4));
+
+println("b << 1");
+println(binary_from_num_w(shift_l(b, 1), 4));
+
+println("a >> 1");
+println(binary_from_num_w(shift_r(a, 1), 4));
+
+println("b >> 1");
+println(binary_from_num_w(shift_r(b, 1), 4));
+```
+
+which outputs
+```
+a
+1011
+b
+1010
+a & b
+1010
+a | b
+1011
+a ^ b
+0001
+~a
+0100
+~b
+0101
+a << 1
+0110
+b << 1
+0100
+a >> 1
+0101
+b >> 1
+0101
+```
 
 ## Examples
 ### Hello World
