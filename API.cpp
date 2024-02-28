@@ -12,35 +12,9 @@ inline std::string ReadFile(const char* fname)
 
 bool Astral::API::CompileFile(const char* fname, Rom& generatedRom, bool dumpLexer, bool dumpParser, bool dumpRom)
 {
-	std::string data = ReadFile(fname);
-
-	Lexer lexer(data, fname);
-	lexer.Tokenise();
-	if (lexer.Failed())
+	ast tree{};
+	if (!CompileToParseTree(fname, tree, dumpLexer, dumpParser))
 		return false;
-
-	if (dumpLexer)
-	{
-		for (const Token& t : lexer.GetTokens())
-			std::cout << t << '\n';
-
-		std::cout << '\n';
-	}
-
-	Parser parser(lexer.GetTokens());
-	parser.Parse();
-
-	if (parser.HasFailed())
-		return false;
-
-	ast tree = parser.tree;
-
-	if (dumpParser)
-	{
-		for (ParseTree* node : tree)
-			node->Dump();
-		std::cout << "\n\n";
-	}
 
 	Compiler compiler(tree);
 	compiler.GenerateBytecode();
@@ -85,4 +59,39 @@ void Astral::API::LoadDefaultLibraries()
 void Astral::API::MainCall(Interpreter& interpreter)
 {
 	interpreter.CallFunction("main");
+}
+
+bool Astral::API::CompileToParseTree(const char* fname, ast& tree, bool dumpLexer, bool dumpParser)
+{
+	std::string data = ReadFile(fname);
+
+	Lexer lexer(data, fname);
+	lexer.Tokenise();
+	if (lexer.Failed())
+		return false;
+
+	if (dumpLexer)
+	{
+		for (const Token& t : lexer.GetTokens())
+			std::cout << t << '\n';
+
+		std::cout << '\n';
+	}
+
+	Parser parser(lexer.GetTokens());
+	parser.Parse();
+
+	if (parser.HasFailed())
+		return false;
+
+	tree = parser.tree;
+
+	if (dumpParser)
+	{
+		for (ParseTree* node : tree)
+			node->Dump();
+		std::cout << "\n\n";
+	}
+
+	return true;
 }

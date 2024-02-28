@@ -4,12 +4,12 @@
 
 inline static float lerp(float a, float b, float c)
 {
-	return a * (1.0 - c) + (b * c);
+	return a * (1.0f - c) + (b * c);
 }
 
 inline static float sign(float x)
 {
-	return (0 < x) - (x < 0);
+	return (float)((0.f < x) - (x < 0.f));
 }
 
 inline static float clamp(float min, float max, float v)
@@ -489,7 +489,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::Rad(FuncParams params, I
 		return nullptr;
 	}
 
-	return new Type::number_t(num->Value() * 3.1415936 / 180);
+	return new Type::number_t(num->Value() * 3.1415936f / 180.f);
 }
 
 Astral::Type::atype_t* Astral::Functions::Astral::Math::Deg(FuncParams params, Interpreter& vm, const Lexeme& caller)
@@ -504,5 +504,5 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::Deg(FuncParams params, I
 		return nullptr;
 	}
 
-	return new Type::number_t(num->Value() * 180 / 3.1415936);
+	return new Type::number_t(num->Value() * 180.f / 3.1415936f);
 }

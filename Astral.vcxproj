@@ -156,6 +156,7 @@
     <ClInclude Include="Compilation\Parsing\Statements\ExpressionStatement.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Function.h" />
     <ClInclude Include="Compilation\Parsing\Statements\IfStatement.h" />
+    <ClInclude Include="Compilation\Parsing\Statements\Include.h" />
     <ClInclude Include="Compilation\Parsing\Statements\ParamList.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Program.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Return.h" />
@@ -214,6 +215,7 @@
     <ClCompile Include="Compilation\Parsing\Statements\ExpressionStatement.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Function.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\IfStatement.cpp" />
+    <ClCompile Include="Compilation\Parsing\Statements\Include.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\ParamList.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Program.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Return.cpp" />

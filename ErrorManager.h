@@ -33,7 +33,7 @@ namespace Astral
 	{
 		std::string result = "";
 
-		int len = strlen(message);
+		int len = (int)strlen(message);
 		for (int i = 0; i < len; ++i)
 		{
 			if (message[i] == '\t')

@@ -26,4 +26,5 @@ namespace Astral::API
 	ASTRAL void ExecuteScript(const Rom& rom);
 	ASTRAL void LoadDefaultLibraries();
 	ASTRAL void MainCall(Interpreter& interpreter);
+	ASTRAL bool CompileToParseTree(const char* fname, ast& tree, bool dumpLexer = false, bool dumpParser = false);
 }

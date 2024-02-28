@@ -23,3 +23,4 @@
 #include "Statements/Function.h"
 #include "Statements/Using.h"
 #include "Statements/Empty.h"
+#include "Statements/Include.h"

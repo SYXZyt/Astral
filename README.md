@@ -155,6 +155,11 @@ whereas `(1 + 2) * 3` will be turned into this tree.
 / \
 1 2
 ```
+### Linker
+The linker in Astral does not quite function the same as the C/C++ linker. In Astral, the linkers job is to resolve `include` statements. These statements will tell the compiler that it wants to use another file and load its code.
+The linker will take the given filename, try to load it, and run the first two compilation stages on the code. Once a tree has been generated, it will be appended onto the end of the current tree.
+Also important to the linker is to track which files have already been loaded as to ensure that the same file is not loaded multiple times (similar to `pragma once` in C++).
+
 ### Compiler
 The final stage of compilation is the compiler or assembler. It will navigate through the AST and generate bytecode. Bytecode is the instructions that the virtual machine or interpreter will execute. These instructions are very simple and will usually consist of, push value onto stack, or add together two values.
 

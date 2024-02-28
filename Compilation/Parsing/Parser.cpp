@@ -601,6 +601,8 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 		return ParseFunctionDefinition();
 	else if (Match(TokenType::USING))
 		return ParseUsing();
+	else if (Match(TokenType::INCLUDE))
+		return ParseInclude();
 	else
 	{
 		Error("Expected declaration", Peek());
@@ -910,6 +912,22 @@ Astral::Statement* Astral::Parser::ParseUsing()
 	libName.SetLexeme(lex);
 
 	return new Using(token, libName);
+}
+
+Astral::Statement* Astral::Parser::ParseInclude()
+{
+	Token token = Previous();
+	Token fname = Advance();
+
+	if (fname.GetType() != TokenType::STRING)
+	{
+		Error("Expected string", fname);
+		return nullptr;
+	}
+
+	Consume(TokenType::SEMICOLON, "Expected ';'");
+
+	return new Include(token, fname);
 }
 
 void Astral::Parser::Parse()
