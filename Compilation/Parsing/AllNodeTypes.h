@@ -21,3 +21,6 @@
 #include "Statements/Break.h"
 #include "Statements/ParamList.h"
 #include "Statements/Function.h"
+#include "Statements/Using.h"
+#include "Statements/Empty.h"
+#include "Statements/Include.h"

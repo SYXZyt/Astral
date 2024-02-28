@@ -6,11 +6,13 @@
 #include <vector>
 #include <iostream>
 
+#include "Library.h"
 #include "../Astral.h"
 #include "BindFunction.h"
 #include "MathsHandler.h"
 #include "BooleanHandler.h"
 #include "../ErrorManager.h"
+#include "BuiltInLibraries.h"
 #include "Types/AstralTypes.h"
 #include "Variables/Variables.h"
 #include "Memory/GarbageCollector.h"
@@ -175,7 +177,9 @@ namespace Astral
 
 		void ExecuteInstruction(Bytecode& instruction);
 
+		bool TryToLoadLib(const std::string& name);
 		void PreloadFunctions();
+		void PreloadLibraries();
 
 	public:
 		void Bind_Function(BindFunction& func);
@@ -192,6 +196,7 @@ namespace Astral
 		{
 			instance = this;
 			PreloadFunctions();
+			PreloadLibraries();
 		}
 
 		~Interpreter();

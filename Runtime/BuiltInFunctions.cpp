@@ -2,9 +2,23 @@
 
 #include "Types/AstralTypes.h"
 
-Astral::Type::atype_t* Astral::PrintFunction(FuncParams params, Interpreter& vm, const Lexeme& caller)
+inline static float lerp(float a, float b, float c)
 {
-	//If we do not know the type we are printing, just print the address
+	return a * (1.0f - c) + (b * c);
+}
+
+inline static float sign(float x)
+{
+	return (float)((0.f < x) - (x < 0.f));
+}
+
+inline static float clamp(float min, float max, float v)
+{
+	return (std::max)(min, (std::min)(v, max));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::IO::PrintFunction(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
 	if (Type::void_t* void_t = dynamic_cast<Type::void_t*>(params[0]))
 	{
 		Error("void reference", caller);
@@ -17,19 +31,14 @@ Astral::Type::atype_t* Astral::PrintFunction(FuncParams params, Interpreter& vm,
     return nullptr;
 }
 
-Astral::Type::atype_t* Astral::PrintlnFunction(FuncParams params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::IO::PrintlnFunction(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
 {
     Type::atype_t* ret = PrintFunction(params, vm, caller);
     std::cout << '\n';
     return ret;
 }
 
-Astral::Type::atype_t* Astral::CreateVoid(FuncParams params, Interpreter& vm, const Lexeme& caller)
-{
-	return new Type::void_t();
-}
-
-Astral::Type::atype_t* Astral::StringLength(FuncParams params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::String::StringLength(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::string_t* str;
 	if (str = dynamic_cast<Type::string_t*>(params[0]))
@@ -42,7 +51,7 @@ Astral::Type::atype_t* Astral::StringLength(FuncParams params, Interpreter& vm, 
 	}
 }
 
-Astral::Type::atype_t* Astral::StringRead(FuncParams params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::String::StringRead(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
 {
 	//Validate input types
 	Type::string_t* str = dynamic_cast<Type::string_t*>(params[0]);
@@ -73,7 +82,7 @@ Astral::Type::atype_t* Astral::StringRead(FuncParams params, Interpreter& vm, co
 	return new Type::string_t(v);
 }
 
-Astral::Type::atype_t* Astral::StringWrite(FuncParams params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::String::StringWrite(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::string_t* str = dynamic_cast<Type::string_t*>(params[0]);
 
@@ -120,33 +129,553 @@ Astral::Type::atype_t* Astral::StringWrite(FuncParams params, Interpreter& vm, c
 	return nullptr;
 }
 
-Astral::Type::atype_t* Astral::Input(FuncParams params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::String::BinaryFromNumber(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		num = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!num)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::string_t(std::bitset<32>((int)num->Value()).to_string());
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::String::BinaryFromNumberW(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		num = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	Type::number_t* count = dynamic_cast<Type::number_t*>(params[1]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[1]))
+		count = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!num || !count)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	int v = (int)num->Value();
+	int c = (int)count->Value();
+
+	std::vector<bool> bits;
+	for (int i = 0; i < c; ++i)
+	{
+		bits.push_back(v & 1);
+		v >>= 1;
+	}
+
+	std::string res;
+	for (int i = c - 1; i >= 0; i--)
+		res += std::to_string(bits[i]);
+
+	return new Type::string_t(res);
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::IO::Input(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
 {
 	std::string str;
 	std::getline(std::cin, str);
 	return new Type::string_t(str);
 }
 
-void Astral::BindBuiltInFunctionsToInterpreter(Interpreter& interpreter)
+Astral::Type::atype_t* Astral::Functions::Astral::IO::Clear(const FuncParams& param, Interpreter& vm, const Lexeme& caller)
 {
-	BindFunction __print("print", 1, PrintFunction);
-	__print.Bind(interpreter);
+#ifdef _WIN32
+	///@see https://stackoverflow.com/questions/5866529/how-do-we-clear-the-console-in-assembly/5866648#5866648
+	COORD tl{ 0, 0 };
+	CONSOLE_SCREEN_BUFFER_INFO s;
+	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+	GetConsoleScreenBufferInfo(console, &s);
+	DWORD cells = s.dwSize.X * s.dwSize.Y;
+	DWORD written;
+	FillConsoleOutputCharacterW(console, L' ', cells, tl, &written);
+	FillConsoleOutputAttribute(console, s.wAttributes, cells, tl, &written);
+	SetConsoleCursorPosition(console, tl);
+#else
+	Error("Clear is currently only supported on Windows", caller);
+	vm.Fail();
+#endif
 
-	BindFunction __println("println", 1, PrintlnFunction);
-	__println.Bind(interpreter);
+	return nullptr;
+}
 
-	BindFunction __void("void", 0, CreateVoid);
-	__void.Bind(interpreter);
+Astral::Type::atype_t* Astral::Functions::Astral::IO::Title(const FuncParams& param, Interpreter& vm, const Lexeme& caller)
+{
+#ifdef _WIN32
+	SetConsoleTitleA(param[0]->ToString().c_str());
+#else
+	Error("Title is currently only supported on Windows", caller);
+	vm.Fail();
+#endif
 
-	BindFunction __strlen("string_length", 1, StringLength);
-	__strlen.Bind(interpreter);
+	return nullptr;
+}
 
-	BindFunction __strread("string_read", 2, StringRead);
-	__strread.Bind(interpreter);
+Astral::Type::atype_t* Astral::Functions::Astral::GetType(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	return new Type::string_t(params[0]->Type().c_str());
+}
 
-	BindFunction __strwrite("string_write", 3, StringWrite);
-	__strwrite.Bind(interpreter);
+Astral::Type::atype_t* Astral::Functions::Astral::CreateVoid(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	return new Type::void_t();
+}
 
-	BindFunction __input("input", 0, Input);
-	__input.Bind(interpreter);
+Astral::Type::atype_t* Astral::Functions::Astral::ToNumber(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::string_t* str = dynamic_cast<Type::string_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		str = dynamic_cast<Type::string_t*>(ref->GetBlock()->data);
+
+	if (!str)
+	{
+		Error("Expected string", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t(std::stof(str->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Sin(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		num = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!num)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t(sin(num->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Cos(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		num = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!num)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t(cos(num->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Tan(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		num = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!num)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t(tan(num->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::ASin(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		num = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!num)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t(asin(num->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::ACos(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		num = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!num)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t(acos(num->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::ATan(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		num = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!num)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t(atan(num->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::ATan2(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* a = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		a = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	Type::number_t* b = dynamic_cast<Type::number_t*>(params[1]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[1]))
+		b = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!a || !b)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t(atan2(a->Value(), b->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Sqrt(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		num = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!num)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t(sqrt(num->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Log(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		num = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!num)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t(log(num->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Abs(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		num = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!num)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t(abs(num->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Floor(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		num = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!num)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t(floor(num->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Ceil(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		num = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!num)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t(ceil(num->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Round(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		num = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!num)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t(round(num->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Clamp(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* a = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		a = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	Type::number_t* b = dynamic_cast<Type::number_t*>(params[1]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[1]))
+		b = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	Type::number_t* c = dynamic_cast<Type::number_t*>(params[2]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[2]))
+		c = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!a || !b || !c)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t(clamp(a->Value(), b->Value(), c->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Min(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* a = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		a = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	Type::number_t* b = dynamic_cast<Type::number_t*>(params[1]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[1]))
+		b = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!a || !b)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t((std::min)(a->Value(), b->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Max(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* a = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		a = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	Type::number_t* b = dynamic_cast<Type::number_t*>(params[1]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[1]))
+		b = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!a || !b)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t((std::max)(a->Value(), b->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Lerp(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* a = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		a = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	Type::number_t* b = dynamic_cast<Type::number_t*>(params[1]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[1]))
+		b = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	Type::number_t* c = dynamic_cast<Type::number_t*>(params[2]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[2]))
+		c = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!a || !b || !c)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t(lerp(a->Value(), b->Value(), c->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Sign(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		num = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!num)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t(sign(num->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Rad(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		num = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!num)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t(num->Value() * 3.1415936f / 180.f);
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Deg(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		num = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!num)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t(num->Value() * 180.f / 3.1415936f);
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::And(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* a = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		a = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	Type::number_t* b = dynamic_cast<Type::number_t*>(params[1]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[1]))
+		b = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!a || !b)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t((float)((int)a->Value() & (int)b->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Or(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* a = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		a = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	Type::number_t* b = dynamic_cast<Type::number_t*>(params[1]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[1]))
+		b = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!a || !b)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t((float)((int)a->Value() | (int)b->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Xor(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* a = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		a = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	Type::number_t* b = dynamic_cast<Type::number_t*>(params[1]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[1]))
+		b = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!a || !b)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t((float)((int)a->Value() ^ (int)b->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Not(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* a = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		a = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!a)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t((float)(~(int)a->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::LeftShift(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* a = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		a = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	Type::number_t* b = dynamic_cast<Type::number_t*>(params[1]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[1]))
+		b = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!a || !b)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t((float)((int)a->Value() << (int)b->Value()));
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::Math::RightShift(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::number_t* a = dynamic_cast<Type::number_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		a = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	Type::number_t* b = dynamic_cast<Type::number_t*>(params[1]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[1]))
+		b = dynamic_cast<Type::number_t*>(ref->GetBlock()->data);
+
+	if (!a || !b)
+	{
+		Error("Expected numeric value", caller);
+		return nullptr;
+	}
+
+	return new Type::number_t((float)((int)a->Value() >> (int)b->Value()));
 }

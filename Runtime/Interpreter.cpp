@@ -589,12 +589,38 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 	}
 }
 
+bool Astral::Interpreter::TryToLoadLib(const std::string& name)
+{
+	for (Library& lib : Astral::libraries)
+	{
+		if (name == lib.Name())
+		{
+			lib.Bind(*this);
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void Astral::Interpreter::PreloadFunctions()
 {
 	for (auto& func : _rom.GetFunction())
 	{
 		variables.AddVariable(func.name);
 		variables.UpdateValue(func.name, func.func);
+	}
+}
+
+void Astral::Interpreter::PreloadLibraries()
+{
+	for (const Lexeme& _using : _rom.GetUsings())
+	{
+		if (!TryToLoadLib(_using.lexeme))
+		{
+			Error("Failed to load library", _using);
+			failed = true;
+		}
 	}
 }
 

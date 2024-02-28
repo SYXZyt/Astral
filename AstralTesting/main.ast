@@ -1,0 +1,42 @@
+using astral.io;
+using astral.math;
+using astral.string;
+
+func Run()
+{
+	let a = 11;  //1011
+	let b = 10; //1010
+
+	println("a");
+	println(binary_from_num_w(a, 4));
+
+	println("b");
+	println(binary_from_num_w(b, 4));
+
+	println("a & b");
+	println(binary_from_num_w(and(a, b), 4));
+
+	println("a | b");
+	println(binary_from_num_w(or(a, b), 4));
+
+	println("a ^ b");
+	println(binary_from_num_w(xor(a, b), 4));
+
+	println("~a");
+	println(binary_from_num_w(not(a), 4));
+
+	println("~b");
+	println(binary_from_num_w(not(b), 4));
+
+	println("a << 1");
+	println(binary_from_num_w(shift_l(a, 1), 4));
+
+	println("b << 1");
+	println(binary_from_num_w(shift_l(b, 1), 4));
+
+	println("a >> 1");
+	println(binary_from_num_w(shift_r(a, 1), 4));
+
+	println("b >> 1");
+	println(binary_from_num_w(shift_r(b, 1), 4));
+}

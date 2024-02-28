@@ -135,6 +135,7 @@
     <ClInclude Include="Compilation\Compiler\Compiler.h" />
     <ClInclude Include="Compilation\Compiler\OpType.h" />
     <ClInclude Include="Compilation\Compiler\Rom.h" />
+    <ClInclude Include="Compilation\Linker\Linker.h" />
     <ClInclude Include="Compilation\Parsing\AllNodeTypes.h" />
     <ClInclude Include="Compilation\Parsing\Expression.h" />
     <ClInclude Include="Compilation\Parsing\Expressions\BinaryOp.h" />
@@ -152,12 +153,15 @@
     <ClInclude Include="Compilation\Parsing\Expressions\Factorial.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Break.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Continue.h" />
+    <ClInclude Include="Compilation\Parsing\Statements\Empty.h" />
     <ClInclude Include="Compilation\Parsing\Statements\ExpressionStatement.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Function.h" />
     <ClInclude Include="Compilation\Parsing\Statements\IfStatement.h" />
+    <ClInclude Include="Compilation\Parsing\Statements\Include.h" />
     <ClInclude Include="Compilation\Parsing\Statements\ParamList.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Program.h" />
     <ClInclude Include="Compilation\Parsing\Statements\Return.h" />
+    <ClInclude Include="Compilation\Parsing\Statements\Using.h" />
     <ClInclude Include="Compilation\Parsing\Statements\VariableAssignment.h" />
     <ClInclude Include="Compilation\Parsing\Statements\VariableDefinition.h" />
     <ClInclude Include="Compilation\Tokenisation\Lexeme.h" />
@@ -168,7 +172,9 @@
     <ClInclude Include="Runtime\BindFunction.h" />
     <ClInclude Include="Runtime\BooleanHandler.h" />
     <ClInclude Include="Runtime\BuiltInFunctions.h" />
+    <ClInclude Include="Runtime\BuiltInLibraries.h" />
     <ClInclude Include="Runtime\Interpreter.h" />
+    <ClInclude Include="Runtime\Library.h" />
     <ClInclude Include="Runtime\MathsHandler.h" />
     <ClInclude Include="Runtime\Memory\GarbageCollector.h" />
     <ClInclude Include="Runtime\Memory\MemoryBlock.h" />
@@ -183,12 +189,14 @@
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
     <None Include="cpp.hint" />
+    <None Include="Documentation\lib.md" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="API.cpp" />
     <ClCompile Include="Astral.cpp" />
     <ClCompile Include="Compilation\Compiler\Compiler.cpp" />
+    <ClCompile Include="Compilation\Linker\Linker.cpp" />
     <ClCompile Include="Compilation\Parsing\Expression.cpp" />
     <ClCompile Include="Compilation\Parsing\Expressions\BinaryOp.cpp" />
     <ClCompile Include="Compilation\Parsing\Expressions\CallParameters.cpp" />
@@ -205,19 +213,24 @@
     <ClCompile Include="Compilation\Parsing\Expressions\Factorial.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Break.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Continue.cpp" />
+    <ClCompile Include="Compilation\Parsing\Statements\Empty.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\ExpressionStatement.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Function.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\IfStatement.cpp" />
+    <ClCompile Include="Compilation\Parsing\Statements\Include.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\ParamList.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Program.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\Return.cpp" />
+    <ClCompile Include="Compilation\Parsing\Statements\Using.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\VariableAssignment.cpp" />
     <ClCompile Include="Compilation\Parsing\Statements\VariableDefinition.cpp" />
     <ClCompile Include="Compilation\Tokenisation\Lexer.cpp" />
     <ClCompile Include="Runtime\BindFunction.cpp" />
     <ClCompile Include="Runtime\BooleanHandler.cpp" />
     <ClCompile Include="Runtime\BuiltInFunctions.cpp" />
+    <ClCompile Include="Runtime\BuiltInLibraries.cpp" />
     <ClCompile Include="Runtime\Interpreter.cpp" />
+    <ClCompile Include="Runtime\Library.cpp" />
     <ClCompile Include="Runtime\MathsHandler.cpp" />
     <ClCompile Include="Runtime\Memory\GarbageCollector.cpp" />
     <ClCompile Include="Runtime\Memory\MemoryBlock.cpp" />
