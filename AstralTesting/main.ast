@@ -1,3 +1,5 @@
+using astral.io;
+
 func Run()
 {
 	let i = 0;

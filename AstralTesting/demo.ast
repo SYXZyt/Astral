@@ -1,12 +1,8 @@
 using astral.io;
-include "demo.ast";
+include "main.ast";
+include "main.ast";
 
 func main()
 {
-	let i = 0;
-	while (true)
-	{
-		title(i);
-		++i;
-	}
+	Run();
 }

@@ -9,6 +9,8 @@
 #include "Compilation/Parsing/Parser.h"
 #include "Compilation/Parsing/ParseTree.h"
 
+#include "Compilation/Linker/Linker.h"
+
 #include "Compilation/Compiler/Rom.h"
 #include "Compilation/Compiler/Compiler.h"
 
@@ -26,4 +28,5 @@ namespace Astral::API
 	ASTRAL void ExecuteScript(const Rom& rom);
 	ASTRAL void LoadDefaultLibraries();
 	ASTRAL void MainCall(Interpreter& interpreter);
+	ASTRAL bool CompileToParseTree(const char* fname, ast& tree, bool dumpLexer = false, bool dumpParser = false);
 }

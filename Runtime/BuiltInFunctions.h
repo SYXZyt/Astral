@@ -17,47 +17,47 @@ namespace Astral
 	{
 		namespace Astral
 		{
-			extern Type::atype_t* GetType(FuncParams params, Interpreter& vm, const Lexeme& caller);
-			extern Type::atype_t* CreateVoid(FuncParams params, Interpreter& vm, const Lexeme& caller);
+			extern Type::atype_t* GetType(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+			extern Type::atype_t* CreateVoid(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
 
 			namespace IO
 			{
-				extern Type::atype_t* PrintFunction(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* PrintlnFunction(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* Input(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* Clear(FuncParams param, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* Title(FuncParams param, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* PrintFunction(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* PrintlnFunction(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Input(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Clear(const FuncParams& param, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Title(const FuncParams& param, Interpreter& vm, const Lexeme& caller);
 			}
 
 			namespace String
 			{
-				extern Type::atype_t* StringLength(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* StringRead(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* StringWrite(FuncParams params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* StringLength(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* StringRead(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* StringWrite(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
 			}
 
 			namespace Math
 			{
-				extern Type::atype_t* Sin(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* Cos(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* Tan(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* ASin(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* ACos(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* ATan(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* ATan2(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* Sqrt(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* Log(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* Abs(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* Floor(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* Ceil(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* Round(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* Clamp(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* Min(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* Max(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* Lerp(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* Sign(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* Rad(FuncParams params, Interpreter& vm, const Lexeme& caller);
-				extern Type::atype_t* Deg(FuncParams params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Sin(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Cos(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Tan(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* ASin(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* ACos(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* ATan(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* ATan2(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Sqrt(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Log(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Abs(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Floor(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Ceil(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Round(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Clamp(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Min(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Max(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Lerp(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Sign(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Rad(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
+				extern Type::atype_t* Deg(const FuncParams& params, Interpreter& vm, const Lexeme& caller);
 			}
 		}
 	}

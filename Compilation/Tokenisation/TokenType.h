@@ -61,6 +61,7 @@ namespace Astral
 		CONTINUE,
 		RETURN,
 		USING,
+		INCLUDE,
 	};
 
 	ASTRAL inline std::ostream& operator<<(std::ostream& os, const TokenType& t)
@@ -179,6 +180,10 @@ namespace Astral
 				break;
 			case TokenType::USING:
 				os << "<USING>";
+				break;
+			case TokenType::INCLUDE:
+				os << "<INCLUDE>";
+				break;
 
 			default:
 				os << "<UNKNOWN-TYPE>";

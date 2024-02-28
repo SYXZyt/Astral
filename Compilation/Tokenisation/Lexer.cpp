@@ -134,52 +134,52 @@ Astral::Token Astral::Lexer::GenerateString(char strChar)
 
 			switch (currentChar)
 			{
-			case 'n':
-				data += '\n';
-				break;
-			case 't':
-				data += '\t';
-				break;
-			case 'r':
-				data += '\r';
-				break;
-			case 'b':
-				data += '\b';
-				break;
-			case '\'':
-				data += '\'';
-				break;
-			case '\"':
-				data += '\"';
-				break;
-			case '\\':
-				data += '\\';
-				break;
-			case '0':
-				data += '\0';
-				break;
-			case '\0':
-			{
-				lex.lexeme = data;
-				Token token;
-				token.SetLexeme(lex);
-				Error("Unterminated string", token);
-				failed = true;
+				case 'n':
+					data += '\n';
+					break;
+				case 't':
+					data += '\t';
+					break;
+				case 'r':
+					data += '\r';
+					break;
+				case 'b':
+					data += '\b';
+					break;
+				case '\'':
+					data += '\'';
+					break;
+				case '\"':
+					data += '\"';
+					break;
+				case '\\':
+					data += '\\';
+					break;
+				case '0':
+					data += '\0';
+					break;
+				case '\0':
+				{
+					lex.lexeme = data;
+					Token token;
+					token.SetLexeme(lex);
+					Error("Unterminated string", token);
+					failed = true;
 
-				break;
-			}
-			default:
-			{
-				lex.positionInBuffer = bufferpos - 1;
-				lex.positionInLine = posOnLine - 1;
-				lex.lexeme = "\\" + currentChar;
-				Token token;
-				token.SetLexeme(lex);
-				Error("Unknown escape sequence", token);
-				failed = true;
+					break;
+				}
+				default:
+				{
+					lex.positionInBuffer = bufferpos - 1;
+					lex.positionInLine = posOnLine - 1;
+					lex.lexeme = "\\" + currentChar;
+					Token token;
+					token.SetLexeme(lex);
+					Error("Unknown escape sequence", token);
+					failed = true;
 
-				break;
-			}
+					break;
+				}
 			}
 
 			Advance();
@@ -261,6 +261,8 @@ Astral::Token Astral::Lexer::GenerateIdentifier()
 		token.SetType(TokenType::BREAK);
 	else if (iden == "using")
 		token.SetType(TokenType::USING);
+	else if (iden == "include")
+		token.SetType(TokenType::INCLUDE);
 
 	return token;
 }
@@ -291,7 +293,7 @@ void Astral::Lexer::Tokenise()
 {
 	while (currentChar != '\0')
 	{
-		//If we have a whitespace character, we need to skip it since they are unused Astral
+		//If we have a whitespace character, we need to skip it since they are unused in Astral
 		if (FILTER_WHITE(currentChar))
 		{
 			Advance();

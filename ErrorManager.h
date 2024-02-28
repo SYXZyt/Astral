@@ -33,7 +33,7 @@ namespace Astral
 	{
 		std::string result = "";
 
-		int len = strlen(message);
+		int len = (int)strlen(message);
 		for (int i = 0; i < len; ++i)
 		{
 			if (message[i] == '\t')
@@ -69,7 +69,7 @@ namespace Astral
 		ss << std::setw(4) << lexeme.line + 1;
 		msg += ss.str() + "| " + ReplaceTabsWithSpaces(lexeme.lineData.c_str()) + '\n';
 
-		msg += std::string(StringLengthConvertTabToSpace(lexeme.lineData.c_str(), lexeme.positionInLine) + 6, ' ');
+		msg += std::string((size_t)StringLengthConvertTabToSpace(lexeme.lineData.c_str(), lexeme.positionInLine) + 6, ' ');
 		msg += std::string(lexeme.lexeme.size(), '^');
 
 		msg += "\n\n";
@@ -86,7 +86,7 @@ namespace Astral
 		ss << std::setw(4) << lexeme.line + 1;
 		msg += ss.str() + "| " + ReplaceTabsWithSpaces(lexeme.lineData.c_str()) + '\n';
 
-		msg += std::string(StringLengthConvertTabToSpace(lexeme.lineData.c_str(), lexeme.positionInLine) + 6, ' ');
+		msg += std::string((size_t)StringLengthConvertTabToSpace(lexeme.lineData.c_str(), lexeme.positionInLine) + 6, ' ');
 		msg += std::string(lexeme.lexeme.size(), '^');
 
 		msg += "\n\n";
