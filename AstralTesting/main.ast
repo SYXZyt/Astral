@@ -1,7 +1,4 @@
-using astral.io;
-include "demo.ast";
-
-func main()
+func Run()
 {
 	let i = 0;
 	while (true)

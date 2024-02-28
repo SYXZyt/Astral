@@ -29,6 +29,22 @@ namespace Astral
 		return count;
 	}
 
+	inline std::string ReplaceTabsWithSpaces(const char* message, int spaceCount = 2)
+	{
+		std::string result = "";
+
+		int len = strlen(message);
+		for (int i = 0; i < len; ++i)
+		{
+			if (message[i] == '\t')
+				result += std::string(spaceCount, ' ');
+			else
+				result += message[i];
+		}
+
+		return result;
+	}
+
 	inline void Error(const char* const message)
 	{
 		if (UseCLIOutput)
@@ -51,7 +67,7 @@ namespace Astral
 		msg += '\n';
 		std::stringstream ss;
 		ss << std::setw(4) << lexeme.line + 1;
-		msg += ss.str() + "| " + lexeme.lineData + '\n';
+		msg += ss.str() + "| " + ReplaceTabsWithSpaces(lexeme.lineData.c_str()) + '\n';
 
 		msg += std::string(StringLengthConvertTabToSpace(lexeme.lineData.c_str(), lexeme.positionInLine) + 6, ' ');
 		msg += std::string(lexeme.lexeme.size(), '^');
@@ -68,7 +84,7 @@ namespace Astral
 		msg += '\n';
 		std::stringstream ss;
 		ss << std::setw(4) << lexeme.line + 1;
-		msg += ss.str() + "| " + lexeme.lineData + '\n';
+		msg += ss.str() + "| " + ReplaceTabsWithSpaces(lexeme.lineData.c_str()) + '\n';
 
 		msg += std::string(StringLengthConvertTabToSpace(lexeme.lineData.c_str(), lexeme.positionInLine) + 6, ' ');
 		msg += std::string(lexeme.lexeme.size(), '^');
