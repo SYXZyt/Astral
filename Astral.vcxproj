@@ -135,6 +135,7 @@
     <ClInclude Include="Compilation\Compiler\Compiler.h" />
     <ClInclude Include="Compilation\Compiler\OpType.h" />
     <ClInclude Include="Compilation\Compiler\Rom.h" />
+    <ClInclude Include="Compilation\Linker\Linker.h" />
     <ClInclude Include="Compilation\Parsing\AllNodeTypes.h" />
     <ClInclude Include="Compilation\Parsing\Expression.h" />
     <ClInclude Include="Compilation\Parsing\Expressions\BinaryOp.h" />
@@ -195,6 +196,7 @@
     <ClCompile Include="API.cpp" />
     <ClCompile Include="Astral.cpp" />
     <ClCompile Include="Compilation\Compiler\Compiler.cpp" />
+    <ClCompile Include="Compilation\Linker\Linker.cpp" />
     <ClCompile Include="Compilation\Parsing\Expression.cpp" />
     <ClCompile Include="Compilation\Parsing\Expressions\BinaryOp.cpp" />
     <ClCompile Include="Compilation\Parsing\Expressions\CallParameters.cpp" />
