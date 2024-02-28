@@ -3,7 +3,7 @@
 #include <vector>
 #include <filesystem>
 
-#include "../../API.h"
+#include "../Parsing/AllNodeTypes.h"
 #include "../Parsing/ParseTree.h"
 
 namespace Astral
@@ -16,7 +16,7 @@ namespace Astral
 		static Linker* instance;
 
 	public:
-		static Linker& GetInstance()
+		static Linker& Instance()
 		{
 			if (!instance)
 				instance = new Linker();
@@ -33,37 +33,47 @@ namespace Astral
 			instance = nullptr;
 		}
 
+		void AddFile(const char* fname)
+		{
+			std::string name = std::filesystem::absolute(fname).string();
+			if (!HasBeenIncluded(name))
+				includedFiles.push_back(name);
+		}
+
+		void AddFile(const std::string& fname)
+		{
+			AddFile(fname.c_str());
+		}
+
 		std::vector<ParseTree*> SearchTree(const std::vector<ParseTree*>& tree)
 		{
 			std::vector<ParseTree*> output;
 			for (ParseTree* node : tree)
 				output.push_back(node);
 
-			for (ParseTree* node : tree)
+			for (ParseTree* node : dynamic_cast<const Program*>(tree[0])->Statements())
 			{
 				if (const Include* include = dynamic_cast<const Include*>(node))
 				{
 					std::vector<ParseTree*> file = ResolveInclude(include->GetFileName().GetLexeme().lexeme);
-					for (ParseTree* n : file)
-						output.push_back(n);
+					if (file.size())
+					{
+						file = SearchTree(file);
+						for (ParseTree* n : file)
+							output.push_back(n);
+					}
 				}
 			}
 
 			return output;
 		}
 
-		std::vector<ParseTree*> ResolveInclude(const std::string& fname)
-		{
-			if (HasBeenIncluded(fname))
-				return {};
-
-			includedFiles.push_back(fname);
-
-			Astral::API::ast tree;
-			Astral::API::CompileToParseTree(fname.c_str(), tree, false, false);
-			return tree;
-		}
+		std::vector<ParseTree*> ResolveInclude(const std::string& fname);
 			
-		inline bool HasBeenIncluded(const std::string& fname) const { return std::count(includedFiles.begin(), includedFiles.end(), fname); }
+		inline bool HasBeenIncluded(const std::string& fname) const
+		{
+			std::string path = std::filesystem::absolute(fname).string();
+			return std::count(includedFiles.begin(), includedFiles.end(), path);
+		}
 	};
 }

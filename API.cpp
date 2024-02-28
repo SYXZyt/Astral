@@ -4,7 +4,7 @@
 
 inline std::string ReadFile(const char* fname)
 {
-	std::ifstream in("demo.ast");
+	std::ifstream in(fname);
 	std::stringstream ss;
 	ss << in.rdbuf();
 	return ss.str();
@@ -15,6 +15,10 @@ bool Astral::API::CompileFile(const char* fname, Rom& generatedRom, bool dumpLex
 	ast tree{};
 	if (!CompileToParseTree(fname, tree, dumpLexer, dumpParser))
 		return false;
+	
+	Linker::Instance().AddFile(fname); //Does this really need to be a singleton?
+	tree = Linker::Instance().SearchTree(tree);
+	Linker::FreeInstance();
 
 	Compiler compiler(tree);
 	compiler.GenerateBytecode();

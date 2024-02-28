@@ -9,6 +9,8 @@
 #include "Compilation/Parsing/Parser.h"
 #include "Compilation/Parsing/ParseTree.h"
 
+#include "Compilation/Linker/Linker.h"
+
 #include "Compilation/Compiler/Rom.h"
 #include "Compilation/Compiler/Compiler.h"
 

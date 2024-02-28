@@ -169,6 +169,3 @@ In the future, I plan to convert over to using CMAKE instead of using a Visual S
 
 ## Linking
 To use Astral, make sure that your linker is set to load `Astral.lib` and ensure that `Astral.dll` is placed in your executable folder.
-
-## Contributing
-Currently I am not accepting any support with Astral. Both Astral and Aurora are personal projects which I am working on for myself to further improve my skills. If you would like to make any changes, feel free to make and maintain your own fork.
