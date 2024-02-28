@@ -6,17 +6,18 @@ The language features a syntax which has mainly been inspired by JavaScript and 
 Astral and its runtime are still currently in development. Many of the features shown here may not be implemented yet.
 
 ## Data Types
-| Type     | Description                                                     |
-|----------|-----------------------------------------------------------------|
-| Number   | 32-bit floating point number                                    |
-| String   | Sequence of characters                                          |
-| Void     | Void is the lack of any data. Astral equivalent of null or None |
-| Object   | Collection of types bonded together in a struct                 |
-| Function | Object which can be called as a function                        |
+| Type            | Description                                                     |
+| --------------- | --------------------------------------------------------------- |
+| Number          | 32-bit floating point number                                    |
+| String          | Sequence of characters                                          |
+| Void            | Void is the lack of any data. Astral equivalent of null or None |
+| Object          | Collection of types bonded together in a struct                 |
+| Function        | Object which can be called as a function                        |
+| Extern Function | Object which can be called as an external function (Native C++) |
 
 ### Planned Future Types
 | Type  | Description                                                                             |
-|-------|-----------------------------------------------------------------------------------------|
+| ----- | --------------------------------------------------------------------------------------- |
 | Array | Dynamically sized list of data                                                          |
 | Char  | Single character. Will be used when reading or writing to a string at a specified index |
 
@@ -43,6 +44,96 @@ Global variables are variables which can be access anywhere within the program, 
 Global variables will be defined by using the `global` keyword. By default, they will store void. They should be initalised in the main method or before use.
 Functions can be defined using the `func` keyword. Following the dynamic typing of Astral functions do not have any explicit return type.
 Additionally, the language has not function overloading, although this is planned in the future.
+
+One problem that is important to note with Astral, is that all conditions in an if statement are ran.
+Take this for example
+```
+let obj = create();
+if (obj && obj.member)
+	...
+```
+
+This code is fine, until obj is void. You might think it will be ok since we are checking if the object exists, but Astral will run both expressions before calculating the `&&`.
+If the object is void then this code will result in a void reference.
+The solution would be this.
+```
+let obj = create();
+if (obj)
+{
+	if (obj.member)
+		...
+}
+```
+
+## Bitwise
+Astral does not have any bitwise operators, however, the maths library contains functions which can perform these operations.
+```
+using astral.io;
+using astral.math;
+using astral.string;
+
+let a = 11;  //1011
+let b = 10; //1010
+
+println("a");
+println(binary_from_num_w(a, 4));
+
+println("b");
+println(binary_from_num_w(b, 4));
+
+println("a & b");
+println(binary_from_num_w(and(a, b), 4));
+
+println("a | b");
+println(binary_from_num_w(or(a, b), 4));
+
+println("a ^ b");
+println(binary_from_num_w(xor(a, b), 4));
+
+println("~a");
+println(binary_from_num_w(not(a), 4));
+
+println("~b");
+println(binary_from_num_w(not(b), 4));
+
+println("a << 1");
+println(binary_from_num_w(shift_l(a, 1), 4));
+
+println("b << 1");
+println(binary_from_num_w(shift_l(b, 1), 4));
+
+println("a >> 1");
+println(binary_from_num_w(shift_r(a, 1), 4));
+
+println("b >> 1");
+println(binary_from_num_w(shift_r(b, 1), 4));
+```
+
+which outputs
+```
+a
+1011
+b
+1010
+a & b
+1010
+a | b
+1011
+a ^ b
+0001
+~a
+0100
+~b
+0101
+a << 1
+0110
+b << 1
+0100
+a >> 1
+0101
+b >> 1
+0101
+```
 
 ## Examples
 ### Hello World
@@ -155,6 +246,11 @@ whereas `(1 + 2) * 3` will be turned into this tree.
 / \
 1 2
 ```
+### Linker
+The linker in Astral does not quite function the same as the C/C++ linker. In Astral, the linkers job is to resolve `include` statements. These statements will tell the compiler that it wants to use another file and load its code.
+The linker will take the given filename, try to load it, and run the first two compilation stages on the code. Once a tree has been generated, it will be appended onto the end of the current tree.
+Also important to the linker is to track which files have already been loaded as to ensure that the same file is not loaded multiple times (similar to `pragma once` in C++).
+
 ### Compiler
 The final stage of compilation is the compiler or assembler. It will navigate through the AST and generate bytecode. Bytecode is the instructions that the virtual machine or interpreter will execute. These instructions are very simple and will usually consist of, push value onto stack, or add together two values.
 
@@ -164,6 +260,3 @@ In the future, I plan to convert over to using CMAKE instead of using a Visual S
 
 ## Linking
 To use Astral, make sure that your linker is set to load `Astral.lib` and ensure that `Astral.dll` is placed in your executable folder.
-
-## Contributing
-Currently I am not accepting any support with Astral. Both Astral and Aurora are personal projects which I am working on for myself to further improve my skills. If you would like to make any changes, feel free to make and maintain your own fork.

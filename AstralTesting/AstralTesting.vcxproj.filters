@@ -21,5 +21,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="demo.ast" />
+    <None Include="main.ast" />
   </ItemGroup>
 </Project>

@@ -455,14 +455,6 @@ Astral::Expression* Astral::Parser::ParseCallParams()
 
 Astral::Statement* Astral::Parser::ParseStatement()
 {
-	return ParseDeclarations();
-}
-
-Astral::Statement* Astral::Parser::ParseDeclarations()
-{
-	if (Match(TokenType::FUNC))
-		return ParseFunctionDefinition();
-
 	if (Match(TokenType::RETURN))
 		return ParseReturn();
 
@@ -471,7 +463,7 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 
 	if (Match(TokenType::IDEN))
 	{
-		if (Peek().GetType() == TokenType::ASSIGNMENT)
+		if (Peek().GetType() == TokenType::ASSIGNMENT || Peek().GetType() == TokenType::PLUS_EQUALS || Peek().GetType() == TokenType::MINUS_EQUALS)
 			return ParseAssignment();
 		else if (Peek().GetType() == TokenType::L_BRA)
 		{
@@ -595,12 +587,29 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 
 	if (Match(TokenType::SEMICOLON))
 	{
-		return nullptr;
+		return new Empty(Previous());
 	}
 
 	Error("Expected statement", PeekOrLast());
 	failed = true;
 	return nullptr;
+}
+
+Astral::Statement* Astral::Parser::ParseDeclarations()
+{
+	if (Match(TokenType::FUNC))
+		return ParseFunctionDefinition();
+	else if (Match(TokenType::USING))
+		return ParseUsing();
+	else if (Match(TokenType::INCLUDE))
+		return ParseInclude();
+	else
+	{
+		Error("Expected declaration", Peek());
+		Sync();
+		failed = true;
+		return nullptr;
+	}
 }
 
 Astral::Statement* Astral::Parser::ParseBlock()
@@ -872,13 +881,62 @@ Astral::Statement* Astral::Parser::ParseReturn()
 	return new Return(tok, returnValue);
 }
 
+Astral::Statement* Astral::Parser::ParseUsing()
+{
+	Token token = Previous();
+
+	Token libName = Advance();
+	std::string name = libName.GetLexeme().lexeme;
+	while (Peek().GetType() == TokenType::DOT)
+	{
+		Advance();
+		Advance();
+
+		name += '.';
+
+		Token sub = Previous();
+
+		if (sub.GetType() != TokenType::IDEN)
+		{
+			Error("Expected identifier", sub);
+			return nullptr;
+		}
+
+		name += sub.GetLexeme().lexeme;
+	}
+
+	Consume(TokenType::SEMICOLON, "Expected ';'");
+
+	Lexeme lex = libName.GetLexeme();
+	lex.lexeme = name;
+	libName.SetLexeme(lex);
+
+	return new Using(token, libName);
+}
+
+Astral::Statement* Astral::Parser::ParseInclude()
+{
+	Token token = Previous();
+	Token fname = Advance();
+
+	if (fname.GetType() != TokenType::STRING)
+	{
+		Error("Expected string", fname);
+		return nullptr;
+	}
+
+	Consume(TokenType::SEMICOLON, "Expected ';'");
+
+	return new Include(token, fname);
+}
+
 void Astral::Parser::Parse()
 {
 	loopNest.push(0);
 
 	while (!IsEof())
 	{
-		Statement* stmt = ParseStatement();
+		Statement* stmt = ParseDeclarations();
 		if (stmt)
 			tree.push_back(stmt);
 	}

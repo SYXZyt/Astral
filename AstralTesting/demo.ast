@@ -1,4 +1,6 @@
-func Main()
+include "main.ast";
+
+func main()
 {
-	Println("Main Function");
+	Run();
 }

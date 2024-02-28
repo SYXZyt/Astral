@@ -157,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="demo.ast" />
+    <None Include="main.ast" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
