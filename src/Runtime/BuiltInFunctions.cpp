@@ -17,7 +17,7 @@ inline static float clamp(float min, float max, float v)
 	return (std::max)(min, (std::min)(v, max));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::IO::PrintFunction(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::IO::PrintFunction(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	if (Type::void_t* void_t = dynamic_cast<Type::void_t*>(params[0]))
 	{
@@ -31,14 +31,14 @@ Astral::Type::atype_t* Astral::Functions::Astral::IO::PrintFunction(const FuncPa
     return nullptr;
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::IO::PrintlnFunction(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::IO::PrintlnFunction(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
     Type::atype_t* ret = PrintFunction(params, vm, caller);
     std::cout << '\n';
     return ret;
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::String::StringLength(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::String::StringLength(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::string_t* str;
 	if (str = dynamic_cast<Type::string_t*>(params[0]))
@@ -51,7 +51,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::String::StringLength(const Fun
 	}
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::String::StringRead(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::String::StringRead(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	//Validate input types
 	Type::string_t* str = dynamic_cast<Type::string_t*>(params[0]);
@@ -82,7 +82,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::String::StringRead(const FuncP
 	return new Type::string_t(v);
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::String::StringWrite(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::String::StringWrite(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::string_t* str = dynamic_cast<Type::string_t*>(params[0]);
 
@@ -129,7 +129,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::String::StringWrite(const Func
 	return nullptr;
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::String::BinaryFromNumber(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::String::BinaryFromNumber(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -144,7 +144,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::String::BinaryFromNumber(const
 	return new Type::string_t(std::bitset<32>((int)num->Value()).to_string());
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::String::BinaryFromNumberW(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::String::BinaryFromNumberW(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -177,14 +177,14 @@ Astral::Type::atype_t* Astral::Functions::Astral::String::BinaryFromNumberW(cons
 	return new Type::string_t(res);
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::IO::Input(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::IO::Input(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	std::string str;
 	std::getline(std::cin, str);
 	return new Type::string_t(str);
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::IO::Clear(const FuncParams& param, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::IO::Clear(const FuncParams param, Interpreter& vm, const Lexeme& caller)
 {
 #ifdef _WIN32
 	///@see https://stackoverflow.com/questions/5866529/how-do-we-clear-the-console-in-assembly/5866648#5866648
@@ -205,7 +205,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::IO::Clear(const FuncParams& pa
 	return nullptr;
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::IO::Title(const FuncParams& param, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::IO::Title(const FuncParams param, Interpreter& vm, const Lexeme& caller)
 {
 #ifdef _WIN32
 	SetConsoleTitleA(param[0]->ToString().c_str());
@@ -217,17 +217,17 @@ Astral::Type::atype_t* Astral::Functions::Astral::IO::Title(const FuncParams& pa
 	return nullptr;
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::GetType(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::GetType(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	return new Type::string_t(params[0]->Type().c_str());
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::CreateVoid(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::CreateVoid(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	return new Type::void_t();
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::ToNumber(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::ToNumber(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::string_t* str = dynamic_cast<Type::string_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -242,7 +242,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::ToNumber(const FuncParams& par
 	return new Type::number_t(std::stof(str->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::Sin(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Sin(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -257,7 +257,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::Sin(const FuncParams& pa
 	return new Type::number_t(sin(num->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::Cos(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Cos(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -272,7 +272,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::Cos(const FuncParams& pa
 	return new Type::number_t(cos(num->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::Tan(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Tan(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -287,7 +287,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::Tan(const FuncParams& pa
 	return new Type::number_t(tan(num->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::ASin(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::ASin(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -302,7 +302,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::ASin(const FuncParams& p
 	return new Type::number_t(asin(num->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::ACos(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::ACos(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -317,7 +317,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::ACos(const FuncParams& p
 	return new Type::number_t(acos(num->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::ATan(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::ATan(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -332,7 +332,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::ATan(const FuncParams& p
 	return new Type::number_t(atan(num->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::ATan2(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::ATan2(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* a = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -351,7 +351,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::ATan2(const FuncParams& 
 	return new Type::number_t(atan2(a->Value(), b->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::Sqrt(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Sqrt(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -366,7 +366,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::Sqrt(const FuncParams& p
 	return new Type::number_t(sqrt(num->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::Log(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Log(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -381,7 +381,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::Log(const FuncParams& pa
 	return new Type::number_t(log(num->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::Abs(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Abs(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -396,7 +396,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::Abs(const FuncParams& pa
 	return new Type::number_t(abs(num->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::Floor(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Floor(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -411,7 +411,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::Floor(const FuncParams& 
 	return new Type::number_t(floor(num->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::Ceil(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Ceil(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -426,7 +426,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::Ceil(const FuncParams& p
 	return new Type::number_t(ceil(num->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::Round(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Round(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -441,7 +441,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::Round(const FuncParams& 
 	return new Type::number_t(round(num->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::Clamp(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Clamp(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* a = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -464,7 +464,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::Clamp(const FuncParams& 
 	return new Type::number_t(clamp(a->Value(), b->Value(), c->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::Min(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Min(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* a = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -483,7 +483,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::Min(const FuncParams& pa
 	return new Type::number_t((std::min)(a->Value(), b->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::Max(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Max(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* a = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -502,7 +502,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::Max(const FuncParams& pa
 	return new Type::number_t((std::max)(a->Value(), b->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::Lerp(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Lerp(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* a = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -525,7 +525,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::Lerp(const FuncParams& p
 	return new Type::number_t(lerp(a->Value(), b->Value(), c->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::Sign(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Sign(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -540,7 +540,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::Sign(const FuncParams& p
 	return new Type::number_t(sign(num->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::Rad(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Rad(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -555,7 +555,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::Rad(const FuncParams& pa
 	return new Type::number_t(num->Value() * 3.1415936f / 180.f);
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::Deg(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Deg(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -570,7 +570,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::Deg(const FuncParams& pa
 	return new Type::number_t(num->Value() * 180.f / 3.1415936f);
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::And(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::And(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* a = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -589,7 +589,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::And(const FuncParams& pa
 	return new Type::number_t((float)((int)a->Value() & (int)b->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::Or(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Or(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* a = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -608,7 +608,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::Or(const FuncParams& par
 	return new Type::number_t((float)((int)a->Value() | (int)b->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::Xor(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Xor(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* a = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -627,7 +627,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::Xor(const FuncParams& pa
 	return new Type::number_t((float)((int)a->Value() ^ (int)b->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::Not(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::Not(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* a = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -642,7 +642,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::Not(const FuncParams& pa
 	return new Type::number_t((float)(~(int)a->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::LeftShift(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::LeftShift(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* a = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
@@ -661,7 +661,7 @@ Astral::Type::atype_t* Astral::Functions::Astral::Math::LeftShift(const FuncPara
 	return new Type::number_t((float)((int)a->Value() << (int)b->Value()));
 }
 
-Astral::Type::atype_t* Astral::Functions::Astral::Math::RightShift(const FuncParams& params, Interpreter& vm, const Lexeme& caller)
+Astral::Type::atype_t* Astral::Functions::Astral::Math::RightShift(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* a = dynamic_cast<Type::number_t*>(params[0]);
 	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))

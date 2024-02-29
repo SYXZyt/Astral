@@ -572,7 +572,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 				//Due to the stack our parameters are backwards so we need to fix that
 				std::reverse(parameters.begin(), parameters.end());
 
-				Type::atype_t* returnValue = externfunc->GetFunction().Call(parameters, *this, instruction.lexeme);
+				Type::atype_t* returnValue = externfunc->GetFunction().Call(parameters.data(), *this, instruction.lexeme);
 
 				//If we returned null, we need to convert that to void
 				if (!returnValue)
@@ -656,20 +656,20 @@ void Astral::Interpreter::CallFunction(const char* funcName)
 	CallFunction(funcName, params);
 }
 
-void Astral::Interpreter::CallFunction(const char* funcName, const std::vector<Type::atype_t*>& params)
+void Astral::Interpreter::CallFunction(const char* funcName, Type::atype_t** params, size_t paramCount)
 {
 	if (Variable* var = variables.GetVariableInGlobalScope(funcName))
 	{
 		if (Type::func_t* func = dynamic_cast<Type::func_t*>(var->Value()->data))
 		{
-			if (func->ParamCount() != params.size())
+			if (func->ParamCount() != paramCount)
 			{
 				Error("Param count does not match function signature");
 				return;
 			}
 
-			for (Type::atype_t* param : params)
-				Push(param->Copy());
+			for (int i = 0; i < paramCount; ++i)
+				Push(params[i]->Copy());
 
 			callstack.push(pc);
 			pc = (int)func->Address();
@@ -678,7 +678,7 @@ void Astral::Interpreter::CallFunction(const char* funcName, const std::vector<T
 		}
 		else if (Type::externfunc_t* native = dynamic_cast<Type::externfunc_t*>(var->Value()->data))
 		{
-			if (native->GetFunction().ParamCount() != params.size())
+			if (native->GetFunction().ParamCount() != paramCount)
 			{
 				Error("Param count does not match function signature");
 				return;
@@ -695,6 +695,11 @@ void Astral::Interpreter::CallFunction(const char* funcName, const std::vector<T
 	{
 		Error("Tried to call a non-existent Astral function");
 	}
+}
+
+void Astral::Interpreter::CallFunction(const char* funcName, std::vector<Type::atype_t*>& params)
+{
+	CallFunction(funcName, params.data(), params.size());
 }
 
 Astral::Interpreter::~Interpreter()

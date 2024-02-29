@@ -143,25 +143,6 @@ namespace Astral
 
 		std::stack<int> callstack;
 
-		Type::atype_t* returnValue = nullptr;
-
-		inline Type::atype_t* GetReturnValue()
-		{
-			returnValue->isOnStack = false;
-			Type::atype_t* v = returnValue;
-			returnValue = nullptr;
-			return v;
-		}
-
-		inline void SetReturnValue(Type::atype_t* value)
-		{
-			value->isOnStack = true; //Protect it from gc
-			if (returnValue)
-				GetReturnValue();
-
-			returnValue = value;
-		}
-
 		inline void Return()
 		{
 			int i = callstack.top();
@@ -187,7 +168,8 @@ namespace Astral
 		void Execute();
 
 		void CallFunction(const char* funcName);
-		void CallFunction(const char* funcName, const std::vector<Type::atype_t*>& params);
+		void CallFunction(const char* funcName, Type::atype_t** params, size_t paramCount);
+		void CallFunction(const char* funcName, std::vector<Type::atype_t*>& params);
 
 		inline void Fail() { failed = true; }
 		inline bool Failed() const { return failed; }

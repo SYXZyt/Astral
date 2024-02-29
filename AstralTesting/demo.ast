@@ -1,6 +1,21 @@
-include "main.ast";
+using astral.io;
+
+struct vec2
+{
+	x;
+	y;
+}
+
+func vec2_tostring(v)
+{
+	return "X: " + v.x + ", Y: " + v.y;
+}
 
 func main()
 {
-	Run();
+	let vec = new(vec2);
+	vec.x = 10;
+	vec.y = -10;
+
+	println(vec2_tostring(vec));
 }

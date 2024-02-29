@@ -13,7 +13,7 @@ namespace Astral
 
 	namespace Type { class atype_t; }
 
-	typedef std::vector<Type::atype_t*> FuncParams;
+	typedef Type::atype_t** FuncParams;
 
 	class ASTRAL BindFunction
 	{
@@ -21,21 +21,21 @@ namespace Astral
 		const char* fname;
 		int paramCount;
 
-		Type::atype_t* (*func)(const std::vector<Type::atype_t*>&, Interpreter&, const Lexeme&);
+		Type::atype_t* (*func)(const FuncParams, Interpreter&, const Lexeme&);
 
 	public:
 		inline const char* Name() const { return fname; }
 
 		inline int ParamCount() const { return paramCount; }
 
-		inline Type::atype_t* Call(const std::vector<Type::atype_t*>& params, Interpreter& vm, const Lexeme& caller)
+		inline Type::atype_t* Call(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 		{
 			return func(params, vm, caller);
 		}
 
 		void Bind(Interpreter& interpreter);
 
-		BindFunction(const char* fname, int paramCount, Type::atype_t* (*func)(const std::vector<Type::atype_t*>&, Interpreter&, const Lexeme&)) :
+		BindFunction(const char* fname, int paramCount, Type::atype_t* (*func)(const FuncParams, Interpreter&, const Lexeme&)) :
 			fname(fname),
 			paramCount(paramCount),
 			func(func) {}
