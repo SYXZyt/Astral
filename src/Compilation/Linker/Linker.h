@@ -45,7 +45,7 @@ namespace Astral
 			AddFile(fname.c_str());
 		}
 
-		std::vector<ParseTree*> SearchTree(const std::vector<ParseTree*>& tree)
+		std::vector<ParseTree*> SearchTree(const std::vector<ParseTree*>& tree, bool& failed)
 		{
 			std::vector<ParseTree*> output;
 			for (ParseTree* node : tree)
@@ -55,10 +55,10 @@ namespace Astral
 			{
 				if (const Include* include = dynamic_cast<const Include*>(node))
 				{
-					std::vector<ParseTree*> file = ResolveInclude(include->GetFileName().GetLexeme().lexeme);
+					std::vector<ParseTree*> file = ResolveInclude(include->GetFileName().GetLexeme().lexeme, failed);
 					if (file.size())
 					{
-						file = SearchTree(file);
+						file = SearchTree(file, failed);
 						for (ParseTree* n : file)
 							output.push_back(n);
 					}
@@ -68,7 +68,7 @@ namespace Astral
 			return output;
 		}
 
-		std::vector<ParseTree*> ResolveInclude(const std::string& fname);
+		std::vector<ParseTree*> ResolveInclude(const std::string& fname, bool& failed);
 			
 		inline bool HasBeenIncluded(const std::string& fname) const
 		{

@@ -16,9 +16,13 @@ bool Astral::API::CompileFile(const char* fname, Rom& generatedRom, bool dumpLex
 	if (!CompileToParseTree(fname, tree, dumpLexer, dumpParser))
 		return false;
 	
+	bool failed = false;
 	Linker::Instance().AddFile(fname); //Does this really need to be a singleton?
-	tree = Linker::Instance().SearchTree(tree);
+	tree = Linker::Instance().SearchTree(tree, failed);
 	Linker::FreeInstance();
+
+	if (failed)
+		return false;
 
 	Compiler compiler(tree);
 	compiler.GenerateBytecode();

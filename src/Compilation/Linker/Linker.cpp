@@ -4,7 +4,7 @@
 
 Astral::Linker* Astral::Linker::instance = nullptr;
 
-std::vector<Astral::ParseTree*> Astral::Linker::ResolveInclude(const std::string& fname)
+std::vector<Astral::ParseTree*> Astral::Linker::ResolveInclude(const std::string& fname, bool& failed)
 {
 	if (HasBeenIncluded(fname))
 	{
@@ -18,6 +18,12 @@ std::vector<Astral::ParseTree*> Astral::Linker::ResolveInclude(const std::string
 	AddFile(fname);
 
 	Astral::API::ast tree;
-	Astral::API::CompileToParseTree(fname.c_str(), tree, false, false);
-	return tree;
+	if (Astral::API::CompileToParseTree(fname.c_str(), tree, false, false))
+	{
+		failed = false;
+		return tree;
+	}
+
+	failed = true;
+	return {};
 }
