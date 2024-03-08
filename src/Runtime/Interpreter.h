@@ -156,6 +156,9 @@ namespace Astral
 
 		bool failed;
 
+		void Error(const char* message);
+		void Error(const char* message, const Lexeme& lex);
+
 		void ExecuteInstruction(Bytecode& instruction);
 
 		bool TryToLoadLib(const std::string& name);
@@ -163,6 +166,8 @@ namespace Astral
 		void PreloadLibraries();
 
 	public:
+		void DumpCallStack();
+
 		void Bind_Function(BindFunction& func);
 
 		void Execute();

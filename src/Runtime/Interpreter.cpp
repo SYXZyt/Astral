@@ -2,6 +2,18 @@
 
 Astral::Interpreter* Astral::Interpreter::instance = nullptr;
 
+void Astral::Interpreter::Error(const char* message)
+{
+	Astral::Error(message);
+	DumpCallStack();
+}
+
+void Astral::Interpreter::Error(const char* message, const Lexeme& lex)
+{
+	Astral::Error(message, lex);
+	DumpCallStack();
+}
+
 void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 {
 	OpType op = (OpType)instruction.op;
@@ -621,6 +633,23 @@ void Astral::Interpreter::PreloadLibraries()
 			Error("Failed to load library", _using);
 			failed = true;
 		}
+	}
+}
+
+void Astral::Interpreter::DumpCallStack()
+{
+	//Create a copy of the stack so we don't mess with the original
+	std::stack<int> callstack = this->callstack;
+
+	std::cout << "Dumping Callstack (Most recent at top)\n\n";
+	while (!callstack.empty())
+	{
+		int caller = callstack.top();
+		callstack.pop();
+
+		Lexeme& lex = rom[caller].lexeme;
+
+		std::cout << lex.lineData << "\nAt " << lex.line << " in file '" << lex.fname << "'\n\n";
 	}
 }
 

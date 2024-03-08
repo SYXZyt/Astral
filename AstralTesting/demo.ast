@@ -1,4 +1,11 @@
-using astral.io;
+include "main.ast";
+
+func main()
+{
+	Run();
+}
+
+/*using astral.io;
 
 struct vec2
 {
@@ -18,4 +25,4 @@ func main()
 	vec.y = -10;
 
 	println(vec2_tostring(vec));
-}
+}*/

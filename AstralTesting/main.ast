@@ -19,6 +19,8 @@ func Run()
 	println("a | b");
 	println(binary_from_num_w(or(a, b), 4));
 
+	return 1 / 0;
+
 	println("a ^ b");
 	println(binary_from_num_w(xor(a, b), 4));
 
