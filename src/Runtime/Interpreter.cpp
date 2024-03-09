@@ -649,7 +649,7 @@ void Astral::Interpreter::DumpCallStack()
 
 		Lexeme& lex = rom[caller].lexeme;
 
-		std::cout << lex.lineData << "\nAt " << lex.line << " in file '" << lex.fname << "'\n\n";
+		std::cout << lex.lineData << "\nAt line " << lex.line << " in file '" << lex.fname << "'\n\n";
 	}
 }
 
