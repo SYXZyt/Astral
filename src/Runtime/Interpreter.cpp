@@ -566,6 +566,7 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 
 				callstack.push(pc);
 				pc = (int)func->Address();
+				called.push(pc);
 			}
 
 			if (externfunc)
@@ -584,7 +585,11 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 				//Due to the stack our parameters are backwards so we need to fix that
 				std::reverse(parameters.begin(), parameters.end());
 
+				called.push(pc);
+
 				Type::atype_t* returnValue = externfunc->GetFunction().Call(parameters.data(), *this, instruction.lexeme);
+
+				called.pop();
 
 				//If we returned null, we need to convert that to void
 				if (!returnValue)
@@ -642,14 +647,14 @@ void Astral::Interpreter::DumpCallStack()
 	std::stack<int> callstack = this->callstack;
 
 	std::cout << "Dumping Callstack (Most recent at top)\n\n";
-	while (!callstack.empty())
+	while (!called.empty())
 	{
-		int caller = callstack.top();
-		callstack.pop();
+		int caller = called.top();
+		called.pop();
 
 		Lexeme& lex = rom[caller].lexeme;
 
-		std::cout << lex.lineData << "\nAt line " << lex.line << " in file '" << lex.fname << "'\n\n";
+		std::cout << lex.lineData << " (line " << lex.line + 1 << " in file '" << lex.fname << "')\n";
 	}
 }
 
@@ -702,6 +707,7 @@ void Astral::Interpreter::CallFunction(const char* funcName, Type::atype_t** par
 
 			callstack.push(pc);
 			pc = (int)func->Address();
+			called.push(pc);
 
 			Execute();
 		}

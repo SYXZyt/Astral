@@ -142,11 +142,13 @@ namespace Astral
 		std::stack<Type::atype_t*> stack;
 
 		std::stack<int> callstack;
+		std::stack<int> called;
 
 		inline void Return()
 		{
 			int i = callstack.top();
 			callstack.pop();
+			called.pop();
 			pc = i;
 		}
 
