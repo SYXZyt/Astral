@@ -158,10 +158,12 @@
     <ClInclude Include="src\Compilation\Parsing\Statements\Function.h" />
     <ClInclude Include="src\Compilation\Parsing\Statements\IfStatement.h" />
     <ClInclude Include="src\Compilation\Parsing\Statements\Include.h" />
+    <ClInclude Include="src\Compilation\Parsing\Statements\MemberAssignment.h" />
     <ClInclude Include="src\Compilation\Parsing\Statements\ParamList.h" />
     <ClInclude Include="src\Compilation\Parsing\Statements\Program.h" />
     <ClInclude Include="src\Compilation\Parsing\Statements\Return.h" />
     <ClInclude Include="src\Compilation\Parsing\Statements\Struct.h" />
+    <ClInclude Include="src\Compilation\Parsing\Statements\StructDefinition.h" />
     <ClInclude Include="src\Compilation\Parsing\Statements\Using.h" />
     <ClInclude Include="src\Compilation\Parsing\Statements\VariableAssignment.h" />
     <ClInclude Include="src\Compilation\Parsing\Statements\VariableDefinition.h" />
@@ -220,9 +222,11 @@
     <ClCompile Include="src\Compilation\Parsing\Statements\Function.cpp" />
     <ClCompile Include="src\Compilation\Parsing\Statements\IfStatement.cpp" />
     <ClCompile Include="src\Compilation\Parsing\Statements\Include.cpp" />
+    <ClCompile Include="src\Compilation\Parsing\Statements\MemberAssignment.cpp" />
     <ClCompile Include="src\Compilation\Parsing\Statements\ParamList.cpp" />
     <ClCompile Include="src\Compilation\Parsing\Statements\Program.cpp" />
     <ClCompile Include="src\Compilation\Parsing\Statements\Return.cpp" />
+    <ClCompile Include="src\Compilation\Parsing\Statements\StructDefinition.cpp" />
     <ClCompile Include="src\Compilation\Parsing\Statements\Using.cpp" />
     <ClCompile Include="src\Compilation\Parsing\Statements\VariableAssignment.cpp" />
     <ClCompile Include="src\Compilation\Parsing\Statements\VariableDefinition.cpp" />

@@ -50,10 +50,12 @@ namespace Astral
 		Expression* ParseUnary();
 		Expression* ParsePrefix();
 		Expression* ParseLiteral();
+		Expression* ParseStructOffset();
 		Expression* ParseCallParams();
 
 		Statement* ParseStatement();
 		Statement* ParseDeclarations();
+		Statement* ParseStructDecl();
 		Statement* ParseBlock();
 		Statement* ParseLetStatement();
 		Statement* ParseAssignment();

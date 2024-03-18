@@ -24,3 +24,5 @@
 #include "Statements/Using.h"
 #include "Statements/Empty.h"
 #include "Statements/Include.h"
+#include "Statements/StructDefinition.h"
+#include "Statements/MemberAssignment.h"

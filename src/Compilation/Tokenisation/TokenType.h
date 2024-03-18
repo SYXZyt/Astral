@@ -62,6 +62,7 @@ namespace Astral
 		RETURN,
 		USING,
 		INCLUDE,
+		STRUCT,
 	};
 
 	ASTRAL inline std::ostream& operator<<(std::ostream& os, const TokenType& t)

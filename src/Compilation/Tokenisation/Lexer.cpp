@@ -263,6 +263,8 @@ Astral::Token Astral::Lexer::GenerateIdentifier()
 		token.SetType(TokenType::USING);
 	else if (iden == "include")
 		token.SetType(TokenType::INCLUDE);
+	else if (iden == "struct")
+		token.SetType(TokenType::STRUCT);
 
 	return token;
 }

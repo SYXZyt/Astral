@@ -183,6 +183,12 @@
     <ClInclude Include="src\Compilation\Parsing\Statements\Struct.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Compilation\Parsing\Statements\StructDefinition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Compilation\Parsing\Statements\MemberAssignment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
@@ -326,6 +332,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Compilation\Linker\Linker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Compilation\Parsing\Statements\StructDefinition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Compilation\Parsing\Statements\MemberAssignment.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

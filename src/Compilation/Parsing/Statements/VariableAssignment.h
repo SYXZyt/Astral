@@ -14,6 +14,7 @@ namespace Astral
 
 	public:
 		inline const Expression* Expr() const { return expr; }
+		inline Expression* Expr() { return expr; }
 
 		void Dump(int indent = 0) final override;
 

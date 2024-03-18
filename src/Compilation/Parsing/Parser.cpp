@@ -345,6 +345,8 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 			Advance();
 			return fact;
 		}
+		else if (Peek().GetType() == TokenType::DOT)
+			return ParseStructOffset();
 		else if (Peek().GetType() == TokenType::INCREMENT)
 		{
 			IncrementExpression* postfix = new IncrementExpression(value, false, Peek());
@@ -412,6 +414,33 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 	return nullptr;
 }
 
+Astral::Expression* Astral::Parser::ParseStructOffset()
+{
+	//Bit of a bodge here. The literal stores a void pointer to its literal value,
+	//We can just store each subnode in that pointer to achieve our tree
+	Token str = Previous();
+
+	Advance();
+	Advance();
+
+	Token varName = Previous();
+
+	if (Peek().GetType() == TokenType::DOT)
+	{
+		Advance();
+		Literal* subnode = (Literal*)ParseStructOffset();
+
+		NULL_RET(subnode);
+
+		return new Literal(subnode, Literal::LiteralType::STRUCT_ACCESS, varName);
+	}
+	else
+	{
+		Literal* node = new Literal(new std::string(varName.GetLexeme().lexeme), Literal::LiteralType::IDENTIFER, varName);
+		return new Literal(node, Literal::LiteralType::STRUCT_ACCESS, str);
+	}
+}
+
 Astral::Expression* Astral::Parser::ParseCallParams()
 {
 	Token tok = Previous();
@@ -463,6 +492,20 @@ Astral::Statement* Astral::Parser::ParseStatement()
 
 	if (Match(TokenType::IDEN))
 	{
+		if (Peek().GetType() == TokenType::DOT)
+		{
+			Expression* structAccess = ParseStructOffset();
+			Statement* assign = nullptr;
+
+			if (Peek().GetType() == TokenType::ASSIGNMENT || Peek().GetType() == TokenType::PLUS_EQUALS || Peek().GetType() == TokenType::MINUS_EQUALS)
+				assign = ParseAssignment();
+			else
+				Error("Expected assignment", structAccess->GetToken());
+
+			NULL_RET(assign);
+			return new MemberAssignment(structAccess->GetToken(), (Literal*)structAccess, (VariableAssignment*)assign);
+		}
+
 		if (Peek().GetType() == TokenType::ASSIGNMENT || Peek().GetType() == TokenType::PLUS_EQUALS || Peek().GetType() == TokenType::MINUS_EQUALS)
 			return ParseAssignment();
 		else if (Peek().GetType() == TokenType::L_BRA)
@@ -599,6 +642,8 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 {
 	if (Match(TokenType::FUNC))
 		return ParseFunctionDefinition();
+	else if (Match(TokenType::STRUCT))
+		return ParseStructDecl();
 	else if (Match(TokenType::USING))
 		return ParseUsing();
 	else if (Match(TokenType::INCLUDE))
@@ -610,6 +655,50 @@ Astral::Statement* Astral::Parser::ParseDeclarations()
 		failed = true;
 		return nullptr;
 	}
+}
+
+Astral::Statement* Astral::Parser::ParseStructDecl()
+{
+	if (!Check(TokenType::IDEN))
+	{
+		Error("Expected struct name", Previous());
+		return nullptr;
+	}
+
+	StructDefinition* _struct = new StructDefinition(Advance());
+
+	Advance();
+	if (Previous().GetType() != TokenType::L_CURLY)
+	{
+		Error("Expected '{'", Previous());
+		delete _struct;
+		return nullptr;
+	} Advance();
+
+	while (Previous().GetType() != TokenType::R_CURLY)
+	{
+		Token member = Previous();
+		Advance();
+		
+		if (member.GetType() != TokenType::IDEN)
+		{
+			Error("Struct member must be an identifier", member);
+			delete _struct;
+			return nullptr;
+		}
+
+		if (Previous().GetType() != TokenType::SEMICOLON)
+		{
+			Error("Expected ';'", Previous());
+			delete _struct;
+			return nullptr;
+		}
+
+		_struct->AddMember(member);
+		Advance();
+	}
+
+	return _struct;
 }
 
 Astral::Statement* Astral::Parser::ParseBlock()

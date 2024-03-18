@@ -17,6 +17,7 @@ namespace Astral
 			STRING,
 			IDENTIFER,
 			REFERENCE,
+			STRUCT_ACCESS,
 		};
 
 		LiteralType type;
