@@ -50,7 +50,7 @@ namespace Astral
 		Expression* ParseUnary();
 		Expression* ParsePrefix();
 		Expression* ParseLiteral();
-		Expression* ParseStructOffset();
+		Expression* ParseStructOffset(bool isTopLevel = false);
 		Expression* ParseCallParams();
 
 		Statement* ParseStatement();

@@ -4,70 +4,93 @@ void Astral::Compiler::GenerateLiteral(const Literal* literal)
 {
 	switch (literal->type)
 	{
-	case Literal::LiteralType::NUMBER:
-	{
-		Bytecode code;
-		code.lexeme = literal->GetToken().GetLexeme();
-		code.op = (uint8_t)OpType::LIT_NUMBER;
-		rom.push_back(code);
-		break;
-	}
-	case Literal::LiteralType::BOOLEAN:
-	{
-		Bytecode code;
-		code.op = (uint8_t)OpType::LIT_NUMBER;
-		code.lexeme.lexeme = *(bool*)literal->data ? "1" : "0";
-		rom.push_back(code);
-		break;
-	}
-	case Literal::LiteralType::STRING:
-	{
-		Bytecode code;
-		code.lexeme = literal->GetToken().GetLexeme();
-		code.op = (uint8_t)OpType::LIT_STRING;
-		rom.push_back(code);
-		break;
-	}
-	case Literal::LiteralType::IDENTIFER:
-	{
-		Bytecode code;
-		code.lexeme = literal->GetToken().GetLexeme();
-		code.op = (uint8_t)OpType::VARIABLE;
-		rom.push_back(code);
-		break;
-	}
-	case Literal::LiteralType::REFERENCE:
-	{
-		Bytecode code;
-		code.lexeme = literal->GetToken().GetLexeme();
-		code.op = (uint8_t)OpType::VARIABLE_REF;
-		rom.push_back(code);
-		break;
-	}
-	case Literal::LiteralType::STRUCT_ACCESS_LEAF:
-	{
-		Bytecode code;
-		code.lexeme = literal->GetToken().GetLexeme();
-		code.op = (uint8_t)OpType::STRUCT_ACCESS;
-		rom.push_back(code);
+		case Literal::LiteralType::NUMBER:
+		{
+			Bytecode code;
+			code.lexeme = literal->GetToken().GetLexeme();
+			code.op = (uint8_t)OpType::LIT_NUMBER;
+			rom.push_back(code);
+			break;
+		}
+		case Literal::LiteralType::BOOLEAN:
+		{
+			Bytecode code;
+			code.op = (uint8_t)OpType::LIT_NUMBER;
+			code.lexeme.lexeme = *(bool*)literal->data ? "1" : "0";
+			rom.push_back(code);
+			break;
+		}
+		case Literal::LiteralType::STRING:
+		{
+			Bytecode code;
+			code.lexeme = literal->GetToken().GetLexeme();
+			code.op = (uint8_t)OpType::LIT_STRING;
+			rom.push_back(code);
+			break;
+		}
+		case Literal::LiteralType::IDENTIFER:
+		{
+			Bytecode code;
+			code.lexeme = literal->GetToken().GetLexeme();
+			code.op = (uint8_t)OpType::VARIABLE;
+			rom.push_back(code);
+			break;
+		}
+		case Literal::LiteralType::REFERENCE:
+		{
+			Bytecode code;
+			code.lexeme = literal->GetToken().GetLexeme();
+			code.op = (uint8_t)OpType::VARIABLE_REF;
+			rom.push_back(code);
+			break;
+		}
+		case Literal::LiteralType::STRUCT_ACCESS_ROOT:
+		{
+			Literal* sub = (Literal*)literal->data;
 
-		break;
-	}
-	case Literal::LiteralType::STRUCT_ACCESS:
-	{
-		Bytecode code;
-		code.lexeme = literal->GetToken().GetLexeme();
-		code.op = (uint8_t)OpType::STRUCT_ACCESS;
-		rom.push_back(code);
+			Bytecode code;
+			code.lexeme = literal->GetToken().GetLexeme();
+			code.op = (uint8_t)OpType::VARIABLE_REF;
+			rom.push_back(code);
+		}
+		[[fallthrough]];
+		case Literal::LiteralType::STRUCT_ACCESS:
+		{
+			Literal* sub = (Literal*)literal->data;
 
-		//Potentially sketchy. Just hope that this is always correct
-		Literal* sub = (Literal*)literal->data;
-		GenerateLiteral(sub);
+			Bytecode code;
+			code.lexeme = sub->GetToken().GetLexeme();
+			code.op = (uint8_t)OpType::STRUCT_ACCESS;
+			rom.push_back(code);
 
-		break;
-	}
-	default:
-		throw "oop";
+			//Potentially sketchy. Just hope that this is always correct
+			GenerateLiteral(sub);
+
+			break;
+		}
+		case Literal::LiteralType::STRUCT_ACCESS_LERT:
+		{
+			Literal* sub = (Literal*)literal->data;
+
+			Bytecode code;
+			code.lexeme = literal->GetToken().GetLexeme();
+			code.op = (uint8_t)OpType::VARIABLE_REF;
+			rom.push_back(code);
+		}
+		[[fallthrough]];
+		case Literal::LiteralType::STRUCT_ACCESS_LEAF:
+		{
+			Literal* sub = (Literal*)literal->data;
+
+			Bytecode code;
+			code.lexeme = sub->GetToken().GetLexeme();
+			code.op = (uint8_t)OpType::STRUCT_ACCESS;
+			rom.push_back(code);
+
+			break;
+		}
+		default:
+			throw "oop";
 	}
 }
 
@@ -78,14 +101,14 @@ void Astral::Compiler::GenerateUnary(const UnaryOp* unaryOp)
 	OpType type;
 	switch (unaryOp->GetToken().GetType())
 	{
-	case TokenType::MINUS:
-		type = OpType::UNARY_MINUS;
-		break;
-	case TokenType::NOT:
-		type = OpType::NOT;
-		break;
-	default:
-		throw "Oop";
+		case TokenType::MINUS:
+			type = OpType::UNARY_MINUS;
+			break;
+		case TokenType::NOT:
+			type = OpType::NOT;
+			break;
+		default:
+			throw "Oop";
 	}
 
 	Bytecode code;
@@ -102,50 +125,50 @@ void Astral::Compiler::GenerateBinary(const BinaryOp* binaryOp)
 	OpType type;
 	switch (binaryOp->GetToken().GetType())
 	{
-	case TokenType::PLUS:
-		type = OpType::ADD;
-		break;
-	case TokenType::MINUS:
-		type = OpType::SUB;
-		break;
-	case TokenType::ASTERISK:
-		type = OpType::MUL;
-		break;
-	case TokenType::DIVIDE:
-		type = OpType::DIV;
-		break;
-	case TokenType::HAT:
-		type = OpType::POW;
-		break;
-	case TokenType::MODULO:
-		type = OpType::MOD;
-		break;
-	case TokenType::EQUALS:
-		type = OpType::EQUALITY;
-		break;
-	case TokenType::NOT_EQUALS:
-		type = OpType::NEQUALITY;
-		break;
-	case TokenType::GREATER_THAN:
-		type = OpType::GREATER;
-		break;
-	case TokenType::GREATER_THAN_EQUAL:
-		type = OpType::GREATER_EQUALS;
-		break;
-	case TokenType::LESS_THAN:
-		type = OpType::LESS;
-		break;
-	case TokenType::LESS_THAN_EQUAL:
-		type = OpType::LESS_EQUALS;
-		break;
-	case TokenType::OR:
-		type = OpType::OR;
-		break;
-	case TokenType::AND:
-		type = OpType::AND;
-		break;
-	default:
-		throw "Oop";
+		case TokenType::PLUS:
+			type = OpType::ADD;
+			break;
+		case TokenType::MINUS:
+			type = OpType::SUB;
+			break;
+		case TokenType::ASTERISK:
+			type = OpType::MUL;
+			break;
+		case TokenType::DIVIDE:
+			type = OpType::DIV;
+			break;
+		case TokenType::HAT:
+			type = OpType::POW;
+			break;
+		case TokenType::MODULO:
+			type = OpType::MOD;
+			break;
+		case TokenType::EQUALS:
+			type = OpType::EQUALITY;
+			break;
+		case TokenType::NOT_EQUALS:
+			type = OpType::NEQUALITY;
+			break;
+		case TokenType::GREATER_THAN:
+			type = OpType::GREATER;
+			break;
+		case TokenType::GREATER_THAN_EQUAL:
+			type = OpType::GREATER_EQUALS;
+			break;
+		case TokenType::LESS_THAN:
+			type = OpType::LESS;
+			break;
+		case TokenType::LESS_THAN_EQUAL:
+			type = OpType::LESS_EQUALS;
+			break;
+		case TokenType::OR:
+			type = OpType::OR;
+			break;
+		case TokenType::AND:
+			type = OpType::AND;
+			break;
+		default:
+			throw "Oop";
 	}
 
 	Bytecode code;

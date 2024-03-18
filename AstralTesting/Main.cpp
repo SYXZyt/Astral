@@ -8,7 +8,7 @@
 int main(int, char**)
 {	
 	Astral::Rom program;
-	if (!Astral::API::CompileFile("demo.ast", program, false, !false, false))
+	if (!Astral::API::CompileFile("demo.ast", program, false, false, !false))
 		return 1;
 
 	Astral::API::LoadDefaultLibraries();

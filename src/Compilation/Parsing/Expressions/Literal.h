@@ -19,6 +19,8 @@ namespace Astral
 			REFERENCE,
 			STRUCT_ACCESS,
 			STRUCT_ACCESS_LEAF, //Final node in a struct access
+			STRUCT_ACCESS_ROOT, //First node in a struct access
+			STRUCT_ACCESS_LERT, //Node is both a root and leaf, hence LERT: LEaf-RooT
 		};
 
 		LiteralType type;

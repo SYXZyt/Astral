@@ -346,7 +346,7 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 			return fact;
 		}
 		else if (Peek().GetType() == TokenType::DOT)
-			return ParseStructOffset();
+			return ParseStructOffset(true);
 		else if (Peek().GetType() == TokenType::INCREMENT)
 		{
 			IncrementExpression* postfix = new IncrementExpression(value, false, Peek());
@@ -414,7 +414,7 @@ Astral::Expression* Astral::Parser::ParseLiteral()
 	return nullptr;
 }
 
-Astral::Expression* Astral::Parser::ParseStructOffset()
+Astral::Expression* Astral::Parser::ParseStructOffset(bool isTopLevel)
 {
 	//Bit of a bodge here. The literal stores a void pointer to its literal value,
 	//We can just store each subnode in that pointer to achieve our tree
@@ -432,12 +432,16 @@ Astral::Expression* Astral::Parser::ParseStructOffset()
 
 		NULL_RET(subnode);
 
-		return new Literal(subnode, Literal::LiteralType::STRUCT_ACCESS, varName);
+		Literal::LiteralType type = isTopLevel ? Literal::LiteralType::STRUCT_ACCESS_ROOT : Literal::LiteralType::STRUCT_ACCESS;
+
+		return new Literal(subnode, type, varName);
 	}
 	else
 	{
+		Literal::LiteralType type = isTopLevel ? Literal::LiteralType::STRUCT_ACCESS_LERT : Literal::LiteralType::STRUCT_ACCESS_LEAF;
+
 		Literal* node = new Literal(new std::string(varName.GetLexeme().lexeme), Literal::LiteralType::IDENTIFER, varName);
-		return new Literal(node, Literal::LiteralType::STRUCT_ACCESS_LEAF, str);
+		return new Literal(node, type, str);
 	}
 }
 
@@ -494,7 +498,7 @@ Astral::Statement* Astral::Parser::ParseStatement()
 	{
 		if (Peek().GetType() == TokenType::DOT)
 		{
-			Expression* structAccess = ParseStructOffset();
+			Expression* structAccess = ParseStructOffset(true);
 			Statement* assign = nullptr;
 
 			if (Peek().GetType() == TokenType::ASSIGNMENT || Peek().GetType() == TokenType::PLUS_EQUALS || Peek().GetType() == TokenType::MINUS_EQUALS)
