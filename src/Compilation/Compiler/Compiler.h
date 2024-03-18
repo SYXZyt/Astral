@@ -65,12 +65,14 @@ namespace Astral
 		void GenerateProgram(const Program* program);
 		void GenerateLet(const VariableDefinition* variable);
 		void GenerateAssign(const VariableAssignment* variable);
+		void GenerateMemberAssign(const MemberAssignment* member);
 		void GenerateBlock(const Block* block);
 		void GenerateIf(const IfStatement* ifStatement);
 		void GenerateWhile(const While* whileStatement);
 		void GenerateContinue(const Continue* _continue);
 		void GenerateBreak(const Break* _break);
 		void GenerateFunctionDefinition(const Function* func);
+		void GenerateStructDefinition(const StructDefinition* structDefinition);
 		void GenerateFunctionParamList(const ParamList* params);
 		void GenerateReturn(const Return* ret);
 		void GenerateExpressionStatement(const ExpressionStatement* expr);

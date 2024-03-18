@@ -437,7 +437,7 @@ Astral::Expression* Astral::Parser::ParseStructOffset()
 	else
 	{
 		Literal* node = new Literal(new std::string(varName.GetLexeme().lexeme), Literal::LiteralType::IDENTIFER, varName);
-		return new Literal(node, Literal::LiteralType::STRUCT_ACCESS, str);
+		return new Literal(node, Literal::LiteralType::STRUCT_ACCESS_LEAF, str);
 	}
 }
 

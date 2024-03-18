@@ -14,6 +14,8 @@ namespace Astral
 		GC,
 		POP,
 
+		STRUCT_ACCESS,
+
 		LIT_NUMBER,
 		LIT_STRING,
 		VARIABLE,
@@ -46,6 +48,7 @@ namespace Astral
 		ASSIGN,
 		UPDATE_VAR,
 		UPDATE_REF,
+		UPDATE_MEMBER,
 
 		IF,
 		IF_ELSE,
@@ -74,6 +77,8 @@ namespace Astral
 				return "NOP";
 			case OpType::GC:
 				return "GC";
+			case OpType::STRUCT_ACCESS:
+				return "STRUCT_MEMBER";
 			case OpType::POP:
 				return "POP";
 			case OpType::LIT_NUMBER:
@@ -120,6 +125,8 @@ namespace Astral
 				return "UPD_VAR";
 			case OpType::UPDATE_REF:
 				return "UPD_REF";
+			case OpType::UPDATE_MEMBER:
+				return "UPD_MEMBER";
 			case OpType::SCOPE_BEG:
 				return "SCOPE_BEG";
 			case OpType::SCOPE_END:

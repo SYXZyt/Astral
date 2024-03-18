@@ -13,7 +13,7 @@ func vec2_tostring(v)
 
 func main()
 {
-	let vec = new(vec2);
+	let vec = new("vec2");
 	vec.x = 10;
 	vec.y = -10;
 

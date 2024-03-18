@@ -18,6 +18,7 @@ namespace Astral
 			IDENTIFER,
 			REFERENCE,
 			STRUCT_ACCESS,
+			STRUCT_ACCESS_LEAF, //Final node in a struct access
 		};
 
 		LiteralType type;

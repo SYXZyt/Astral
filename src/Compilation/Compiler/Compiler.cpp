@@ -44,6 +44,28 @@ void Astral::Compiler::GenerateLiteral(const Literal* literal)
 		rom.push_back(code);
 		break;
 	}
+	case Literal::LiteralType::STRUCT_ACCESS_LEAF:
+	{
+		Bytecode code;
+		code.lexeme = literal->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::STRUCT_ACCESS;
+		rom.push_back(code);
+
+		break;
+	}
+	case Literal::LiteralType::STRUCT_ACCESS:
+	{
+		Bytecode code;
+		code.lexeme = literal->GetToken().GetLexeme();
+		code.op = (uint8_t)OpType::STRUCT_ACCESS;
+		rom.push_back(code);
+
+		//Potentially sketchy. Just hope that this is always correct
+		Literal* sub = (Literal*)literal->data;
+		GenerateLiteral(sub);
+
+		break;
+	}
 	default:
 		throw "oop";
 	}
@@ -350,12 +372,16 @@ void Astral::Compiler::GenerateStatement(const Statement* statement)
 		GenerateContinue(continueStatement);
 	else if (const Function* function = dynamic_cast<const Function*>(statement))
 		GenerateFunctionDefinition(function);
+	else if (const StructDefinition* _struct = dynamic_cast<const StructDefinition*>(statement))
+		GenerateStructDefinition(_struct);
 	else if (const Return* ret = dynamic_cast<const Return*>(statement))
 		GenerateReturn(ret);
 	else if (const ExpressionStatement* expr = dynamic_cast<const ExpressionStatement*>(statement))
 		GenerateExpressionStatement(expr);
 	else if (const Using* library = dynamic_cast<const Using*>(statement))
 		GenerateUsing(library);
+	else if (const MemberAssignment* member = dynamic_cast<const MemberAssignment*>(statement))
+		GenerateMemberAssign(member);
 	else if (dynamic_cast<const Empty*>(statement)) {}
 	else if (dynamic_cast<const Include*>(statement)) {}
 	else
@@ -391,6 +417,17 @@ void Astral::Compiler::GenerateAssign(const VariableAssignment* variable)
 	Bytecode code;
 	code.lexeme = variable->GetToken().GetLexeme();
 	code.op = (uint8_t)OpType::UPDATE_VAR;
+	rom.push_back(code);
+}
+
+void Astral::Compiler::GenerateMemberAssign(const MemberAssignment* member)
+{
+	GenerateExpression(member->Expr());
+	GenerateLiteral(member->Member());
+
+	Bytecode code;
+	code.lexeme = member->GetToken().GetLexeme();
+	code.op = (uint8_t)OpType::UPDATE_MEMBER;
 	rom.push_back(code);
 }
 
@@ -525,6 +562,26 @@ void Astral::Compiler::GenerateFunctionDefinition(const Function* func)
 	rom.push_back(code);
 	code.op = (uint8_t)OpType::FUNC_END;
 	rom.push_back(code);
+}
+
+void Astral::Compiler::GenerateStructDefinition(const StructDefinition* structDefinition)
+{
+	const char* structName = structDefinition->GetToken().GetLexeme().lexeme.c_str();
+	std::vector<const char*> members;
+
+	for (const Token& t : structDefinition->GetMembers())
+		members.push_back(t.GetLexeme().lexeme.c_str());
+
+	Rom::StructDefinition str{ structName, members };
+
+	if (rom.DoesStructExist(str.name))
+	{
+		Error("Struct redefinition", structDefinition->GetToken());
+		failed = true;
+		return;
+	}
+
+	rom.AddStruct(str);
 }
 
 void Astral::Compiler::GenerateFunctionParamList(const ParamList* params)
