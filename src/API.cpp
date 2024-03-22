@@ -2,9 +2,11 @@
 
 #include "Runtime/BuiltInLibraries.h"
 
-inline std::string ReadFile(const char* fname)
+inline std::string ReadFile(const char* fname, bool& good)
 {
 	std::ifstream in(fname);
+	good = in.good();
+
 	std::stringstream ss;
 	ss << in.rdbuf();
 	return ss.str();
@@ -71,7 +73,14 @@ void Astral::API::MainCall(Interpreter& interpreter)
 
 bool Astral::API::CompileToParseTree(const char* fname, ast& tree, bool dumpLexer, bool dumpParser)
 {
-	std::string data = ReadFile(fname);
+	bool good;
+	std::string data = ReadFile(fname, good);
+
+	if (!good)
+	{
+		Error((std::string("Failed to open file '") + fname + '\'').c_str());
+		return false;
+	}
 
 	Lexer lexer(data, fname);
 	lexer.Tokenise();
