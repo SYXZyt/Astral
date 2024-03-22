@@ -23,9 +23,6 @@ namespace Astral
 			extern Type::atype_t* CreateVoid(const FuncParams params, Interpreter& vm, const Lexeme& caller);
 			extern Type::atype_t* ToNumber(const FuncParams params, Interpreter& vm, const Lexeme& caller);
 			extern Type::atype_t* New(const FuncParams params, Interpreter& vm, const Lexeme& caller);
-			extern Type::atype_t* GetMember(const FuncParams params, Interpreter& vm, const Lexeme& caller);
-			extern Type::atype_t* SetMember(const FuncParams params, Interpreter& vm, const Lexeme& caller);
-			extern Type::atype_t* ToString(const FuncParams params, Interpreter& vm, const Lexeme& caller);
 
 			namespace IO
 			{

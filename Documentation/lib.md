@@ -7,6 +7,7 @@
 | new       | `string` (Struct name) | `struct` | Creates a new struct of the provided type. This function will later be moved to be top-level and not inside of a library |
 | get_type  | Value                  | `string` | Returns the type name of a value																						   |
 | to_number | `string`               | `number` | Converts a string to a number																							   |
+| to_string | Value					 | `string` | Returns the string representation of a value																			   |
 
 ## astral.io
 

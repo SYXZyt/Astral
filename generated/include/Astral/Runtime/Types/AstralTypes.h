@@ -155,7 +155,7 @@ namespace Astral::Type
 	class ASTRAL struct_t final : public atype_t
 	{
 	private:
-		std::unordered_map<std::string, Type::atype_t*> members;
+		std::unordered_map<const char*, Type::atype_t*> members;
 
 	public:
 		atype_t* Copy() final override;

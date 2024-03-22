@@ -242,6 +242,117 @@ Astral::Type::atype_t* Astral::Functions::Astral::ToNumber(const FuncParams para
 	return new Type::number_t(std::stof(str->Value()));
 }
 
+Astral::Type::atype_t* Astral::Functions::Astral::New(const FuncParams params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::string_t* str = dynamic_cast<Type::string_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		str = dynamic_cast<Type::string_t*>(ref->GetBlock()->data);
+
+	if (!str)
+	{
+		Error("Expected string", caller);
+		return nullptr;
+	}
+
+	const char* structName = str->Value();
+	const std::vector<Rom::StructDefinition>& structs = vm.GetRom().GetStructs();
+
+	const Rom::StructDefinition* tmplate = nullptr;
+	for (const Rom::StructDefinition& str : structs)
+	{
+		if (strcmp(structName, str.name) == 0)
+		{
+			tmplate = &str;
+			break;
+		}
+	}
+
+	if (!tmplate)
+	{
+		std::string msg = "Struct '" + std::string(structName) + "' could not be found";
+		Error(msg.c_str(), caller);
+	}
+
+	Warning("Structs currently have a memory-leak and SHOULD NOT be used", caller);
+
+	Type::struct_t* _struct = new Type::struct_t(tmplate->members);
+	return _struct;
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::GetMember(const FuncParams params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::struct_t* str = dynamic_cast<Type::struct_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		str = dynamic_cast<Type::struct_t*>(ref->GetBlock()->data);
+
+	if (!str)
+	{
+		Error("Expected struct", caller);
+		return nullptr;
+	}
+
+	Type::string_t* member = dynamic_cast<Type::string_t*>(params[1]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[1]))
+		member = dynamic_cast<Type::string_t*>(ref->GetBlock()->data);
+
+	if (!member)
+	{
+		Error("Expected string", caller);
+		return nullptr;
+	}
+
+	if (!str->HasMember(member->Value()))
+	{
+		Error((std::string("Struct does not have member '") + member->Value() + '\'').c_str());
+		return nullptr;
+	}
+
+	return *str->GetMember(member->Value());
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::SetMember(const FuncParams params, Interpreter& vm, const Lexeme& caller)
+{
+	Type::struct_t* str = dynamic_cast<Type::struct_t*>(params[0]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[0]))
+		str = dynamic_cast<Type::struct_t*>(ref->GetBlock()->data);
+
+	if (!str)
+	{
+		Error("Expected struct", caller);
+		return nullptr;
+	}
+
+	Type::string_t* member = dynamic_cast<Type::string_t*>(params[1]);
+	if (Type::ref_t* ref = dynamic_cast<Type::ref_t*>(params[1]))
+		member = dynamic_cast<Type::string_t*>(ref->GetBlock()->data);
+
+	if (!member)
+	{
+		Error("Expected string", caller);
+		return nullptr;
+	}
+
+	if (!str->HasMember(member->Value()))
+	{
+		Error((std::string("Struct does not have member '") + member->Value() + '\'').c_str());
+		return nullptr;
+	}
+
+	Type::atype_t* oldValue = *str->GetMember(member->Value());
+	oldValue->isOnStack = false;
+	GarbageCollector::Instance().RegisterDanglingPointer(oldValue);
+
+	Type::atype_t* newValue = params[2]->Copy();
+	*str->GetMember(member->Value()) = newValue;
+
+	return new Type::void_t();
+}
+
+Astral::Type::atype_t* Astral::Functions::Astral::ToString(const FuncParams params, Interpreter& vm, const Lexeme& caller)
+{
+	return new Type::string_t(params[0]->ToString());
+}
+
 Astral::Type::atype_t* Astral::Functions::Astral::Math::Sin(const FuncParams params, Interpreter& vm, const Lexeme& caller)
 {
 	Type::number_t* num = dynamic_cast<Type::number_t*>(params[0]);

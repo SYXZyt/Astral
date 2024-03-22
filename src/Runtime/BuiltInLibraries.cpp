@@ -9,10 +9,18 @@ void Astral::LoadLibraries()
 	BindFunction __type("get_type", 1, Functions::Astral::GetType);
 	BindFunction __void("void", 0, Functions::Astral::CreateVoid);
 	BindFunction __stof("to_number", 1, Functions::Astral::ToNumber);
+	BindFunction __new("new", 1, Functions::Astral::New);
+	BindFunction __getMember("get_member", 2, Functions::Astral::GetMember);
+	BindFunction __setMember("set_member", 3, Functions::Astral::SetMember);
+	BindFunction __toString("to_string", 1, Functions::Astral::ToString);
 
 	astral.AddFunction(__type);
 	astral.AddFunction(__void);
 	astral.AddFunction(__stof);
+	astral.AddFunction(__new);
+	astral.AddFunction(__getMember);
+	astral.AddFunction(__setMember);
+	astral.AddFunction(__toString);
 
 	libraries.push_back(astral);
 

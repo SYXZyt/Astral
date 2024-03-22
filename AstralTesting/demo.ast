@@ -1,3 +1,4 @@
+using astral;
 using astral.io;
 
 struct vec2
@@ -8,14 +9,15 @@ struct vec2
 
 func vec2_tostring(v)
 {
-	return "X: " + v.x + ", Y: " + v.y;
+	return "X: " + to_string(get_member(v, "x")) + ", Y: " + to_string(get_member(v, "y"));
 }
 
 func main()
 {
 	let vec = new("vec2");
-	vec.x = 10;
-	vec.y = -10;
+	set_member(vec, "x", 10);
+	set_member(vec, "y", -10);
 
-	println(vec2_tostring(&vec));
+	while (true)
+	vec2_tostring(&vec);
 }

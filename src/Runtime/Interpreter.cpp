@@ -388,9 +388,19 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 				break;
 			}
 
-			Type::atype_t* copy = variables.GetValue(name.c_str())->Copy();
-			GarbageCollector::Instance().RegisterDanglingPointer(copy);
-			Push(copy);
+			Type::atype_t* base = variables.GetValue(name.c_str());
+			if (Type::struct_t* _struct = dynamic_cast<Type::struct_t*>(base)) //Structs are always references
+			{
+				Type::ref_t* varRef = new Type::ref_t(variables.GetVariable(name.c_str())->Value());
+				GarbageCollector::Instance().RegisterDanglingPointer(varRef);
+				Push(varRef);
+			}
+			else
+			{
+				Type::atype_t* copy = base->Copy();
+				GarbageCollector::Instance().RegisterDanglingPointer(copy);
+				Push(copy);
+			}
 			break;
 		}
 		case OpType::ASSIGN_VOID:
@@ -601,6 +611,10 @@ void Astral::Interpreter::ExecuteInstruction(Bytecode& instruction)
 
 			break;
 		}
+		case OpType::STRUCT_ACCESS:
+			Error("Not implemented in this astral build. Use get or set_member", instruction.lexeme);
+			failed = true;
+			break;
 		default:
 			throw "oop";
 	}
