@@ -2,5 +2,5 @@ using astral.io;
 
 func main()
 {   
-    println("Hello from Linux. You are gay!");    
+    println("Hello =D");    
 }

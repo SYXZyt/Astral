@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.2)
 
 include_directories(../)
+link_directories(.)
 
 project(AstralOut)
 
@@ -10,4 +11,6 @@ add_executable(AstralTesting Main.cpp)
 
 if (UNIX)
     target_link_libraries(AstralTesting ${CMAKE_CURRENT_SOURCE_DIR}/libAstral.so)
-endif (UNIX)
+elseif (WIN32)
+    target_link_libraries(AstralTesting PUBLIC "Astral.lib")
+endif()
