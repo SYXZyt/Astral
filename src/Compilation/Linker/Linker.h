@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <algorithm>
 #include <filesystem>
 
 #include "../Parsing/AllNodeTypes.h"

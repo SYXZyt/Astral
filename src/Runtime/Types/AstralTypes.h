@@ -69,7 +69,11 @@ namespace Astral::Type
 			FreeValue();
 
 			this->value = new char[len];
+#ifdef _WIN32
 			strcpy_s(this->value, len, value);
+#elif __linux__
+            strcpy(this->value, value);
+#endif
 			this->value[len - 1] = '\0';
 		}
 
@@ -79,7 +83,11 @@ namespace Astral::Type
 			++len;
 
 			char* value = new char[len];
+#ifdef _WIN32
 			strcpy_s(value, len, this->value);
+#elif __linux
+        strcpy(value, this->value);
+#endif
 			value[len - 1] = '\0';
 
 			string_t* copy = new string_t(value);

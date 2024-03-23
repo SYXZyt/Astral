@@ -20,7 +20,11 @@ Astral::Variable::Variable(const char* name)
 {
 	size_t len = strlen(name) + 1;
 	varname = new char[len];
+#ifdef _WIN32
 	strcpy_s(varname, len, name);
+#elif __linux__
+    strcpy(varname, name);
+#endif
 	varname[len - 1] = '\0';
 
 	value = GarbageCollector::Instance().New();

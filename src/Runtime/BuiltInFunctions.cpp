@@ -2,6 +2,8 @@
 
 #include "Types/AstralTypes.h"
 
+#include <cmath>
+
 inline static float lerp(float a, float b, float c)
 {
 	return a * (1.0f - c) + (b * c);

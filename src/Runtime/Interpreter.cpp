@@ -1,5 +1,7 @@
 #include "Interpreter.h"
 
+#include <algorithm>
+
 Astral::Interpreter* Astral::Interpreter::instance = nullptr;
 
 void Astral::Interpreter::Error(const char* message)

@@ -13,7 +13,7 @@
 
 namespace Astral
 {
-	namespace Type { class Type::atype_t; }
+	namespace Type { class atype_t; }
 
 	namespace Functions
 	{

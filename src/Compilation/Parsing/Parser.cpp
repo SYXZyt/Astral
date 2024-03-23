@@ -34,6 +34,8 @@ void Astral::Parser::Sync()
 		case TokenType::WHILE:
 		case TokenType::RETURN:
 			return;
+            default:
+                break;
 		}
 
 		Advance();

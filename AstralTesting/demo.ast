@@ -1,23 +1,6 @@
-using astral;
 using astral.io;
 
-struct vec2
-{
-	x;
-	y;
-}
-
-func vec2_tostring(v)
-{
-	return "X: " + to_string(get_member(v, "x")) + ", Y: " + to_string(get_member(v, "y"));
-}
-
 func main()
-{
-	let vec = new("vec2");
-	set_member(vec, "x", 10);
-	set_member(vec, "y", -10);
-
-	while (true)
-	vec2_tostring(&vec);
+{   
+    println("Hello from Linux. You are gay!");    
 }

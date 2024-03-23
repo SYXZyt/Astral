@@ -16,6 +16,12 @@
 # Mono auto generated files
 mono_crash.*
 
+# Jetbrains
+.idea/*
+
+AstralTesting
+libAstral.so
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -363,3 +369,18 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Cmake
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+
+generated/*

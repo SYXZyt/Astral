@@ -2,8 +2,14 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <cstring>
 #include <iostream>
+
+#ifdef _WIN32
 #include <windows.h>
+#elif __linux__
+#include <stdio.h>
+#endif
 
 #include "Astral.h"
 #include "Compilation/Tokenisation/Token.h"
@@ -50,7 +56,11 @@ namespace Astral
 		if (UseCLIOutput)
 			std::cerr << message << "\n\n";
 		else
+#ifdef _WIN32
 			MessageBoxA(nullptr, message, "Astral encountered an error", MB_OK);
+#elif __linux__
+            popen((std::string("zenity --error --text=\"") + message + "\"").c_str(), "r");
+#endif
 	}
 
 	inline void Warning(const char* const message)
@@ -58,7 +68,11 @@ namespace Astral
 		if (UseCLIOutput)
 			std::cerr << message << "\n\n";
 		else
+#ifdef _WIN32
 			MessageBoxA(nullptr, message, "Astral encountered a warning", MB_OK);
+#elif __linux__
+            popen((std::string("zenity --warning --text=\"") + message + "\"").c_str(), "r");
+#endif
 	}
 
 	inline void Error(const char* const message, const Astral::Lexeme& lexeme)

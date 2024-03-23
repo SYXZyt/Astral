@@ -2,6 +2,7 @@
 #pragma warning(push)
 #pragma warning(disable : 4251)
 
+#include <cstring>
 #include <ostream>
 #include <sstream>
 #include <iomanip>
@@ -23,9 +24,13 @@ namespace Astral
 	inline ASTRAL std::ostream& operator<<(std::ostream& os, const Bytecode& bytecode)
 	{
 		const char* repr = OpTypeToString((OpType)bytecode.op);
-
+        
 		os << repr << "\t";
+#ifdef _WIN32
 		if (strnlen_s(repr, 16) < 8)
+#elif __linux__
+        if (strlen(repr) < 8)
+#endif
 			os << '\t';
 
 		std::stringstream ss;
