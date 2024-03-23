@@ -3,12 +3,12 @@
 #include <sstream>
 #include <vector>
 
-#include <API.h>
+#include <src/API.h>
 
 int main(int, char**)
 {	
 	Astral::Rom program;
-	if (!Astral::API::CompileFile("demo.ast", program, false, true, true))
+	if (!Astral::API::CompileFile("demo.ast", program, false, false, false))
 		return 1;
 
 	Astral::API::LoadDefaultLibraries();

@@ -1,6 +1,6 @@
-include "main.ast";
+using astral.io;
 
 func main()
-{
-	Run();
+{   
+    println("Hello from Linux. You are gay!");    
 }
