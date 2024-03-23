@@ -4,6 +4,10 @@ project(Astral)
 
 set(CMAKE_CXX_STANDARD 17)
 
+if (WIN32)
+    add_definitions(-DASTRAL_EXPORT)
+endif()
+
 set(SOURCES
         src/API.cpp
         src/Astral.cpp
